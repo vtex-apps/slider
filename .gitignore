@@ -91,6 +91,7 @@ Desktop.ini
 $RECYCLE.BIN/
 
 # App specific
+react/node_modules
 node_modules/
 docs/_book/
 .tmp
@@ -100,7 +101,10 @@ npm-debug.log
 lib
 dist
 build
+lib
+.eslintrc
 lerna-debug.log
 yarn-error.log
 *.orig
 package-lock.json
+*.orig
