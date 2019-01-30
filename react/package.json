@@ -1,0 +1,17 @@
+{
+  "name": "vtex.slider",
+  "version": "0.0.0",
+  "description": "A React Slider component that works well in SPA and SSR",
+  "files": [
+    "react"
+  ],
+  "dependencies": {
+    "classnames": "^2.2.6",
+    "debounce": "^1.2.0",
+    "prop-types": "^15.6.2",
+    "ramda": "^0.26.1",
+    "react": "^16.6.3",
+    "react-event-listener": "^0.6.5",
+    "react-scripts": "^2.1.3"
+  }
+}
