@@ -1,9 +1,9 @@
-.slider-root {
+.sliderRoot {
   overflow: hidden;
   height: 100%;
 }
 
-.slider-frame {
+.sliderFrame {
   list-style: none;
   padding: 0;
   height: 100%;
@@ -12,13 +12,12 @@
 
 .slide {
   float: left;
-  background-color: #777;
   height: 100%;
   overflow: hidden;
   position: relative;
 }
 
-.slide__img {
+.slideImg {
   position: absolute;
   margin-right: -50%;
   transform: translate(-50%, -50%);
@@ -26,10 +25,10 @@
   top: 50%;
 }
 
-.slide__img-full-height {
+.slideImgFullHeight {
   height: 100%;
 }
 
-.slide__img-full-width {
+.slideImgFullWidth {
   width: 100%;
 }

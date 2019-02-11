@@ -114,7 +114,7 @@ class Slider extends Component {
     this.setStyle(this.sliderFrame, {
       width: `${(this.selectorWidth / this.perPage) * this.innerElements.length}px`
     })
-    
+
     if (currentSlide !== newCurrentSlide) {
       onChangeCurrentSlide(newCurrentSlide)
     }
