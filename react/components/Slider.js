@@ -1,12 +1,13 @@
-import React from 'react'
 import React, { Children, Component, cloneElement } from 'react'
 import debounce from 'debounce'
 import PropTypes from 'prop-types'
 import { resolveSlidesNumber } from '../utils'
+import styles from './styles'
 
 class Slider extends Component {
   static propTypes = {
     resizeDebounce: PropTypes.number,
+    sliderFrameTag: PropTypes.string,
     onChangeCurrentSlide: PropTypes.func.isRequired,
     duration: PropTypes.number,
     easing: PropTypes.string,
@@ -30,7 +31,8 @@ class Slider extends Component {
     howManySlides: 1,
     draggable: true,
     threshold: 20,
-    loop: false
+    loop: false,
+    sliderFrameTag: 'ul'
   }
 
   static events = ['onMouseUp', 'onMouseDown', 'onMouseLeave', 'onMouseMove']
@@ -45,16 +47,7 @@ class Slider extends Component {
       letItGo: null
     }
 
-    this.transformProperty = this.getTransformProperty()
-  }
-
-  getTransformProperty = () => {
-    const transform = typeof window !== 'undefined' && window.document.documentElement.style.transform
-
-    if (typeof transform === 'string') {
-      return 'transform'
-    }
-    return 'WebkitTransform'
+    this.transformProperty = 'transform'
   }
 
   componentDidMount() {
@@ -365,7 +358,7 @@ class Slider extends Component {
   }
 
   render() {
-    const { children: childrenProp, loop } = this.props
+    const { children: childrenProp, loop, sliderFrameTag: SliderFrameTag } = this.props
     if (!this.perPage) {
       this.perPage = resolveSlidesNumber(this.props.perPage)
     }
@@ -378,13 +371,13 @@ class Slider extends Component {
 
     return (
       <div
+        className={styles.sliderRoot}
         ref={selector => this.selector = selector}
-        style={{ overflow: 'hidden' }}
         {...Slider.events.reduce((props, event) => ({ ...props, [event]: this[event] }), {})}
       >
-        <div ref={sliderFrame => this.sliderFrame = sliderFrame}>
+        <SliderFrameTag className={styles.sliderFrame} ref={sliderFrame => this.sliderFrame = sliderFrame}>
           {newChildren}
-        </div>
+        </SliderFrameTag>
       </div>
     )
   }
