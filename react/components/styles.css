@@ -15,6 +15,7 @@
   height: 100%;
   overflow: hidden;
   position: relative;
+  transition: width 300ms ease;
 }
 
 .slideImg {

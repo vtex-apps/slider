@@ -13,7 +13,7 @@ class Slider extends Component {
   static propTypes = {
     resizeDebounce: PropTypes.number,
     sliderFrameTag: PropTypes.string,
-    onChangeCurrentSlide: PropTypes.func.isRequired,
+    onChangeSlide: PropTypes.func.isRequired,
     duration: PropTypes.number,
     easing: PropTypes.string,
     perPage: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
@@ -102,7 +102,7 @@ class Slider extends Component {
   }
 
   handleResize = () => {
-    const { perPage, currentSlide, onChangeCurrentSlide } = this.props
+    const { perPage, currentSlide, onChangeSlide } = this.props
     this.perPage = resolveSlidesNumber(perPage)
     const newCurrentSlide = Math.floor(currentSlide / this.perPage) * this.perPage
 
@@ -112,7 +112,7 @@ class Slider extends Component {
     })
 
     if (currentSlide !== newCurrentSlide) {
-      onChangeCurrentSlide(newCurrentSlide)
+      onChangeSlide(newCurrentSlide)
     }
 
     this.slideToCurrent(false, newCurrentSlide)
@@ -142,7 +142,7 @@ class Slider extends Component {
     const {
       loop,
       draggable,
-      onChangeCurrentSlide,
+      onChangeSlide,
       currentSlide
     } = this.props
 
@@ -172,7 +172,7 @@ class Slider extends Component {
     if (newCurrentSlide !== currentSlide) {
       this.slideToCurrent(loop, newCurrentSlide)
       requestAnimationFrame(() => {
-        onChangeCurrentSlide(newCurrentSlide)
+        onChangeSlide(newCurrentSlide)
       })
     }
 
@@ -187,7 +187,7 @@ class Slider extends Component {
     const {
       loop,
       draggable,
-      onChangeCurrentSlide,
+      onChangeSlide,
       currentSlide
     } = this.props
 
@@ -218,7 +218,7 @@ class Slider extends Component {
     if (newCurrentSlide !== currentSlide) {
       this.slideToCurrent(loop, newCurrentSlide)
       requestAnimationFrame(() => {
-        onChangeCurrentSlide(newCurrentSlide)
+        onChangeSlide(newCurrentSlide)
       })
     }
 
@@ -234,7 +234,7 @@ class Slider extends Component {
   }
 
   goTo = index => {
-    const { onChangeCurrentSlide, currentSlide, loop } = this.props
+    const { onChangeSlide, currentSlide, loop } = this.props
 
     if (this.totalSlides <= this.perPage) {
       return
@@ -244,7 +244,7 @@ class Slider extends Component {
 
     if (newCurrentSlide !== currentSlide) {
       this.slideToCurrent(false, newCurrentSlide)
-      onChangeCurrentSlide(newCurrentSlide)
+      onChangeSlide(newCurrentSlide)
     }
   }
 

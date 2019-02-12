@@ -16,10 +16,15 @@ class SlideComponent extends Component {
         }, props.resizeDebounce)
       }, props.resizeDebounce)
     }
+
+    this.state = {
+      runningInServer: true
+    }
   }
 
   componentDidMount() {
     this.ensureImageCover()
+    this.setState({ runningInServer: false })
   }
 
   componentDidUpdate() {
@@ -72,11 +77,18 @@ class SlideComponent extends Component {
       fitImg,
       innerRef,
       resizeDebounce,
+      SSRSize,
       ...rootProps
     } = this.props
 
+    const { runningInServer } = this.state
+
     return (
-      <RootComponent ref={innerRef} className={classnames(styles.slide, className)} {...rootProps}>
+      <RootComponent
+        ref={innerRef}
+        className={classnames(styles.slide, className)}
+        style={runningInServer ? { width: SSRSize } : {}}
+        {...rootProps}>
         <EventListener target="window" onResize={this.handleResize} />
         {React.Children.map(children, child => {
           if (!React.isValidElement(child)) {
@@ -107,13 +119,15 @@ Slide.propTypes = {
   className: PropTypes.string,
   tag: PropTypes.string,
   fitImg: PropTypes.bool,
-  resizeDebounce: PropTypes.number
+  resizeDebounce: PropTypes.number,
+  SSRSize: PropTypes.number
 }
 
 Slide.defaultProps = {
   tag: 'li',
   fitImg: true,
-  resizeDebounce: 250
+  resizeDebounce: 250,
+  SSRSize: 281
 }
 
 export default Slide
