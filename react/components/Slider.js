@@ -1,4 +1,5 @@
 import React, { Children, Component, cloneElement } from 'react'
+import Slide from './Slide'
 import debounce from 'debounce'
 import PropTypes from 'prop-types'
 import { resolveSlidesNumber } from '../utils'
@@ -15,10 +16,7 @@ class Slider extends Component {
     // TODO draggable: PropTypes.bool,
     threshold: PropTypes.number,
     loop: PropTypes.bool,
-    children: PropTypes.oneOfType([
-      PropTypes.element,
-      PropTypes.arrayOf(PropTypes.element)
-    ])
+    children: PropTypes.arrayOf(PropTypes.instanceOf(Slide))
   }
 
   static defaultProps = {
@@ -126,7 +124,7 @@ class Slider extends Component {
   }
 
   setInnerElements = () => {
-    this.innerElements = [].slice.call(this.sliderFrame.children)
+    this.innerElements = Array.prototype.slice.call(this.sliderFrame.children)
   }
 
   get totalSlides() {
@@ -309,9 +307,11 @@ class Slider extends Component {
   }
 
   onMouseUp = e => {
+    const { draggable } = this.props
+
     e.stopPropagation()
     this.pointerDown = false
-    this.enableTransition({ cursor: '-webkit-grab' })
+    this.enableTransition( draggable ? { cursor: '-webkit-grab' } : {})
 
     if (this.drag.endX) {
       this.updateAfterDrag()
@@ -321,10 +321,10 @@ class Slider extends Component {
   }
 
   onMouseMove = e => {
-    const { easing, loop, currentSlide } = this.props
+    const { easing, loop, currentSlide, draggable } = this.props
 
     e.preventDefault()
-    if (this.pointerDown) {
+    if (this.pointerDown && draggable) {
       // TODO prevent link clicks
 
       this.drag.endX = e.pageX
@@ -346,10 +346,11 @@ class Slider extends Component {
   onMouseLeave = e => {
 
     if (this.pointerDown) {
+      const { draggable } = this.props
       this.pointerDown = false
       this.drag.endX = e.pageX
 
-      this.enableTransition({ cursor: '-webkit-grab' })
+      this.enableTransition(draggable ? { cursor: '-webkit-grab' } : {})
       this.updateAfterDrag()
       this.clearDrag()
     }
