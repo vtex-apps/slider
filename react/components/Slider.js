@@ -12,9 +12,8 @@ class Slider extends Component {
     duration: PropTypes.number,
     easing: PropTypes.string,
     perPage: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-    draggable: PropTypes.bool,
+    // TODO draggable: PropTypes.bool,
     threshold: PropTypes.number,
-    howManySlides: PropTypes.number,
     loop: PropTypes.bool,
     children: PropTypes.oneOfType([
       PropTypes.element,
@@ -28,7 +27,6 @@ class Slider extends Component {
     easing: 'ease-out',
     perPage: 1,
     currentSlide: 0,
-    howManySlides: 1,
     draggable: true,
     threshold: 20,
     loop: false,
