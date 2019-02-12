@@ -1,8 +1,12 @@
-import React, { Children, Component, cloneElement } from 'react'
-import Slide from './Slide'
+import React, { Component } from 'react'
 import debounce from 'debounce'
 import PropTypes from 'prop-types'
-import { resolveSlidesNumber } from '../utils'
+import {
+  resolveSlidesNumber,
+  getStylingTransition,
+  setTransformProperty,
+  setStyle,
+} from '../utils'
 import styles from './styles'
 
 class Slider extends Component {
@@ -16,7 +20,10 @@ class Slider extends Component {
     // TODO draggable: PropTypes.bool,
     threshold: PropTypes.number,
     loop: PropTypes.bool,
-    children: PropTypes.arrayOf(PropTypes.instanceOf(Slide))
+    children: PropTypes.oneOfType([
+      PropTypes.element,
+      PropTypes.arrayOf(PropTypes.element)
+    ])
   }
 
   static defaultProps = {
@@ -42,8 +49,6 @@ class Slider extends Component {
       startY: 0,
       letItGo: null
     }
-
-    this.transformProperty = 'transform'
   }
 
   componentDidMount() {
@@ -60,24 +65,19 @@ class Slider extends Component {
     this.init()
   }
 
-  getStylingTransition = (easing, duration = 0) => ({
-    webkitTransition: `all ${duration}ms ${easing}`,
-    transition: `all ${duration}ms ${easing}`
-  })
-
   enableTransition = (extraStyles = {}) => {
     const { easing, duration } = this.props
 
-    this.setStyle(this.sliderFrame, {
-      ...this.getStylingTransition(easing, duration),
+    setStyle(this._sliderFrame, {
+      ...getStylingTransition(easing, duration),
       ...extraStyles
     })
   }
 
   disableTransition = (extraStyles = {}) => {
     const { easing } = this.props
-    this.setStyle(this.sliderFrame, {
-      ...this.getStylingTransition(easing),
+    setStyle(this._sliderFrame, {
+      ...getStylingTransition(easing),
       ...extraStyles
     })
   }
@@ -93,7 +93,7 @@ class Slider extends Component {
     })
 
     this.innerElements.forEach(el => {
-      this.setStyle(el, {
+      setStyle(el, {
         width: `${100 / this.innerElements.length}%`
       })
     })
@@ -106,8 +106,8 @@ class Slider extends Component {
     this.perPage = resolveSlidesNumber(perPage)
     const newCurrentSlide = Math.floor(currentSlide / this.perPage) * this.perPage
 
-    this.selectorWidth = this.selector.getBoundingClientRect().width
-    this.setStyle(this.sliderFrame, {
+    this.setSelectorWidth()
+    setStyle(this._sliderFrame, {
       width: `${(this.selectorWidth / this.perPage) * this.innerElements.length}px`
     })
 
@@ -120,11 +120,11 @@ class Slider extends Component {
   }
 
   setSelectorWidth = () => {
-    this.selectorWidth = this.selector.getBoundingClientRect().width
+    this.selectorWidth = this._selector.getBoundingClientRect().width
   }
 
   setInnerElements = () => {
-    this.innerElements = Array.prototype.slice.call(this.sliderFrame.children)
+    this.innerElements = Array.prototype.slice.call(this._sliderFrame.children)
   }
 
   get totalSlides() {
@@ -159,7 +159,7 @@ class Slider extends Component {
         const dragDistance = draggable ? this.drag.endX - this.drag.startX : 0
 
         requestAnimationFrame(() => {
-          this.sliderFrame.style[this.transformProperty] = `translate3d(${offset + dragDistance}px, 0, 0)`
+          setTransformProperty(this._sliderFrame, offset + dragDistance)
         })
         newCurrentSlide = mirrorSlideIndex - howManySlides
       } else {
@@ -205,7 +205,7 @@ class Slider extends Component {
         const dragDistance = draggable ? this.drag.endX - this.drag.startX : 0
 
         requestAnimationFrame(() => {
-          this.sliderFrame.style[this.transformProperty] = `translate3d(${offset + dragDistance}px, 0, 0)`
+          setTransformProperty(this._sliderFrame, offset + dragDistance)
         })
         newCurrentSlide = mirrorSlideIndex + howManySlides
       } else {
@@ -256,11 +256,11 @@ class Slider extends Component {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           this.enableTransition()
-          this.sliderFrame.style[this.transformProperty] = `translate3d(${offset}px, 0, 0)`
+          setTransformProperty(this._sliderFrame, offset)
         })
       })
     } else {
-      this.sliderFrame.style[this.transformProperty] = `translate3d(${offset}px, 0, 0)`
+      setTransformProperty(this._sliderFrame, offset)
     }
   }
 
@@ -282,19 +282,13 @@ class Slider extends Component {
     this.slideToCurrent(slideToNegativeClone || slideToPositiveClone, newCurrentSlide)
   }
 
-  clearDrag = () => {
+  _clearDrag = () => {
     this.drag = {
       startX: 0,
       endX: 0,
       startY: 0,
       letItGo: null
     }
-  }
-
-  setStyle(target, styles) {
-    Object.keys(styles).forEach(attr => {
-      target.style[attr] = styles[attr]
-    })
   }
 
   // TODO add touch events
@@ -317,7 +311,7 @@ class Slider extends Component {
       this.updateAfterDrag()
     }
 
-    this.clearDrag()
+    this._clearDrag()
   }
 
   onMouseMove = e => {
@@ -334,11 +328,12 @@ class Slider extends Component {
       const dragOffset = (this.drag.endX - this.drag.startX)
       const offset = currentOffset - dragOffset
 
-      this.setStyle(this.sliderFrame, {
+      setStyle(this._sliderFrame, {
         cursor: '-webkit-grabbing',
         webkitTransition: `all 0ms ${easing}`,
         transition: `all 0ms ${easing}`,
-        [this.transformProperty]: `translate3d(${offset * -1}px, 0, 0)`
+        transform: `translate3d(${offset * -1}px, 0, 0)`,
+        WebkitTransform: `translate3d(${offset * -1}px, 0, 0)`
       })
     }
   }
@@ -352,7 +347,7 @@ class Slider extends Component {
 
       this.enableTransition(draggable ? { cursor: '-webkit-grab' } : {})
       this.updateAfterDrag()
-      this.clearDrag()
+      this._clearDrag()
     }
   }
 
@@ -362,19 +357,19 @@ class Slider extends Component {
       this.perPage = resolveSlidesNumber(this.props.perPage)
     }
 
-    const newChildren = loop ? Children.map([
+    const newChildren = loop ? React.Children.map([
       ...childrenProp.slice(childrenProp.length - this.perPage, childrenProp.length),
       ...childrenProp,
       ...childrenProp.slice(0, this.perPage)
-    ], (c, i) => cloneElement(c, { key: i })) : childrenProp
+    ], (c, i) => React.cloneElement(c, { key: i })) : childrenProp
 
     return (
       <div
         className={styles.sliderRoot}
-        ref={selector => this.selector = selector}
+        ref={selector => this._selector = selector}
         {...Slider.events.reduce((props, event) => ({ ...props, [event]: this[event] }), {})}
       >
-        <SliderFrameTag className={styles.sliderFrame} ref={sliderFrame => this.sliderFrame = sliderFrame}>
+        <SliderFrameTag className={styles.sliderFrame} ref={sliderFrame => this._sliderFrame = sliderFrame}>
           {newChildren}
         </SliderFrameTag>
       </div>
