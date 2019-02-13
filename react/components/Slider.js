@@ -11,15 +11,29 @@ import styles from './styles'
 
 class Slider extends Component {
   static propTypes = {
+    /** Resize debounce timer in milliseconds */
     resizeDebounce: PropTypes.number,
+    /** Tag to be rendered in the slider frame */
     sliderFrameTag: PropTypes.string,
+    /** Current slide on the screen (if you have perPage > 1, then the current slide is the most left slide on the screen) */
+    currentSlide: PropTypes.number,
+    /** Function to change the value of currentSlide */
     onChangeSlide: PropTypes.func.isRequired,
+    /** Duration of transitions */
     duration: PropTypes.number,
+    /** Transition function */
     easing: PropTypes.string,
+    /** Amount of slides to be on the screen, if a number is passed, then thats the slides that will be shown,
+     * if an object with breakpoints is passed, then the component will check the size of the screen to see how
+     * many elements will be on the screen
+     */
     perPage: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
     // TODO draggable: PropTypes.bool,
+    /** Threshold of pixels to drag to the slider let it go to the next/prev slide */
     threshold: PropTypes.number,
+    /** If the slider should loop or not */
     loop: PropTypes.bool,
+    /** The slides to render */
     children: PropTypes.oneOfType([
       PropTypes.element,
       PropTypes.arrayOf(PropTypes.element)
