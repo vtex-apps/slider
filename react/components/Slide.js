@@ -115,11 +115,17 @@ renderFormwardRef.displayName = 'Slide'
 const Slide = React.forwardRef(renderFormwardRef)
 
 Slide.propTypes = {
+  /** Node to render */
   children: PropTypes.node.isRequired,
+  /** Classes to pass to root of slider */
   className: PropTypes.string,
+  /** Tag to be rendered in root element */
   tag: PropTypes.string,
+  /** If the slide component should try to fit the img (only works if children is an img element) */
   fitImg: PropTypes.bool,
+  /** Time of debounce of resize event listener */
   resizeDebounce: PropTypes.number,
+  /** Initial width to be applied in SSR */
   SSRSize: PropTypes.number
 }
 
