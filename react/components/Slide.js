@@ -87,7 +87,7 @@ class SlideComponent extends Component {
       <RootComponent
         ref={innerRef}
         className={classnames(styles.slide, className)}
-        style={runningInServer ? { width: SSRSize } : {}}
+        style={runningInServer && SSRSize ? { width: SSRSize } : {}}
         {...rootProps}>
         <EventListener target="window" onResize={this.handleResize} />
         {React.Children.map(children, child => {
@@ -126,8 +126,7 @@ Slide.propTypes = {
 Slide.defaultProps = {
   tag: 'li',
   fitImg: true,
-  resizeDebounce: 250,
-  SSRSize: 281
+  resizeDebounce: 250
 }
 
 export default Slide
