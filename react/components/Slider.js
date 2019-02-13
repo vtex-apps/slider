@@ -377,9 +377,9 @@ class Slider extends Component {
   generateChildrenWithClones = (children, perPage) => {
     const childrenArray = React.Children.toArray(children)
     return React.Children.map([
-      ...children.slice(childrenArray.length - perPage, childrenArray.length),
-      childrenArray,
-      childrenArray.slice(0, perPage)
+      ...childrenArray.slice(childrenArray.length - perPage, childrenArray.length),
+      ...childrenArray,
+      ...childrenArray.slice(0, perPage)
     ], (c, i) => React.cloneElement(c, { key: i }))
   }
 
