@@ -8,18 +8,27 @@ import EventListener from 'react-event-listener'
 
 class Dots extends Component {
   static propTypes = {
+    /** Classes to style the elements fo the component */
     classes: PropTypes.shape({
       root: PropTypes.string,
       dot: PropTypes.string,
       activeDot: PropTypes.string,
       notActiveDot: PropTypes.string
     }),
+    /** Extra props to be applied to the dot element */
     dotProps: PropTypes.object,
+    /** Tag to be rendered in the dot element */
     dotTag: PropTypes.string,
+    /** Function to change the currentSlide */
     onChangeSlide: PropTypes.func.isRequired,
+    /** This prop works the same way the perPage of Slider and this component should receive the same value of Slider */
     perPage: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+    /** Tag of root element of the component to be rendered */
     rootTag: PropTypes.string,
+    /** Total value of sliders that will be rendered */
     totalSlides: PropTypes.number.isRequired,
+    /** If this flag is true, then every dot represent a page of slides (e.g. if perPage = 2 and you have 4 elements,
+     * then you have 2 dots), if false, then it will render a dot to every slide */
     showDotsPerPage: PropTypes.bool,
   }
 
