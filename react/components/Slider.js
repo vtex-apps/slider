@@ -15,6 +15,8 @@ class Slider extends Component {
     resizeDebounce: PropTypes.number,
     /** Tag to be rendered in the slider frame */
     sliderFrameTag: PropTypes.string,
+    /** Tag to be rendered in the root element of the page */
+    rootTag: PropTypes.string,
     /** Current slide on the screen (if you have perPage > 1, then the current slide is the most left slide on the screen) */
     currentSlide: PropTypes.number,
     /** Function to change the value of currentSlide */
@@ -49,7 +51,8 @@ class Slider extends Component {
     draggable: true,
     threshold: 20,
     loop: false,
-    sliderFrameTag: 'ul'
+    sliderFrameTag: 'ul',
+    rootTag: 'div'
   }
 
   static events = ['onMouseUp', 'onMouseDown', 'onMouseLeave', 'onMouseMove']
@@ -380,16 +383,21 @@ class Slider extends Component {
   }
 
   render() {
-    const { children: childrenProp, loop, sliderFrameTag: SliderFrameTag } = this.props
+    const {
+      children,
+      loop,
+      sliderFrameTag: SliderFrameTag,
+      rootTag: RootTag
+    } = this.props
     if (!this.perPage) {
       this.perPage = resolveSlidesNumber(this.props.perPage)
     }
 
-    const newChildren = loop ? this.generateChildrenWithClones(childrenProp, this.perPage)
+    const newChildren = loop ? this.generateChildrenWithClones(children, this.perPage)
       : childrenProp
 
     return (
-      <div
+      <RootTag
         className={styles.sliderRoot}
         ref={this._selector}
         {...Slider.events.reduce((props, event) => ({ ...props, [event]: this[event] }), {})}
@@ -397,7 +405,7 @@ class Slider extends Component {
         <SliderFrameTag className={styles.sliderFrame} ref={this._sliderFrame}>
           {newChildren}
         </SliderFrameTag>
-      </div>
+      </RootTag>
     )
   }
 }
