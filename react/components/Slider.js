@@ -35,6 +35,10 @@ class Slider extends Component {
     threshold: PropTypes.number,
     /** If the slider should loop or not */
     loop: PropTypes.bool,
+    /** Css value of cursor when mouse is hovering the slider frame */
+    cursor: PropTypes.string,
+    /** Css value of cursos when mouse is down */
+    cursorOnMouseDown: PropTypes.string,
     /** The slides to render */
     children: PropTypes.oneOfType([
       PropTypes.element,
@@ -52,7 +56,9 @@ class Slider extends Component {
     threshold: 20,
     loop: false,
     sliderFrameTag: 'ul',
-    rootTag: 'div'
+    rootTag: 'div',
+    cursor: '-webkit-grab',
+    cursorOnMouseDown: '-webkit-grabbing'
   }
 
   static events = ['onMouseUp', 'onMouseDown', 'onMouseLeave', 'onMouseMove']
@@ -104,14 +110,14 @@ class Slider extends Component {
   }
 
   init = () => {
-    const { draggable, currentSlide, loop } = this.props
+    const { draggable, currentSlide, loop, cursor } = this.props
     this.setSelectorWidth()
     this.setInnerElements()
     this.perPage = resolveSlidesNumber(this.props.perPage)
 
     this.enableTransition({
       width: `${(this.selectorWidth / this.perPage) * this.innerElements.length}px`,
-      ...(draggable ? { cursor: '-webkit-grab' } : {}),
+      ...(draggable ? { cursor } : {}),
     })
 
     this.innerElements.forEach(el => {
@@ -320,14 +326,18 @@ class Slider extends Component {
     e.stopPropagation()
     this.pointerDown = true
     this.drag.startX = e.pageX
+
+    setStyle(this._sliderFrame.current, {
+      cursor: this.props.cursorOnMouseDown
+    })
   }
 
   onMouseUp = e => {
-    const { draggable } = this.props
+    const { draggable, cursor } = this.props
 
     e.stopPropagation()
     this.pointerDown = false
-    this.enableTransition(draggable ? { cursor: '-webkit-grab' } : {})
+    this.enableTransition(draggable ? { cursor } : {})
 
     if (this.drag.endX) {
       this.updateAfterDrag()
@@ -337,7 +347,7 @@ class Slider extends Component {
   }
 
   onMouseMove = e => {
-    const { easing, loop, currentSlide, draggable } = this.props
+    const { easing, loop, currentSlide, draggable, cursorOnMouseDown } = this.props
 
     e.preventDefault()
     if (this.pointerDown && draggable) {
@@ -351,7 +361,7 @@ class Slider extends Component {
       const offset = currentOffset - dragOffset
 
       setStyle(this._sliderFrame.current, {
-        cursor: '-webkit-grabbing',
+        cursor: cursorOnMouseDown,
         webkitTransition: `all 0ms ${easing}`,
         transition: `all 0ms ${easing}`,
         transform: `translate3d(${offset * -1}px, 0, 0)`,
@@ -363,11 +373,11 @@ class Slider extends Component {
   onMouseLeave = e => {
 
     if (this.pointerDown) {
-      const { draggable } = this.props
+      const { cursor, draggable } = this.props
       this.pointerDown = false
       this.drag.endX = e.pageX
 
-      this.enableTransition(draggable ? { cursor: '-webkit-grab' } : {})
+      this.enableTransition(draggable ? { cursor } : {})
       this.updateAfterDrag()
       this._clearDrag()
     }
