@@ -89,8 +89,37 @@ class Slider extends Component {
   }
 
   componentDidMount() {
-    this.init()
-    this.setState({ firstRender: false })
+    const { draggable, currentSlide, loop, cursor } = this.props
+    this.setSelectorWidth()
+    this.setInnerElements()
+    this.perPage = resolveSlidesNumber(this.props.perPage)
+
+    this.innerElements.forEach(el => {
+      setStyle(el, {
+        width: `${100 / this.innerElements.length}%`
+      })
+    })
+    let newCurrentSlide = loop ? currentSlide % this.totalSlides : Math.min(Math.max(currentSlide, 0), this.totalSlides - this.perPage)
+    
+    if (currentSlide === 0) {
+      // If you don't know why these triple requestAnimationFrame watch this:
+      // https://youtu.be/cCOL7MC4Pl0
+      requestAnimationFrame(() => {
+        setStyle(this._sliderFrame.current, {
+          width: `${(this.selectorWidth / this.perPage) * this.innerElements.length}px`,
+          ...(draggable ? { cursor } : {}),
+        })
+        requestAnimationFrame(() => {
+          this.slideToCurrent(false, newCurrentSlide)
+          requestAnimationFrame(() => {
+            this.enableTransition()
+          })
+        })
+      })
+    } else {
+      this.init()
+    }
+    
   }
 
   componentWillUnmount() {
