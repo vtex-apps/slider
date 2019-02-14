@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import debounce from 'debounce'
+import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import {
   resolveSlidesNumber,
@@ -408,11 +409,14 @@ class Slider extends Component {
 
     return (
       <RootTag
-        className={styles.sliderRoot}
+        className={classnames(styles.sliderRoot, 'overflow-hidden h-100')}
         ref={this._selector}
         {...Slider.events.reduce((props, event) => ({ ...props, [event]: this[event] }), {})}
       >
-        <SliderFrameTag className={styles.sliderFrame} ref={this._sliderFrame}>
+        <SliderFrameTag
+          className={classnames(styles.sliderFrame, 'list pa0 h-100 ma0')}
+          ref={this._sliderFrame}
+        >
           {newChildren}
         </SliderFrameTag>
       </RootTag>

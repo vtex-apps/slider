@@ -42,11 +42,11 @@ class SlideComponent extends Component {
       imgElement.width / imgElement.height >
       imgElement.parentNode.offsetWidth / imgElement.parentNode.offsetHeight
     ) {
-      imgElement.classList.remove(styles.slideImgFullWidth)
-      imgElement.classList.add(styles.slideImgFullHeight)
+      imgElement.classList.remove('w-100')
+      imgElement.classList.add('h-100')
     } else {
-      imgElement.classList.remove(styles.slideImgFullHeight)
-      imgElement.classList.add(styles.slideImgFullWidth)
+      imgElement.classList.remove('h-100')
+      imgElement.classList.add('w-100')
     }
 
     imgElement.removeEventListener('load', this.fit)
@@ -79,7 +79,7 @@ class SlideComponent extends Component {
     return (
       <RootComponent
         ref={innerRef}
-        className={classnames(styles.slide, className)}
+        className={classnames(className, styles.slide, 'fl h-100 relative overflow-hidden')}
         {...rootProps}>
         <NoSSR>
           <EventListener target="window" onResize={this.handleResize} />
@@ -90,7 +90,7 @@ class SlideComponent extends Component {
             if (fitImg && child.type === 'img') {
               return React.cloneElement(child, {
                 ref: this.imgRef,
-                className: classnames(styles.slideImg, child.props.className)
+                className: classnames(styles.slideImg, child.props.className, 'absolute')
               })
             }
 

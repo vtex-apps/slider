@@ -1,35 +1,12 @@
-.sliderRoot {
-  overflow: hidden;
-  height: 100%;
-}
+.sliderRoot {}
 
-.sliderFrame {
-  list-style: none;
-  padding: 0;
-  height: 100%;
-  margin: 0;
-}
+.sliderFrame {}
 
-.slide {
-  float: left;
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-  transition: width 300ms ease;
-}
+.slide {}
 
 .slideImg {
-  position: absolute;
   margin-right: -50%;
   transform: translate(-50%, -50%);
   left: 50%;
   top: 50%;
-}
-
-.slideImgFullHeight {
-  height: 100%;
-}
-
-.slideImgFullWidth {
-  width: 100%;
 }
