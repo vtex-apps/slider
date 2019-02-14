@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import debounce from 'debounce'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
+import EventListener from 'react-event-listener'
 import {
   resolveSlidesNumber,
   getStylingTransition,
@@ -52,7 +53,10 @@ class Slider extends Component {
   }
 
   static defaultProps = {
-    classes: {},
+    classes: {
+      root: '',
+      sliderFrame: ''
+    },
     currentSlide: 0,
     cursor: '-webkit-grab',
     cursorOnMouseDown: '-webkit-grabbing',
@@ -81,17 +85,16 @@ class Slider extends Component {
 
     this._selector = React.createRef()
     this._sliderFrame = React.createRef()
+    this.handleResize = debounce(this.fit, props.resizeDebounce)
   }
 
   componentDidMount() {
     this.init()
-    this.onResize = debounce(this.handleResize, this.props.resizeDebounce)
-    window.addEventListener('resize', this.onResize)
     this.setState({ firstRender: false })
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.onResize)
+    this.handleResize.clear()
   }
 
   componentDidUpdate() {
@@ -135,7 +138,7 @@ class Slider extends Component {
     this.slideToCurrent(false, newCurrentSlide)
   }
 
-  handleResize = () => {
+  fit = () => {
     const { perPage, currentSlide, onChangeSlide } = this.props
     this.perPage = resolveSlidesNumber(perPage)
     const newCurrentSlide = Math.floor(currentSlide / this.perPage) * this.perPage
@@ -404,7 +407,7 @@ class Slider extends Component {
       loop,
       sliderFrameTag: SliderFrameTag,
       rootTag: RootTag,
-      classes
+      classes: classesProp
     } = this.props
     if (!this.perPage) {
       this.perPage = resolveSlidesNumber(this.props.perPage)
@@ -413,12 +416,18 @@ class Slider extends Component {
     const newChildren = loop ? this.generateChildrenWithClones(children, this.perPage)
       : childrenProp
 
+    const classes = {
+      ...Slider.defaultProps.classes,
+      ...classesProp
+    }
+
     return (
       <RootTag
         className={classnames(classes.root, 'overflow-hidden h-100')}
         ref={this._selector}
         {...Slider.events.reduce((props, event) => ({ ...props, [event]: this[event] }), {})}
       >
+        <EventListener target="window" onResize={this.handleResize} />
         <SliderFrameTag
           className={classnames(classes.sliderFrame, 'list pa0 h-100 ma0')}
           ref={this._sliderFrame}
