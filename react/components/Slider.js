@@ -8,58 +8,63 @@ import {
   setTransformProperty,
   setStyle,
 } from '../utils'
-import styles from './styles'
 
 class Slider extends Component {
   static propTypes = {
-    /** Resize debounce timer in milliseconds */
-    resizeDebounce: PropTypes.number,
-    /** Tag to be rendered in the slider frame */
-    sliderFrameTag: PropTypes.string,
-    /** Tag to be rendered in the root element of the page */
-    rootTag: PropTypes.string,
+    /** The slides to render */
+    children: PropTypes.oneOfType([
+      PropTypes.element,
+      PropTypes.arrayOf(PropTypes.element)
+    ]),
+    /** Classes to apply to the Slider elements */
+    classes: PropTypes.shape({
+      root: PropTypes.string,
+      sliderFrame: PropTypes.string
+    }),
     /** Current slide on the screen (if you have perPage > 1, then the current slide is the most left slide on the screen) */
     currentSlide: PropTypes.number,
-    /** Function to change the value of currentSlide */
-    onChangeSlide: PropTypes.func.isRequired,
+    /** Css value of cursor when mouse is hovering the slider frame */
+    cursor: PropTypes.string,
+    /** Css value of cursos when mouse is down */
+    cursorOnMouseDown: PropTypes.string,
+    // TODO draggable: PropTypes.bool,
     /** Duration of transitions */
     duration: PropTypes.number,
     /** Transition function */
     easing: PropTypes.string,
+    /** If the slider should loop or not */
+    loop: PropTypes.bool,
+    /** Function to change the value of currentSlide */
+    onChangeSlide: PropTypes.func.isRequired,
     /** Amount of slides to be on the screen, if a number is passed, then thats the slides that will be shown,
      * if an object with breakpoints is passed, then the component will check the size of the screen to see how
      * many elements will be on the screen
      */
     perPage: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-    // TODO draggable: PropTypes.bool,
+    /** Resize debounce timer in milliseconds */
+    resizeDebounce: PropTypes.number,
+    /** Tag to be rendered in the root element of the page */
+    rootTag: PropTypes.string,
+    /** Tag to be rendered in the slider frame */
+    sliderFrameTag: PropTypes.string,
     /** Threshold of pixels to drag to the slider let it go to the next/prev slide */
     threshold: PropTypes.number,
-    /** If the slider should loop or not */
-    loop: PropTypes.bool,
-    /** Css value of cursor when mouse is hovering the slider frame */
-    cursor: PropTypes.string,
-    /** Css value of cursos when mouse is down */
-    cursorOnMouseDown: PropTypes.string,
-    /** The slides to render */
-    children: PropTypes.oneOfType([
-      PropTypes.element,
-      PropTypes.arrayOf(PropTypes.element)
-    ])
   }
 
   static defaultProps = {
-    resizeDebounce: 250,
+    classes: {},
+    currentSlide: 0,
+    cursor: '-webkit-grab',
+    cursorOnMouseDown: '-webkit-grabbing',
+    draggable: true,
     duration: 250,
     easing: 'ease-out',
-    perPage: 1,
-    currentSlide: 0,
-    draggable: true,
-    threshold: 20,
     loop: false,
-    sliderFrameTag: 'ul',
+    perPage: 1,
+    resizeDebounce: 250,
     rootTag: 'div',
-    cursor: '-webkit-grab',
-    cursorOnMouseDown: '-webkit-grabbing'
+    sliderFrameTag: 'ul',
+    threshold: 20
   }
 
   static events = ['onMouseUp', 'onMouseDown', 'onMouseLeave', 'onMouseMove']
@@ -398,7 +403,8 @@ class Slider extends Component {
       children,
       loop,
       sliderFrameTag: SliderFrameTag,
-      rootTag: RootTag
+      rootTag: RootTag,
+      classes
     } = this.props
     if (!this.perPage) {
       this.perPage = resolveSlidesNumber(this.props.perPage)
@@ -409,12 +415,12 @@ class Slider extends Component {
 
     return (
       <RootTag
-        className={classnames(styles.sliderRoot, 'overflow-hidden h-100')}
+        className={classnames(classes.root, 'overflow-hidden h-100')}
         ref={this._selector}
         {...Slider.events.reduce((props, event) => ({ ...props, [event]: this[event] }), {})}
       >
         <SliderFrameTag
-          className={classnames(styles.sliderFrame, 'list pa0 h-100 ma0')}
+          className={classnames(classes.sliderFrame, 'list pa0 h-100 ma0')}
           ref={this._sliderFrame}
         >
           {newChildren}

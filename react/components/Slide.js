@@ -79,7 +79,7 @@ class SlideComponent extends Component {
     return (
       <RootComponent
         ref={innerRef}
-        className={classnames(className, styles.slide, 'fl h-100 relative overflow-hidden')}
+        className={classnames(className, 'fl h-100 relative overflow-hidden')}
         {...rootProps}>
         <NoSSR>
           <EventListener target="window" onResize={this.handleResize} />

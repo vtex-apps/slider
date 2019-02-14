@@ -26,9 +26,12 @@ render.displayName = 'SliderContainer'
 const SliderContainer = React.forwardRef(render)
 
 SliderContainer.propsTypes = {
-  tag: PropTypes.string,
+  /** Children of the component to render */
+  children: PropTypes.node.isRequired,
+  /** classes to be applied to the root element */
   className: PropTypes.string,
-  children: PropTypes.node.isRequired
+  /** Tag to render the component */
+  tag: PropTypes.string
 }
 
 SliderContainer.defaultProps = {
