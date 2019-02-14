@@ -64,10 +64,6 @@ class Slider extends Component {
       letItGo: null
     }
 
-    this.state = {
-      firstRender: true
-    }
-
     this._selector = React.createRef()
     this._sliderFrame = React.createRef()
   }
@@ -385,12 +381,11 @@ class Slider extends Component {
 
   render() {
     const { children: childrenProp, loop, sliderFrameTag: SliderFrameTag } = this.props
-    const { firstRender } = this.state
     if (!this.perPage) {
       this.perPage = resolveSlidesNumber(this.props.perPage)
     }
 
-    const newChildren = loop && !firstRender ? this.generateChildrenWithClones(childrenProp, this.perPage)
+    const newChildren = loop ? this.generateChildrenWithClones(childrenProp, this.perPage)
       : childrenProp
 
     return (

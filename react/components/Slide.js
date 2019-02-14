@@ -4,6 +4,7 @@ import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import debounce from 'debounce'
 import styles from './styles.css'
+import { NoSSR } from 'vtex.render-runtime'
 
 class SlideComponent extends Component {
   constructor(props) {
@@ -16,15 +17,10 @@ class SlideComponent extends Component {
         }, props.resizeDebounce)
       }, props.resizeDebounce)
     }
-
-    this.state = {
-      runningInServer: true
-    }
   }
 
   componentDidMount() {
     this.ensureImageCover()
-    this.setState({ runningInServer: false })
   }
 
   componentDidUpdate() {
@@ -77,32 +73,30 @@ class SlideComponent extends Component {
       fitImg,
       innerRef,
       resizeDebounce,
-      SSRSize,
       ...rootProps
     } = this.props
-
-    const { runningInServer } = this.state
 
     return (
       <RootComponent
         ref={innerRef}
         className={classnames(styles.slide, className)}
-        style={runningInServer && SSRSize ? { width: SSRSize } : {}}
         {...rootProps}>
-        <EventListener target="window" onResize={this.handleResize} />
-        {React.Children.map(children, child => {
-          if (!React.isValidElement(child)) {
-            return null
-          }
-          if (fitImg && child.type === 'img') {
-            return React.cloneElement(child, {
-              ref: this.imgRef,
-              className: classnames(styles.slideImg, child.props.className)
-            })
-          }
+        <NoSSR>
+          <EventListener target="window" onResize={this.handleResize} />
+          {React.Children.map(children, child => {
+            if (!React.isValidElement(child)) {
+              return null
+            }
+            if (fitImg && child.type === 'img') {
+              return React.cloneElement(child, {
+                ref: this.imgRef,
+                className: classnames(styles.slideImg, child.props.className)
+              })
+            }
 
-          return child
-        })}
+            return child
+          })}
+        </NoSSR>
       </RootComponent>
     )
   }
@@ -124,9 +118,7 @@ Slide.propTypes = {
   /** If the slide component should try to fit the img (only works if children is an img element) */
   fitImg: PropTypes.bool,
   /** Time of debounce of resize event listener */
-  resizeDebounce: PropTypes.number,
-  /** Initial width to be applied in SSR */
-  SSRSize: PropTypes.number
+  resizeDebounce: PropTypes.number
 }
 
 Slide.defaultProps = {
