@@ -28,7 +28,7 @@ const SliderContainer = React.forwardRef(render)
 SliderContainer.propsTypes = {
   /** Children of the component to render */
   children: PropTypes.node.isRequired,
-  /** classes to be applied to the root element */
+  /** Classes to be applied to the root element */
   className: PropTypes.string,
   /** Tag to render the component */
   tag: PropTypes.string

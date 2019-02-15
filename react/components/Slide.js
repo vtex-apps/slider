@@ -9,13 +9,11 @@ class SlideComponent extends Component {
   constructor(props) {
     super(props)
     this.imgRef = React.createRef()
-    if (typeof window !== 'undefined') {
-      this.handleResize = debounce(() => {
-        setTimeout(() => {
-          this.fit()
-        }, props.resizeDebounce)
+    this.handleResize = debounce(() => {
+      setTimeout(() => {
+        this.fit()
       }, props.resizeDebounce)
-    }
+    }, props.resizeDebounce)
   }
 
   componentDidMount() {
@@ -37,17 +35,16 @@ class SlideComponent extends Component {
       return
     }
 
-    if (
-      imgElement.width / imgElement.height >
-      imgElement.parentNode.offsetWidth / imgElement.parentNode.offsetHeight
-    ) {
+    const imgAspectRatio = imgElement.width / imgElement.height
+    const parentAspectRatio = imgElement.parentNode.offsetWidth / imgElement.parentNode.offsetHeight
+
+    if (imgAspectRatio > parentAspectRatio) {
       imgElement.classList.remove('w-100')
       imgElement.classList.add('h-100')
     } else {
       imgElement.classList.remove('h-100')
       imgElement.classList.add('w-100')
     }
-
     imgElement.removeEventListener('load', this.fit)
   }
 

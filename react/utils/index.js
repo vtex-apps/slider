@@ -30,7 +30,7 @@ export function setTransformProperty(target, x = 0, y = 0, z = 0) {
 
 export function getStylingTransition(easing, duration = 0) {
   return {
-    webkitTransition: `all ${duration}ms ${easing}`,
+    WebkitTransition: `all ${duration}ms ${easing}`,
     transition: `all ${duration}ms ${easing}`
   }
 }

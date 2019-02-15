@@ -55,12 +55,8 @@ class Dots extends Component {
 
   get slideIndeces() {
     const { showDotsPerPage, totalSlides } = this.props
-
-    if (this.perPage) {
-      return [...Array(showDotsPerPage ? Math.ceil(totalSlides / this.perPage) : totalSlides).keys()]
-    }
-
-    return []
+    return this.perPage ? [...Array(showDotsPerPage ? Math.ceil(totalSlides / this.perPage) : totalSlides).keys()]
+      : []
   }
 
   get selectedDot() {
