@@ -1,7 +1,8 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import debounce from 'debounce'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
+import Arrow from './Arrow'
 import EventListener from 'react-event-listener'
 import {
   resolveSlidesNumber,
@@ -12,6 +13,11 @@ import {
 
 class Slider extends Component {
   static propTypes = {
+    /** Tag to be rendered in the arrows components */
+    arrowTag: PropTypes.string,
+    /** Thickeness of both arrows */
+    arrowThickness: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    arrowProps: PropTypes.object,
     /** The slides to render */
     children: PropTypes.oneOfType([
       PropTypes.element,
@@ -20,7 +26,10 @@ class Slider extends Component {
     /** Classes to apply to the Slider elements */
     classes: PropTypes.shape({
       root: PropTypes.string,
-      sliderFrame: PropTypes.string
+      sliderFrame: PropTypes.string,
+      arrow: PropTypes.string,
+      arrowLeft: PropTypes.string,
+      arrowRight: PropTypes.string
     }),
     /** Current slide on the screen (if you have perPage > 1, then the current slide is the most left slide on the screen) */
     currentSlide: PropTypes.number,
@@ -46,6 +55,7 @@ class Slider extends Component {
     resizeDebounce: PropTypes.number,
     /** Tag to be rendered in the root element of the page */
     rootTag: PropTypes.string,
+    showArrows: PropTypes.bool,
     /** Tag to be rendered in the slider frame */
     sliderFrameTag: PropTypes.string,
     /** Threshold of pixels to drag to the slider let it go to the next/prev slide */
@@ -55,7 +65,10 @@ class Slider extends Component {
   static defaultProps = {
     classes: {
       root: '',
-      sliderFrame: ''
+      sliderFrame: '',
+      arrow: '',
+      arrowLeft: '',
+      arrowRight: ''
     },
     currentSlide: 0,
     cursor: '-webkit-grab',
@@ -67,6 +80,7 @@ class Slider extends Component {
     perPage: 1,
     resizeDebounce: 250,
     rootTag: 'div',
+    showArrows: false,
     sliderFrameTag: 'ul',
     threshold: 20
   }
@@ -448,7 +462,9 @@ class Slider extends Component {
       loop,
       sliderFrameTag: SliderFrameTag,
       rootTag: RootTag,
-      classes: classesProp
+      classes: classesProp,
+      arrowTag,
+      arrowThickness,
     } = this.props
     if (!this.perPage) {
       this.perPage = resolveSlidesNumber(this.props.perPage)
@@ -463,19 +479,34 @@ class Slider extends Component {
     }
 
     return (
-      <RootTag
-        className={classnames(classes.root, 'overflow-hidden h-100')}
-        ref={this._selector}
-        {...Slider.events.reduce((props, event) => ({ ...props, [event]: this[event] }), {})}
-      >
-        <EventListener target="window" onResize={this.handleResize} />
-        <SliderFrameTag
-          className={classnames(classes.sliderFrame, 'list pa0 h-100 ma0 inline-flex')}
-          ref={this._sliderFrame}
-        >
-          {newChildren}
-        </SliderFrameTag>
-      </RootTag>
+      <Fragment>
+        <RootTag
+          className={classnames(classes.root, 'overflow-hidden h-100')}
+          ref={this._selector}
+          {...Slider.events.reduce((props, event) => ({ ...props, [event]: this[event] }), {})}
+          >
+          <EventListener target="window" onResize={this.handleResize} />
+          <SliderFrameTag
+            className={classnames(classes.sliderFrame, 'list pa0 h-100 ma0 inline-flex')}
+            ref={this._sliderFrame}
+            >
+            {newChildren}
+          </SliderFrameTag>
+        </RootTag>
+        <Arrow
+          className={classnames(classes.arrow, classes.arrowLeft)}
+          onClick={() => this.prevPage()}
+          tag={arrowTag}
+          thickness={arrowThickness}
+        />
+        <Arrow
+          right
+          className={classnames(classes.arrow, classes.arrowRight)}
+          onClick={() => this.nextPage()}
+          tag={arrowTag}
+          thickness={arrowThickness}
+        />
+      </Fragment>
     )
   }
 }
