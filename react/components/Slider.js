@@ -465,6 +465,7 @@ class Slider extends Component {
       classes: classesProp,
       arrowTag,
       arrowThickness,
+      showArrows
     } = this.props
     if (!this.perPage) {
       this.perPage = resolveSlidesNumber(this.props.perPage)
@@ -493,19 +494,23 @@ class Slider extends Component {
             {newChildren}
           </SliderFrameTag>
         </RootTag>
-        <Arrow
-          className={classnames(classes.arrow, classes.arrowLeft)}
-          onClick={() => this.prevPage()}
-          tag={arrowTag}
-          thickness={arrowThickness}
-        />
-        <Arrow
-          right
-          className={classnames(classes.arrow, classes.arrowRight)}
-          onClick={() => this.nextPage()}
-          tag={arrowTag}
-          thickness={arrowThickness}
-        />
+        {showArrows && (
+          <Fragment>
+            <Arrow
+              className={classnames(classes.arrow, classes.arrowLeft)}
+              onClick={() => this.prevPage()}
+              tag={arrowTag}
+              thickness={arrowThickness}
+            />
+            <Arrow
+              right
+              className={classnames(classes.arrow, classes.arrowRight)}
+              onClick={() => this.nextPage()}
+              tag={arrowTag}
+              thickness={arrowThickness}
+            />
+          </Fragment>
+        )}
       </Fragment>
     )
   }
