@@ -71,7 +71,7 @@ class Slider extends Component {
     threshold: 20
   }
 
-  static events = ['onMouseUp', 'onMouseDown', 'onMouseLeave', 'onMouseMove']
+  static events = ['onTouchStart', 'onTouchEnd', 'onTouchMove', 'onMouseUp', 'onMouseDown', 'onMouseLeave', 'onMouseMove']
 
   constructor(props) {
     super(props)
@@ -327,7 +327,49 @@ class Slider extends Component {
     }
   }
 
-  // TODO add touch events
+  onTouchStart = e => {
+    e.stopPropagation()
+    this.pointerDown = true
+    this.drag.startX = e.touches[0].pageX
+    this.drag.startY = e.touches[0].pageY
+  }
+
+  onTouchEnd = e => {
+    e.stopPropagation()
+    this.pointerDown = false
+    this.enableTransition()
+    if (this.drag.endX) {
+      this.updateAfterDrag()
+    }
+    this._clearDrag()
+  }
+  
+  onTouchMove = e => {
+    e.stopPropagation()
+
+    if (this.drag.letItGo === null) {
+      this.drag.letItGo = Math.abs(this.drag.startY - e.touches[0].pageY) < Math.abs(this.drag.startX - e.touches[0].pageX)
+    }
+
+    if (this.pointerDown && this.drag.letItGo) {
+      const { easing, loop, currentSlide } = this.props
+
+      e.preventDefault()
+      this.drag.endX = e.touches[0].pageX
+
+      const computedCurrentSlide = loop ? currentSlide + this.perPage : currentSlide
+      const currentOffset = computedCurrentSlide * (this.selectorWidth / this.perPage)
+      const dragOffset = this.drag.endX - this.drag.startX
+      const offset = currentOffset - dragOffset
+
+      setStyle(this._sliderFrame.current, {
+        WebkitTransition: `all 0ms ${easing}`,
+        transition: `all 0ms ${easing}`,
+        transform: `translate3d(${offset * -1}px, 0, 0)`,
+        WebkitTransform: `translate3d(${offset * -1}px, 0, 0)`
+      })
+    }
+  }
 
   onMouseDown = e => {
     e.preventDefault()
@@ -370,7 +412,7 @@ class Slider extends Component {
 
       setStyle(this._sliderFrame.current, {
         cursor: cursorOnMouseDown,
-        webkitTransition: `all 0ms ${easing}`,
+        WebkitTransition: `all 0ms ${easing}`,
         transition: `all 0ms ${easing}`,
         transform: `translate3d(${offset * -1}px, 0, 0)`,
         WebkitTransform: `translate3d(${offset * -1}px, 0, 0)`
