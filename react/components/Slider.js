@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react'
 import debounce from 'debounce'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
-import Arrow from './Arrow'
 import EventListener from 'react-event-listener'
 import {
   resolveSlidesNumber,
@@ -13,8 +12,9 @@ import {
 
 class Slider extends Component {
   static propTypes = {
-    arrowLeft: PropTypes.element,
-    arrowRight: PropTypes.element,
+    /** A render function that will receive as props an orientation prop
+     * and a onClick callback */
+    arrowRender: PropTypes.func,
     /** The slides to render */
     children: PropTypes.oneOfType([
       PropTypes.element,
@@ -453,8 +453,7 @@ class Slider extends Component {
       sliderFrameTag: SliderFrameTag,
       rootTag: RootTag,
       classes: classesProp,
-      arrowLeft: ArrowLeft,
-      arrowRight: ArrowRight
+      arrowRender
     } = this.props
     if (!this.perPage) {
       this.perPage = resolveSlidesNumber(this.props.perPage)
@@ -483,8 +482,8 @@ class Slider extends Component {
             {newChildren}
           </SliderFrameTag>
         </RootTag>
-        {ArrowLeft && React.cloneElement(ArrowLeft, { onClick: () => this.prevPage() })}
-        {ArrowRight && React.cloneElement(ArrowRight, { onClick: () => this.nextPage() })}
+        {arrowRender && arrowRender({ orientation: 'left', onClick: this.prevPage })}
+        {arrowRender && arrowRender({ orientation: 'right', onClick: this.nextPage })}
       </Fragment>
     )
   }
