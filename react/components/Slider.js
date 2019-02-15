@@ -13,11 +13,8 @@ import {
 
 class Slider extends Component {
   static propTypes = {
-    /** Tag to be rendered in the arrows components */
-    arrowTag: PropTypes.string,
-    /** Thickeness of both arrows */
-    arrowThickness: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-    arrowProps: PropTypes.object,
+    arrowLeft: PropTypes.element,
+    arrowRight: PropTypes.element,
     /** The slides to render */
     children: PropTypes.oneOfType([
       PropTypes.element,
@@ -27,9 +24,6 @@ class Slider extends Component {
     classes: PropTypes.shape({
       root: PropTypes.string,
       sliderFrame: PropTypes.string,
-      arrow: PropTypes.string,
-      arrowLeft: PropTypes.string,
-      arrowRight: PropTypes.string
     }),
     /** Current slide on the screen (if you have perPage > 1, then the current slide is the most left slide on the screen) */
     currentSlide: PropTypes.number,
@@ -55,7 +49,6 @@ class Slider extends Component {
     resizeDebounce: PropTypes.number,
     /** Tag to be rendered in the root element of the page */
     rootTag: PropTypes.string,
-    showArrows: PropTypes.bool,
     /** Tag to be rendered in the slider frame */
     sliderFrameTag: PropTypes.string,
     /** Threshold of pixels to drag to the slider let it go to the next/prev slide */
@@ -65,10 +58,7 @@ class Slider extends Component {
   static defaultProps = {
     classes: {
       root: '',
-      sliderFrame: '',
-      arrow: '',
-      arrowLeft: '',
-      arrowRight: ''
+      sliderFrame: ''
     },
     currentSlide: 0,
     cursor: '-webkit-grab',
@@ -463,9 +453,8 @@ class Slider extends Component {
       sliderFrameTag: SliderFrameTag,
       rootTag: RootTag,
       classes: classesProp,
-      arrowTag,
-      arrowThickness,
-      showArrows
+      arrowLeft: ArrowLeft,
+      arrowRight: ArrowRight
     } = this.props
     if (!this.perPage) {
       this.perPage = resolveSlidesNumber(this.props.perPage)
@@ -494,23 +483,8 @@ class Slider extends Component {
             {newChildren}
           </SliderFrameTag>
         </RootTag>
-        {showArrows && (
-          <Fragment>
-            <Arrow
-              className={classnames(classes.arrow, classes.arrowLeft)}
-              onClick={() => this.prevPage()}
-              tag={arrowTag}
-              thickness={arrowThickness}
-            />
-            <Arrow
-              right
-              className={classnames(classes.arrow, classes.arrowRight)}
-              onClick={() => this.nextPage()}
-              tag={arrowTag}
-              thickness={arrowThickness}
-            />
-          </Fragment>
-        )}
+        {ArrowLeft && React.cloneElement(ArrowLeft, { onClick: () => this.prevPage() })}
+        {ArrowRight && React.cloneElement(ArrowRight, { onClick: () => this.nextPage() })}
       </Fragment>
     )
   }

@@ -1,56 +1,47 @@
-
 import React from 'react'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
-import styles from './styles'
-
-function getBorderValue(thickness) {
-  if (typeof thickness === 'number') {
-    return `solid ${thickness}px currentColor`
-  }
-  return `solid ${thickness} currentColor`
-}
+import styles from './styles.css'
+import { IconCaret } from 'vtex.dreamstore-icons'
 
 const Arrow = props => {
   const {
-    tag: TagRoot,
-    thickness,
-    right,
+    rootTag: RootTag,
+    orientation,
     size,
-    className,
+    classes,
     ...restProps
   } = props
 
-  const style = {
-    transform: `rotate(${right ? 45 : -135}deg) translate(0, -50%)`,
-    borderLeft: 'none',
-    borderBottom: 'none',
-    top: '50%',
-    transformOrigin: '50% 0',
-    borderTop: getBorderValue(thickness),
-    borderRight: getBorderValue(thickness),
-    ...(size ? { height: size, width: size } : {})
-  }
+  const containerStyle = size ? { height: size + 10, width: size + 10 } : {}
 
-  return <TagRoot
-    className={classnames(styles.arrow, className, 'bg-transparent absolute pa0')}
-    style={style}
-    {...restProps}
-  />
+  return (
+    <RootTag
+      className={classnames(styles.arrowContainer, classes.container, 'bg-transparent bn absolute pa2')}
+      style={containerStyle}
+      {...restProps}
+    >
+      <IconCaret className={classes.arrow} size={size} orientation={orientation} />
+    </RootTag>
+  )
 }
 
 Arrow.propTypes = {
   className: PropTypes.string,
+  classes: PropTypes.shape({
+    container: PropTypes.string,
+    arrow: PropTypes.string
+  }),
   tag: PropTypes.string,
   right: PropTypes.bool,
   onClick: PropTypes.func.isRequired,
-  size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  thickness: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired
+  orientation: PropTypes.oneOf(['left', 'right']),
+  size: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 }
 
 Arrow.defaultProps = {
-  tag: 'button',
-  right: false
+  rootTag: 'div',
+  orientation: 'left'
 }
 
 export default Arrow

@@ -10,5 +10,8 @@
   },
   "builders": {
     "react": "3.x"
+  },
+  "dependencies": {
+    "vtex.dreamstore-icons": "0.x"
   }
 }
