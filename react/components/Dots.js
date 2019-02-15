@@ -17,6 +17,8 @@ class Dots extends Component {
     }),
     /** Extra props to be applied to the dot element */
     dotProps: PropTypes.object,
+    /** The size of the dots, can be a number (in this case it will use px unit), or a string (you have to pass the number with the unit e.g '3rem') */
+    dotSize: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     /** Tag to be rendered in the dot element */
     dotTag: PropTypes.string,
     /** Function to change the currentSlide */
@@ -103,6 +105,7 @@ class Dots extends Component {
       currentSlide,
       onChangeSlide,
       totalSlides,
+      dotSize,
       ...otherProps
     } = this.props
 
@@ -122,12 +125,18 @@ class Dots extends Component {
       >
         <EventListener target="window" onResize={this.handleResize} />
         {this.slideIndeces.map(i => {
-          const dotClasses = classnames(styles.dot, classes.dot, 'dib', {
+          const dotClasses = classnames(classes.dot, 'dib', {
             [classes.activeDot]: i === this.selectedDot,
             [classes.notActiveDot]: i !== this.selectedDot
           })
           return (
-            <DotTag className={dotClasses} key={i} onClick={() => this.handleDotClick(i)} {...dotProps} />
+            <DotTag
+              className={dotClasses}
+              key={i}
+              onClick={() => this.handleDotClick(i)}
+              {...{ style: { height: dotSize, width: dotSize } }}
+              {...dotProps}
+            />
           )
         })}
       </RootTag>
