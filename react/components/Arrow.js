@@ -6,7 +6,7 @@ import { IconCaret } from 'vtex.dreamstore-icons'
 
 const Arrow = props => {
   const {
-    rootTag: RootTag,
+    tag: RootTag,
     orientation,
     size,
     classes,
@@ -27,20 +27,23 @@ const Arrow = props => {
 }
 
 Arrow.propTypes = {
-  className: PropTypes.string,
+  /** Classes to be passed to the internal elements */
   classes: PropTypes.shape({
     container: PropTypes.string,
     arrow: PropTypes.string
   }),
+  /** Tag to be rendered as the root fo the component */
   tag: PropTypes.string,
-  right: PropTypes.bool,
+  /** onClick callback */
   onClick: PropTypes.func.isRequired,
+  /** Orientation of the Arrow */
   orientation: PropTypes.oneOf(['left', 'right']),
+  /** Size of the icon */
   size: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 }
 
 Arrow.defaultProps = {
-  rootTag: 'div',
+  tag: 'div',
   orientation: 'left'
 }
 
