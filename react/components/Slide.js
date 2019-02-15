@@ -4,7 +4,6 @@ import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import debounce from 'debounce'
 import styles from './styles.css'
-import { NoSSR } from 'vtex.render-runtime'
 
 class SlideComponent extends Component {
   constructor(props) {
@@ -73,30 +72,32 @@ class SlideComponent extends Component {
       fitImg,
       innerRef,
       resizeDebounce,
+      defaultWidth,
+      style,
       ...rootProps
     } = this.props
 
     return (
       <RootComponent
         ref={innerRef}
-        className={classnames(className, 'fl h-100 relative overflow-hidden')}
-        {...rootProps}>
-        <NoSSR>
-          <EventListener target="window" onResize={this.handleResize} />
-          {React.Children.map(children, child => {
-            if (!React.isValidElement(child)) {
-              return null
-            }
-            if (fitImg && child.type === 'img') {
-              return React.cloneElement(child, {
-                ref: this.imgRef,
-                className: classnames(styles.slideImg, child.props.className, 'absolute')
-              })
-            }
+        className={classnames(className, 'inline-flex h-100 relative overflow-hidden')}
+        style={defaultWidth ? { width: defaultWidth } : style}
+        {...rootProps}
+      >
+        <EventListener target="window" onResize={this.handleResize} />
+        {React.Children.map(children, child => {
+          if (!React.isValidElement(child)) {
+            return null
+          }
+          if (fitImg && child.type === 'img') {
+            return React.cloneElement(child, {
+              ref: this.imgRef,
+              className: classnames(styles.slideImg, child.props.className, 'absolute')
+            })
+          }
 
-            return child
-          })}
-        </NoSSR>
+          return child
+        })}
       </RootComponent>
     )
   }
@@ -113,6 +114,8 @@ Slide.propTypes = {
   children: PropTypes.node.isRequired,
   /** Classes to pass to root of slider */
   className: PropTypes.string,
+  /** Default width of root in px */
+  defaultWidth: PropTypes.number,
   /** Tag to be rendered in root element */
   tag: PropTypes.string,
   /** If the slide component should try to fit the img (only works if children is an img element) */

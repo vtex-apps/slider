@@ -34,7 +34,7 @@ class Slider extends Component {
     /** Transition function */
     easing: PropTypes.string,
     /** If the slider should loop or not */
-    loop: PropTypes.bool,
+    // loop: PropTypes.bool, // TODO
     /** Function to change the value of currentSlide */
     onChangeSlide: PropTypes.func.isRequired,
     /** Amount of slides to be on the screen, if a number is passed, then thats the slides that will be shown,
@@ -89,37 +89,7 @@ class Slider extends Component {
   }
 
   componentDidMount() {
-    const { draggable, currentSlide, loop, cursor } = this.props
-    this.setSelectorWidth()
-    this.setInnerElements()
-    this.perPage = resolveSlidesNumber(this.props.perPage)
-
-    this.innerElements.forEach(el => {
-      setStyle(el, {
-        width: `${100 / this.innerElements.length}%`
-      })
-    })
-    let newCurrentSlide = loop ? currentSlide % this.totalSlides : Math.min(Math.max(currentSlide, 0), this.totalSlides - this.perPage)
-    
-    if (currentSlide === 0) {
-      // If you don't know why these triple requestAnimationFrame watch this:
-      // https://youtu.be/cCOL7MC4Pl0
-      requestAnimationFrame(() => {
-        setStyle(this._sliderFrame.current, {
-          width: `${(this.selectorWidth / this.perPage) * this.innerElements.length}px`,
-          ...(draggable ? { cursor } : {}),
-        })
-        requestAnimationFrame(() => {
-          this.slideToCurrent(false, newCurrentSlide)
-          requestAnimationFrame(() => {
-            this.enableTransition()
-          })
-        })
-      })
-    } else {
-      this.init()
-    }
-    
+    this.init()
   }
 
   componentWillUnmount() {
@@ -443,7 +413,7 @@ class Slider extends Component {
     }
 
     const newChildren = loop ? this.generateChildrenWithClones(children, this.perPage)
-      : childrenProp
+      : children
 
     const classes = {
       ...Slider.defaultProps.classes,
@@ -458,7 +428,7 @@ class Slider extends Component {
       >
         <EventListener target="window" onResize={this.handleResize} />
         <SliderFrameTag
-          className={classnames(classes.sliderFrame, 'list pa0 h-100 ma0')}
+          className={classnames(classes.sliderFrame, 'list pa0 h-100 ma0 inline-flex')}
           ref={this._sliderFrame}
         >
           {newChildren}
