@@ -4,6 +4,7 @@ import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import debounce from 'debounce'
 import styles from './styles.css'
+import { constants } from '../utils'
 
 class SlideComponent extends Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class SlideComponent extends Component {
     this.handleResize = debounce(() => {
       setTimeout(() => {
         this.fit()
-      }, props.resizeDebounce)
+      }, props.sliderTransitionDuration)
     }, props.resizeDebounce)
   }
 
@@ -118,13 +119,18 @@ Slide.propTypes = {
   /** If the slide component should try to fit the img (only works if children is an img element) */
   fitImg: PropTypes.bool,
   /** Time of debounce of resize event listener */
-  resizeDebounce: PropTypes.number
+  resizeDebounce: PropTypes.number,
+  /** Duration of transition passed to Slider (must be the same), if nothing is passed to any of the components
+   * it will apply the same default value
+   */
+  sliderTransitionDuration: PropTypes.number
 }
 
 Slide.defaultProps = {
   tag: 'li',
   fitImg: true,
-  resizeDebounce: 250
+  resizeDebounce: constants.defaultResizeDebounce,
+  sliderTransitionDuration: constants.defaultTransitionDuration
 }
 
 export default Slide
