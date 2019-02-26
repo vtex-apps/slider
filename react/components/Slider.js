@@ -496,6 +496,7 @@ class Slider extends Component {
 
     return (
       <Fragment>
+        {this.renderArrows()}
         <RootTag
           className={classnames(classes.root, 'overflow-hidden h-100')}
           ref={this._selector}
@@ -510,7 +511,6 @@ class Slider extends Component {
             {newChildren}
           </SliderFrameTag>
         </RootTag>
-        {this.renderArrows()}
       </Fragment>
     )
   }
