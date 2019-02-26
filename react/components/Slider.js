@@ -3,6 +3,7 @@ import debounce from 'debounce'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import EventListener from 'react-event-listener'
+import styles from './styles.css'
 import {
   resolveSlidesNumber,
   getStylingTransition,
@@ -95,10 +96,14 @@ class Slider extends Component {
     this._selector = React.createRef()
     this._sliderFrame = React.createRef()
     this.handleResize = debounce(this.fit, props.resizeDebounce)
+
+    this.state = {
+      firstRender: true
+    }
   }
 
   componentDidMount() {
-    this.init()
+    this.setState({ firstRender: false })
   }
 
   componentWillUnmount() {
@@ -299,10 +304,8 @@ class Slider extends Component {
 
     if (shouldEnableTransition) {
       requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          this.enableTransition()
-          setTransformProperty(this._sliderFrame.current, offset)
-        })
+        this.enableTransition()
+        setTransformProperty(this._sliderFrame.current, offset)
       })
     } else {
       setTransformProperty(this._sliderFrame.current, offset)
@@ -442,13 +445,11 @@ class Slider extends Component {
     }
   }
 
-  generateChildrenWithClones = (children, perPage) => {
+  generateChildrenWithWidth = (children, firstRender) => {
     const childrenArray = React.Children.toArray(children)
-    return React.Children.map([
-      ...childrenArray.slice(childrenArray.length - perPage, childrenArray.length),
-      ...childrenArray,
-      ...childrenArray.slice(0, perPage)
-    ], (c, i) => React.cloneElement(c, { key: i }))
+    return firstRender ?
+      React.Children.map(childrenArray, c => React.cloneElement(c, { style: { width: `${100 / childrenArray.length}%` } }))
+      : childrenArray
   }
 
   renderArrows = () => {
@@ -477,22 +478,21 @@ class Slider extends Component {
   render() {
     const {
       children,
-      loop,
       sliderFrameTag: SliderFrameTag,
       rootTag: RootTag,
       classes: classesProp
     } = this.props
+    const { firstRender } = this.state
     if (!this.perPage) {
       this.perPage = resolveSlidesNumber(this.props.perPage)
     }
-
-    const newChildren = loop ? this.generateChildrenWithClones(children, this.perPage)
-      : children
 
     const classes = {
       ...Slider.defaultProps.classes,
       ...classesProp
     }
+
+    const newChildren = this.generateChildrenWithWidth(children, firstRender)
 
     return (
       <Fragment>
@@ -503,7 +503,8 @@ class Slider extends Component {
         >
           <EventListener target="window" onResize={this.handleResize} />
           <SliderFrameTag
-            className={classnames(classes.sliderFrame, 'list pa0 h-100 ma0 inline-flex')}
+            className={classnames(classes.sliderFrame, styles.sliderFrame, 'list pa0 h-100 ma0 inline-flex')}
+            style={firstRender ? { width: `${100 * newChildren.length / this.perPage}%` } : {}}
             ref={this._sliderFrame}
           >
             {newChildren}
