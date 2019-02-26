@@ -16,6 +16,10 @@ class Slider extends Component {
     /** A render function that will receive as props an orientation prop
      * and a onClick callback */
     arrowRender: PropTypes.func,
+    /** The component used to contain both arrows.
+     * Either a string to use a DOM element or a component.
+     */
+    arrowsContainerComponent: PropTypes.elementType,
     /** The slides to render */
     children: PropTypes.oneOfType([
       PropTypes.element,
@@ -348,7 +352,7 @@ class Slider extends Component {
     }
     this._clearDrag()
   }
-  
+
   onTouchMove = e => {
     e.stopPropagation()
 
@@ -447,14 +451,36 @@ class Slider extends Component {
     ], (c, i) => React.cloneElement(c, { key: i }))
   }
 
+  renderArrows = () => {
+    const {
+      arrowsContainerComponent: ArrowsContainerComponent,
+      arrowRender
+    } = this.props
+
+    if (!arrowRender) {
+      return null
+    }
+
+    const arrows = (
+      <Fragment>
+        {arrowRender({ orientation: 'left', onClick: this.prevPage })}
+        {arrowRender({ orientation: 'right', onClick: this.nextPage })}
+      </Fragment>
+    )
+    return ArrowsContainerComponent ? (
+      <ArrowsContainerComponent>
+        {arrows}
+      </ArrowsContainerComponent>
+    ) : arrows
+  }
+
   render() {
     const {
       children,
       loop,
       sliderFrameTag: SliderFrameTag,
       rootTag: RootTag,
-      classes: classesProp,
-      arrowRender
+      classes: classesProp
     } = this.props
     if (!this.perPage) {
       this.perPage = resolveSlidesNumber(this.props.perPage)
@@ -474,17 +500,16 @@ class Slider extends Component {
           className={classnames(classes.root, 'overflow-hidden h-100')}
           ref={this._selector}
           {...Slider.events.reduce((props, event) => ({ ...props, [event]: this[event] }), {})}
-          >
+        >
           <EventListener target="window" onResize={this.handleResize} />
           <SliderFrameTag
             className={classnames(classes.sliderFrame, 'list pa0 h-100 ma0 inline-flex')}
             ref={this._sliderFrame}
-            >
+          >
             {newChildren}
           </SliderFrameTag>
         </RootTag>
-        {arrowRender && arrowRender({ orientation: 'left', onClick: this.prevPage })}
-        {arrowRender && arrowRender({ orientation: 'right', onClick: this.nextPage })}
+        {this.renderArrows()}
       </Fragment>
     )
   }
