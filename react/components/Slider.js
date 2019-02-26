@@ -8,6 +8,7 @@ import {
   getStylingTransition,
   setTransformProperty,
   setStyle,
+  constants
 } from '../utils'
 
 class Slider extends Component {
@@ -68,7 +69,7 @@ class Slider extends Component {
     easing: 'ease-out',
     loop: false,
     perPage: 1,
-    resizeDebounce: 250,
+    resizeDebounce: constants.defaultResizeDebounce,
     rootTag: 'div',
     showArrows: false,
     sliderFrameTag: 'ul',

@@ -1,10 +1,10 @@
-import styles from './styles'
-import debounce from 'debounce'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
-import React, { Component } from 'react'
-import { resolveSlidesNumber } from '../utils'
+import debounce from 'debounce'
 import EventListener from 'react-event-listener'
+import { resolveSlidesNumber, constants } from '../utils'
+import styles from './styles'
 
 class Dots extends Component {
   static propTypes = {
@@ -25,6 +25,8 @@ class Dots extends Component {
     onChangeSlide: PropTypes.func.isRequired,
     /** This prop works the same way the perPage of Slider and this component should receive the same value of Slider */
     perPage: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+    /** Debounce time in milliseconds. */
+    resizeDebounce: PropTypes.number,
     /** Tag of root element of the component to be rendered */
     rootTag: PropTypes.string,
     /** Total value of sliders that will be rendered */
@@ -44,15 +46,14 @@ class Dots extends Component {
     dotTag: 'li',
     perPage: 1,
     rootTag: 'ul',
-    showDotsPerPage: false
+    showDotsPerPage: false,
+    resizeDebounce: constants.defaultResizeDebounce
   }
 
   constructor(props) {
     super(props)
 
-    this.handleResize = debounce(() => {
-      setTimeout(this._setPerPageOnResize, props.resizeDebounce)
-    }, props.resizeDebounce)
+    this.handleResize = debounce(this._setPerPageOnResize, props.resizeDebounce)
   }
 
   get slideIndeces() {
@@ -63,24 +64,14 @@ class Dots extends Component {
 
   get selectedDot() {
     const { showDotsPerPage, currentSlide, totalSlides } = this.props
+    const realCurrentSlide = currentSlide < 0 ? currentSlide + totalSlides : currentSlide
 
-    let realCurrentSlide = currentSlide
-    // this thing verifies if currentSlide is a negative clone
-    if (currentSlide < 0) {
-      realCurrentSlide += totalSlides
-    }
     return showDotsPerPage ? Math.floor(realCurrentSlide / this.perPage) : realCurrentSlide
   }
 
   handleDotClick = index => {
     const { showDotsPerPage, onChangeSlide } = this.props
-
-    let slideToGo
-    if (showDotsPerPage) {
-      slideToGo = index * this.perPage
-    } else {
-      slideToGo = index
-    }
+    const slideToGo = showDotsPerPage ? index * this.perPage : index
     onChangeSlide(slideToGo)
   }
 

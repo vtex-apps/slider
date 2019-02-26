@@ -34,3 +34,7 @@ export function getStylingTransition(easing, duration = 0) {
     transition: `all ${duration}ms ${easing}`
   }
 }
+
+export const constants = {
+  defaultResizeDebounce: 250
+}
