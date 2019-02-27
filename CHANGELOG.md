@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.2.0] - 2019-02-27
+### Added
+- Add a first version of `Dots`, `Slide`, `Slider` and `SliderContainer` components.
+
 ## [0.1.0] - 2019-02-27
 ### Added
 - Initial commit with basic structure.
