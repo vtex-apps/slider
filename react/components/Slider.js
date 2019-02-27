@@ -504,7 +504,7 @@ class Slider extends Component {
         >
           <EventListener target="window" onResize={this.handleResize} />
           <SliderFrameTag
-            className={classnames(classes.sliderFrame, styles.sliderFrame, 'list pa0 h-100 ma0 inline-flex')}
+            className={classnames(classes.sliderFrame, styles.sliderFrame, 'list pa0 h-100 ma0 flex')}
             style={firstRender ? { width: `${100 * newChildren.length / this.perPage}%` } : {}}
             ref={this._sliderFrame}
           >
