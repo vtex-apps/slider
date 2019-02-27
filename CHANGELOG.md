@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Fixed
-- Slider frame wasn't getting all the height available for him.
+- Slider frame element not getting all height that it has available.
 
 ## [0.2.0] - 2019-02-27
 ### Added
