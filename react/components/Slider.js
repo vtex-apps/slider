@@ -340,14 +340,12 @@ class Slider extends Component {
   }
 
   onTouchStart = e => {
-    e.stopPropagation()
     this.pointerDown = true
     this.drag.startX = e.touches[0].pageX
     this.drag.startY = e.touches[0].pageY
   }
 
   onTouchEnd = e => {
-    e.stopPropagation()
     this.pointerDown = false
     this.enableTransition()
     if (this.drag.endX) {
@@ -357,8 +355,6 @@ class Slider extends Component {
   }
 
   onTouchMove = e => {
-    e.stopPropagation()
-
     if (this.drag.letItGo === null) {
       this.drag.letItGo = Math.abs(this.drag.startY - e.touches[0].pageY) < Math.abs(this.drag.startX - e.touches[0].pageX)
     }
@@ -366,7 +362,6 @@ class Slider extends Component {
     if (this.pointerDown && this.drag.letItGo) {
       const { easing, loop, currentSlide } = this.props
 
-      e.preventDefault()
       this.drag.endX = e.touches[0].pageX
 
       const computedCurrentSlide = loop ? currentSlide + this.perPage : currentSlide
@@ -385,7 +380,6 @@ class Slider extends Component {
 
   onMouseDown = e => {
     e.preventDefault()
-    e.stopPropagation()
     this.pointerDown = true
     this.drag.startX = e.pageX
 
@@ -397,7 +391,6 @@ class Slider extends Component {
   onMouseUp = e => {
     const { draggable, cursor } = this.props
 
-    e.stopPropagation()
     this.pointerDown = false
     this.enableTransition(draggable ? { cursor } : {})
 
