@@ -101,11 +101,11 @@ class SlideComponent extends Component {
   }
 }
 
-const renderFormwardRef = (props, ref) => <SlideComponent innerRef={ref} {...props} />
+const renderForwardRef = (props, ref) => <SlideComponent innerRef={ref} {...props} />
 
-renderFormwardRef.displayName = 'Slide'
+renderForwardRef.displayName = 'Slide'
 
-const Slide = React.forwardRef(renderFormwardRef)
+const Slide = React.forwardRef(renderForwardRef)
 
 Slide.propTypes = {
   /** Node to render */
