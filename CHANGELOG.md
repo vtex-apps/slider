@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Fixed
-- Slider frame not bubbling up the touch events.
+- Slider frame not bubbling up the touch and mouse events.
 
 ### Added
 - Autoplay functionality.
