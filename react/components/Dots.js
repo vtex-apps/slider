@@ -97,6 +97,7 @@ class Dots extends Component {
       onChangeSlide,
       totalSlides,
       dotSize,
+      resizeDebounce,
       ...otherProps
     } = this.props
 

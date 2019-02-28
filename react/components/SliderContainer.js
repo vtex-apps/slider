@@ -63,6 +63,10 @@ class SliderContainerComponent extends Component {
       onMouseLeave,
       onTouchStart,
       onTouchEnd,
+      onNextSlide,
+      pauseOnHover,
+      autoplay,
+      autoplayInterval,
       ...otherProps
     } = this.props
 
