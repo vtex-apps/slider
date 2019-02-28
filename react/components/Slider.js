@@ -20,7 +20,7 @@ class Slider extends Component {
     /** The component used to contain both arrows.
      * Either a string to use a DOM element or a component.
      */
-    arrowsContainerComponent: PropTypes.elementType,
+    arrowsContainerComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
     /** The slides to render */
     children: PropTypes.oneOfType([
       PropTypes.element,

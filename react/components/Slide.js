@@ -72,6 +72,7 @@ class SlideComponent extends Component {
       resizeDebounce,
       defaultWidth,
       style,
+      sliderTransitionDuration,
       ...rootProps
     } = this.props
 
