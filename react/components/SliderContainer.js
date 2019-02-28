@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import PropTypes from 'prop-types'
 
 class SliderContainerComponent extends Component {
-  intervalRef
+  intervalRef = null
 
   setNewInterval = () => {
     const { autoplayInterval, onNextSlide } = this.props
