@@ -135,16 +135,16 @@ class Slider extends Component {
     this.perPage = resolveSlidesNumber(this.props.perPage)
 
     this.enableTransition({
-      width: `${(this.selectorWidth / this.perPage) * this.innerElements.length}px`,
+      width: `${this.totalSlides / this.perPage * 100}%`,
       ...(draggable ? { cursor } : {}),
     })
 
     this.innerElements.forEach(el => {
       setStyle(el, {
-        width: `${100 / this.innerElements.length}%`
+        width: `${100 / this.totalSlides}%`
       })
     })
-    let newCurrentSlide = Math.min(Math.max(currentSlide, 0), this.totalSlides - this.perPage)
+    const newCurrentSlide = Math.min(Math.max(currentSlide, 0), this.totalSlides - this.perPage)
     this.slideToCurrent(false, newCurrentSlide)
   }
 
@@ -155,7 +155,7 @@ class Slider extends Component {
 
     this.setSelectorWidth()
     setStyle(this._sliderFrame.current, {
-      width: `${(this.selectorWidth / this.perPage) * this.innerElements.length}px`
+      width: `${this.totalSlides / this.perPage * 100}%`
     })
 
     if (currentSlide !== newCurrentSlide) {
@@ -175,7 +175,7 @@ class Slider extends Component {
   }
 
   get totalSlides() {
-    return this.innerElements ? this.innerElements.length : 0
+    return this.props.children ? React.Children.count(this.props.children) : 0
   }
 
   prev = (howManySlides = 1) => {
@@ -239,8 +239,7 @@ class Slider extends Component {
   }
 
   slideToCurrent = (shouldEnableTransition, currentSlide) => {
-    const offset = -1 * currentSlide * (this.selectorWidth / this.perPage)
-
+    const offset = -1 * currentSlide * 100 / this.totalSlides
     if (shouldEnableTransition) {
       requestAnimationFrame(() => {
         this.enableTransition()
@@ -257,16 +256,13 @@ class Slider extends Component {
     const movementDistance = Math.abs(movement)
     const howManySliderToSlide = Math.ceil(movementDistance / (this.selectorWidth / this.perPage))
 
-    const slideToNegativeClone = movement > 0 && currentSlide - howManySliderToSlide < 0
-    const slideToPositiveClone = movement < 0 && currentSlide + howManySliderToSlide > this.innerElements.length - this.perPage
-
     let newCurrentSlide = currentSlide
     if (movement > 0 && movementDistance > threshold && this.innerElements.length > this.perPage) {
       newCurrentSlide = this.prev(howManySliderToSlide)
     } else if (movement < 0 && movementDistance > threshold && this.innerElements.length > this.perPage) {
       newCurrentSlide = this.next(howManySliderToSlide)
     }
-    this.slideToCurrent(slideToNegativeClone || slideToPositiveClone, newCurrentSlide)
+    this.slideToCurrent(false, newCurrentSlide)
   }
 
   _clearDrag = () => {
@@ -305,13 +301,12 @@ class Slider extends Component {
 
       const currentOffset = currentSlide * (this.selectorWidth / this.perPage)
       const dragOffset = this.drag.endX - this.drag.startX
-      const offset = currentOffset - dragOffset
+      const offset = (currentOffset - dragOffset) / this._sliderFrame.current.getBoundingClientRect().width * -100
 
       setStyle(this._sliderFrame.current, {
-        WebkitTransition: `all 0ms ${easing}`,
-        transition: `all 0ms ${easing}`,
-        transform: `translate3d(${offset * -1}px, 0, 0)`,
-        WebkitTransform: `translate3d(${offset * -1}px, 0, 0)`
+        ...getStylingTransition(easing),
+        transform: `translate3d(${offset}%, 0, 0)`,
+        WebkitTransform: `translate3d(${offset}%, 0, 0)`
       })
     }
   }
@@ -340,7 +335,7 @@ class Slider extends Component {
   }
 
   onMouseMove = e => {
-    const { easing, currentSlide, draggable, cursorOnMouseDown } = this.props
+    const { currentSlide, draggable, cursorOnMouseDown, easing } = this.props
 
     e.preventDefault()
     if (this.pointerDown && draggable) {
@@ -350,14 +345,13 @@ class Slider extends Component {
 
       const currentOffset = currentSlide * (this.selectorWidth / this.perPage)
       const dragOffset = (this.drag.endX - this.drag.startX)
-      const offset = currentOffset - dragOffset
+      const offset = (currentOffset - dragOffset) / this._sliderFrame.current.getBoundingClientRect().width * -100
 
       setStyle(this._sliderFrame.current, {
         cursor: cursorOnMouseDown,
-        WebkitTransition: `all 0ms ${easing}`,
-        transition: `all 0ms ${easing}`,
-        transform: `translate3d(${offset * -1}px, 0, 0)`,
-        WebkitTransform: `translate3d(${offset * -1}px, 0, 0)`
+        ...getStylingTransition(easing),
+        transform: `translate3d(${offset}%, 0, 0)`,
+        WebkitTransform: `translate3d(${offset}%, 0, 0)`
       })
     }
   }
@@ -422,8 +416,6 @@ class Slider extends Component {
       ...classesProp
     }
 
-    const newChildren = this.generateChildrenWithWidth(children, firstRender)
-
     return (
       <Fragment>
         {this.renderArrows()}
@@ -435,10 +427,10 @@ class Slider extends Component {
           <EventListener target="window" onResize={this.handleResize} />
           <SliderFrameTag
             className={classnames(classes.sliderFrame, styles.sliderFrame, 'list pa0 h-100 ma0 flex')}
-            style={firstRender ? { width: `${100 * newChildren.length / this.perPage}%` } : {}}
+            style={firstRender ? { width: `${100 * this.totalSlides / this.perPage}%` } : {}}
             ref={this._sliderFrame}
           >
-            {newChildren}
+            {children}
           </SliderFrameTag>
         </RootTag>
       </Fragment>

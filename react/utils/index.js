@@ -21,10 +21,14 @@ export function setStyle(target, styles) {
   })
 }
 
+function _getZeroOrString(num = 0) {
+  return num === 0 ? num : `${num}%`
+}
+
 export function setTransformProperty(target, x = 0, y = 0, z = 0) {
   setStyle(target, {
-    transform: `translate3d(${x}px, ${y}px, ${z}px)`,
-    WebkitTransform: `translate3d(${x}px, ${y}px, ${z}px)`
+    transform: `translate3d(${_getZeroOrString(x)}, ${_getZeroOrString(y)}, ${_getZeroOrString(z)})`,
+    WebkitTransform: `translate3d(${_getZeroOrString(x)}, ${_getZeroOrString(y)}, ${_getZeroOrString(z)})`
   })
 }
 
