@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import EventListener from 'react-event-listener'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
@@ -6,7 +6,7 @@ import debounce from 'debounce'
 import styles from './styles.css'
 import { constants } from '../utils'
 
-class SlideComponent extends Component {
+class SlideComponent extends PureComponent {
   constructor(props) {
     super(props)
     this.imgRef = React.createRef()

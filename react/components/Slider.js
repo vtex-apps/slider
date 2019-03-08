@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { PureComponent, Fragment } from 'react'
 import debounce from 'debounce'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
@@ -12,7 +12,7 @@ import {
   constants
 } from '../utils'
 
-class Slider extends Component {
+class Slider extends PureComponent {
   static propTypes = {
     /** A render function that will receive as props an orientation prop
      * and a onClick callback */
