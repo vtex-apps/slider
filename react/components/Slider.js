@@ -7,7 +7,7 @@ import styles from './styles.css'
 import {
   resolveSlidesNumber,
   getStylingTransition,
-  setTransformProperty,
+  getTranslateProperty,
   setStyle,
   constants
 } from '../utils'
@@ -242,11 +242,16 @@ class Slider extends PureComponent {
     const offset = -1 * currentSlide * 100 / this.totalSlides
     if (shouldEnableTransition) {
       requestAnimationFrame(() => {
-        this.enableTransition()
-        setTransformProperty(this._sliderFrame.current, offset)
+        const { easing, duration } = this.props
+        setStyle(this._sliderFrame.current, {
+          ...getStylingTransition(easing, duration), // enable transition
+          ...getTranslateProperty(offset)
+        })
       })
     } else {
-      setTransformProperty(this._sliderFrame.current, offset)
+      setStyle(this._sliderFrame.current, {
+        ...getTranslateProperty(offset)
+      })
     }
   }
 
