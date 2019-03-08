@@ -369,13 +369,6 @@ class Slider extends Component {
     }
   }
 
-  generateChildrenWithWidth = (children, firstRender) => {
-    const childrenArray = React.Children.toArray(children)
-    return firstRender ?
-      React.Children.map(childrenArray, c => React.cloneElement(c, { style: { width: `${100 / childrenArray.length}%` } }))
-      : childrenArray
-  }
-
   renderArrows = () => {
     const {
       arrowsContainerComponent: ArrowsContainerComponent,
