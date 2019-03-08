@@ -308,8 +308,7 @@ class Slider extends PureComponent {
 
       setStyle(this._sliderFrame.current, {
         ...getStylingTransition(easing),
-        transform: `translate3d(${offset}%, 0, 0)`,
-        WebkitTransform: `translate3d(${offset}%, 0, 0)`
+        ...getTranslateProperty(offset),
       })
     }
   }
