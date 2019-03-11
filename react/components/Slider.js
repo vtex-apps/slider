@@ -109,26 +109,18 @@ class Slider extends PureComponent {
   }
 
   componentDidUpdate() {
-    this.init()
-  }
+    const { draggable, currentSlide, easing, duration, cursor } = this.props
 
-  init = () => {
-    const { draggable, currentSlide } = this.props
     this.setSelectorWidth()
     this.setInnerElements()
     this.perPage = resolveSlidesNumber(this.props.perPage)
 
-    requestAnimationFrame(() => {
-      const { easing, duration, cursor } = this.props
-      setStyle(this._sliderFrame.current, {
-        ...getStylingTransition(easing, duration),
-        width: `${this.totalSlides / this.perPage * 100}%`,
-        ...(draggable ? { cursor } : {}),  
-      })
-      requestAnimationFrame(() => {
-        this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
-      })
+    setStyle(this._sliderFrame.current, {
+      ...getStylingTransition(easing, duration),
+      width: `${this.totalSlides / this.perPage * 100}%`,
+      ...(draggable ? { cursor } : {}),
     })
+    this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
 
     this.innerElements.forEach(el => {
       setStyle(el, {
@@ -145,14 +137,10 @@ class Slider extends PureComponent {
     const newCurrentSlide = Math.floor(currentSlide / this.perPage) * this.perPage
 
     this.setSelectorWidth()
-    requestAnimationFrame(() => {
-      setStyle(this._sliderFrame.current, {
-        width: `${this.totalSlides / this.perPage * 100}%`
-      })
-      requestAnimationFrame(() => {
-        this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
-      })
+    setStyle(this._sliderFrame.current, {
+      width: `${this.totalSlides / this.perPage * 100}%`
     })
+    this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
 
     if (currentSlide !== newCurrentSlide) {
       onChangeSlide(newCurrentSlide)
