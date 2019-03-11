@@ -173,9 +173,7 @@ class Slider extends PureComponent {
 
     if (newCurrentSlide !== currentSlide) {
       this.slideToCurrent(false, newCurrentSlide)
-      requestAnimationFrame(() => {
-        onChangeSlide(newCurrentSlide)
-      })
+      onChangeSlide(newCurrentSlide)
     }
 
     return newCurrentSlide
@@ -191,9 +189,7 @@ class Slider extends PureComponent {
 
     if (newCurrentSlide !== currentSlide) {
       this.slideToCurrent(false, newCurrentSlide)
-      requestAnimationFrame(() => {
-        onChangeSlide(newCurrentSlide)
-      })
+      onChangeSlide(newCurrentSlide)
     }
 
     return newCurrentSlide
@@ -225,12 +221,10 @@ class Slider extends PureComponent {
   slideToCurrent = (shouldEnableTransition, currentSlide) => {
     const offset = -1 * currentSlide * 100 / this.totalSlides
     if (shouldEnableTransition) {
-      requestAnimationFrame(() => {
-        const { easing, duration } = this.props
-        setStyle(this._sliderFrame.current, {
-          ...getStylingTransition(easing, duration), // enable transition
-          ...getTranslateProperty(offset)
-        })
+      const { easing, duration } = this.props
+      setStyle(this._sliderFrame.current, {
+        ...getStylingTransition(easing, duration), // enable transition
+        ...getTranslateProperty(offset)
       })
     } else {
       setStyle(this._sliderFrame.current, {
