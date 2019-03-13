@@ -400,11 +400,11 @@ class Slider extends PureComponent {
 
     return (
       <Fragment>
-        {1 < this.totalSlides && this.renderArrows()}
+        {this.totalSlides > 1 && this.renderArrows()}
         <RootTag
           className={classnames(classes.root, 'overflow-hidden h-100')}
           ref={this._selector}
-          {...(1 < this.totalSlides ? Slider.events.reduce((props, event) => ({ ...props, [event]: this[event] }), {}) : {})}
+          {...(this.totalSlides > 1 ? Slider.events.reduce((props, event) => ({ ...props, [event]: this[event] }), {}) : {})}
         >
           <EventListener target="window" onResize={this.handleResize} />
           <SliderFrameTag
