@@ -109,7 +109,7 @@ class Slider extends PureComponent {
   }
 
   componentDidUpdate() {
-    const { draggable, currentSlide, easing, duration, cursor, children } = this.props
+    const { draggable, currentSlide, easing, duration, cursor } = this.props
 
     this.setSelectorWidth()
     this.setInnerElements()
@@ -118,7 +118,7 @@ class Slider extends PureComponent {
     setStyle(this._sliderFrame.current, {
       ...getStylingTransition(easing, duration),
       width: `${this.totalSlides / this.perPage * 100}%`,
-      ...(draggable && React.Children.count(children) > 1 ? { cursor } : {}),
+      ...(draggable && this.totalSlides > 1 ? { cursor } : {}),
     })
     this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
 
@@ -397,14 +397,14 @@ class Slider extends PureComponent {
       ...Slider.defaultProps.classes,
       ...classesProp
     }
-    const childrenLength = React.Children.count(children)
+
     return (
       <Fragment>
-        {1 < childrenLength && this.renderArrows()}
+        {1 < this.totalSlides && this.renderArrows()}
         <RootTag
           className={classnames(classes.root, 'overflow-hidden h-100')}
           ref={this._selector}
-          {...(1 < childrenLength ? Slider.events.reduce((props, event) => ({ ...props, [event]: this[event] }), {}) : {})}
+          {...(1 < this.totalSlides ? Slider.events.reduce((props, event) => ({ ...props, [event]: this[event] }), {}) : {})}
         >
           <EventListener target="window" onResize={this.handleResize} />
           <SliderFrameTag
