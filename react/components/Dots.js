@@ -106,6 +106,10 @@ class Dots extends PureComponent {
       ...classesProp
     }
 
+    if (totalSlides < 2) {
+      return null
+    }
+
     if (!this.perPage) {
       this.perPage = resolveSlidesNumber(perPage)
     }
