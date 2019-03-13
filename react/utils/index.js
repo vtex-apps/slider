@@ -21,11 +21,15 @@ export function setStyle(target, styles) {
   })
 }
 
-export function setTransformProperty(target, x = 0, y = 0, z = 0) {
-  setStyle(target, {
-    transform: `translate3d(${x}px, ${y}px, ${z}px)`,
-    WebkitTransform: `translate3d(${x}px, ${y}px, ${z}px)`
-  })
+function getZeroOrString(num = 0) {
+  return num === 0 ? num : `${num}%`
+}
+
+export function getTranslateProperty(x = 0, y = 0, z = 0) {
+  return {
+    transform: `translate3d(${getZeroOrString(x)}, ${getZeroOrString(y)}, ${getZeroOrString(z)})`,
+    WebkitTransform: `translate3d(${getZeroOrString(x)}, ${getZeroOrString(y)}, ${getZeroOrString(z)})`
+  }
 }
 
 export function getStylingTransition(easing, duration = 0) {

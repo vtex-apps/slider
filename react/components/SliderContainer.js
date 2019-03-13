@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
 
-class SliderContainerComponent extends Component {
+class SliderContainerComponent extends PureComponent {
   intervalRef = null
 
   setNewInterval = () => {

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.3.2] - 2019-03-13
+### Fixed
+- Blink in first render.
+
 ## [0.3.1] - 2019-02-28
 ### Fixed
 - Autoplay props warnings.

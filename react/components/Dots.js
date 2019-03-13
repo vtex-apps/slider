@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import debounce from 'debounce'
@@ -6,7 +6,7 @@ import EventListener from 'react-event-listener'
 import { resolveSlidesNumber, constants } from '../utils'
 import styles from './styles'
 
-class Dots extends Component {
+class Dots extends PureComponent {
   static propTypes = {
     /** Classes to style the elements fo the component */
     classes: PropTypes.shape({
