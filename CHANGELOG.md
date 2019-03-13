@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.3.3] - 2019-03-13
+### Fixed
+- Add events and rendering arrows and dots when there is only one slide.
+
 ## [0.3.2] - 2019-03-13
 ### Fixed
 - Blink in first render.

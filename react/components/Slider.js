@@ -118,7 +118,7 @@ class Slider extends PureComponent {
     setStyle(this._sliderFrame.current, {
       ...getStylingTransition(easing, duration),
       width: `${this.totalSlides / this.perPage * 100}%`,
-      ...(draggable ? { cursor } : {}),
+      ...(draggable && this.totalSlides > 1 ? { cursor } : {}),
     })
     this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
 
@@ -400,11 +400,11 @@ class Slider extends PureComponent {
 
     return (
       <Fragment>
-        {this.renderArrows()}
+        {this.totalSlides > 1 && this.renderArrows()}
         <RootTag
           className={classnames(classes.root, 'overflow-hidden h-100')}
           ref={this._selector}
-          {...Slider.events.reduce((props, event) => ({ ...props, [event]: this[event] }), {})}
+          {...(this.totalSlides > 1 ? Slider.events.reduce((props, event) => ({ ...props, [event]: this[event] }), {}) : {})}
         >
           <EventListener target="window" onResize={this.handleResize} />
           <SliderFrameTag
