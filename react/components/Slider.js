@@ -12,6 +12,27 @@ import {
   constants
 } from '../utils'
 
+const getDisplaySameSlide = (props, nextProps) => {
+  let displaySameSlide = false
+  const getChildrenKey = child => (child ? child.key : 'empty')
+
+  if (props.children.length && nextProps.children.length) {
+    const oldKeys = React.Children.map(props.children, getChildrenKey)
+    const oldKey = oldKeys[props.index]
+
+    if (oldKey !== null && oldKey !== undefined) {
+      const newKeys = React.Children.map(nextProps.children, getChildrenKey)
+      const newKey = newKeys[nextProps.index]
+
+      if (oldKey === newKey) {
+        displaySameSlide = true
+      }
+    }
+  }
+
+  return displaySameSlide
+}
+
 class Slider extends PureComponent {
   static propTypes = {
     /** A render function that will receive as props an orientation prop
@@ -108,17 +129,16 @@ class Slider extends PureComponent {
     this.handleResize.clear()
   }
 
-  componentDidUpdate() {
-    const { draggable, currentSlide, easing, duration, cursor } = this.props
+  componentDidUpdate(prevProps) {
+    const { currentSlide, easing, duration, cursor } = this.props
 
     this.setSelectorWidth()
     this.setInnerElements()
     this.perPage = resolveSlidesNumber(this.props.perPage)
-
     setStyle(this._sliderFrame.current, {
       ...getStylingTransition(easing, duration),
       width: `${this.totalSlides / this.perPage * 100}%`,
-      ...(draggable && this.totalSlides > 1 ? { cursor } : {}),
+      ...(this.totalSlides > 1 ? { cursor } : {}),
     })
     this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
 
@@ -128,7 +148,7 @@ class Slider extends PureComponent {
       })
     })
     const newCurrentSlide = Math.min(Math.max(currentSlide, 0), this.totalSlides - this.perPage)
-    this.slideToCurrent(false, newCurrentSlide)
+    this.slideToCurrent(!getDisplaySameSlide(prevProps, this.props), newCurrentSlide)
   }
 
   fit = () => {
@@ -146,7 +166,7 @@ class Slider extends PureComponent {
       onChangeSlide(newCurrentSlide)
     }
 
-    this.slideToCurrent(false, newCurrentSlide)
+    this.slideToCurrent(true, newCurrentSlide)
     this.forceUpdate()
   }
 
@@ -172,7 +192,7 @@ class Slider extends PureComponent {
     const newCurrentSlide = Math.max(currentSlide - howManySlides, 0)
 
     if (newCurrentSlide !== currentSlide) {
-      this.slideToCurrent(false, newCurrentSlide)
+      this.slideToCurrent(true, newCurrentSlide)
       onChangeSlide(newCurrentSlide)
     }
 
@@ -186,9 +206,9 @@ class Slider extends PureComponent {
 
     const { onChangeSlide, currentSlide } = this.props
     const newCurrentSlide = Math.min(currentSlide + howManySlides, this.totalSlides - this.perPage)
-
+    console.log('next', currentSlide + howManySlides, this.totalSlides - this.perPage)
     if (newCurrentSlide !== currentSlide) {
-      this.slideToCurrent(false, newCurrentSlide)
+      this.slideToCurrent(true, newCurrentSlide)
       onChangeSlide(newCurrentSlide)
     }
 
@@ -219,15 +239,16 @@ class Slider extends PureComponent {
   }
 
   slideToCurrent = (shouldEnableTransition, currentSlide) => {
+    const { easing, duration } = this.props
     const offset = -1 * currentSlide * 100 / this.totalSlides
     if (shouldEnableTransition) {
-      const { easing, duration } = this.props
       setStyle(this._sliderFrame.current, {
         ...getStylingTransition(easing, duration), // enable transition
         ...getTranslateProperty(offset)
       })
     } else {
       setStyle(this._sliderFrame.current, {
+        ...getStylingTransition(easing),
         ...getTranslateProperty(offset)
       })
     }
@@ -245,7 +266,7 @@ class Slider extends PureComponent {
     } else if (movement < 0 && movementDistance > threshold && this.totalSlides > this.perPage) {
       newCurrentSlide = this.next(howManySliderToSlide)
     }
-    this.slideToCurrent(false, newCurrentSlide)
+    this.slideToCurrent(true, newCurrentSlide)
   }
 
   _clearDrag = () => {
@@ -305,15 +326,11 @@ class Slider extends PureComponent {
     })
   }
 
-  onMouseUp = e => {
-    const { draggable, cursor, easing, duration } = this.props
+  onMouseUp = () => {
+    const { cursor } = this.props
 
     this.pointerDown = false
-    setStyle(this._sliderFrame.current, {
-      ...getStylingTransition(easing, duration),
-      ...(draggable ? { cursor } : {})
-    })
-
+    setStyle(this._sliderFrame.current, { cursor })
     if (this.drag.endX) {
       this.updateAfterDrag()
     }
@@ -323,11 +340,9 @@ class Slider extends PureComponent {
 
   onMouseMove = e => {
     const { currentSlide, draggable, cursorOnMouseDown, easing } = this.props
-
     e.preventDefault()
     if (this.pointerDown && draggable) {
       // TODO prevent link clicks
-
       this.drag.endX = e.pageX
 
       const currentOffset = currentSlide * (this.selectorWidth / this.perPage)
@@ -345,14 +360,13 @@ class Slider extends PureComponent {
   onMouseLeave = e => {
 
     if (this.pointerDown) {
-      const { cursor, draggable, easing, duration } = this.props
+      const { cursor, draggable } = this.props
       this.pointerDown = false
       this.drag.endX = e.pageX
 
-      setStyle(this._sliderFrame.current, {
-        ...getStylingTransition(easing, duration),
-        ...(draggable ? { cursor } : {}),
-      })
+      if (draggable) {
+        setStyle(this._sliderFrame.current, { cursor })
+      }
       this.updateAfterDrag()
       this._clearDrag()
     }
@@ -386,7 +400,9 @@ class Slider extends PureComponent {
       children,
       sliderFrameTag: SliderFrameTag,
       rootTag: RootTag,
-      classes: classesProp
+      classes: classesProp,
+      currentSlide,
+      onTransitionEnd
     } = this.props
     const { firstRender } = this.state
     if (!this.perPage) {
@@ -410,9 +426,17 @@ class Slider extends PureComponent {
           <SliderFrameTag
             className={classnames(classes.sliderFrame, styles.sliderFrame, 'list pa0 h-100 ma0 flex')}
             style={firstRender ? { width: `${100 * this.totalSlides / this.perPage}%` } : {}}
+            onTransitionEnd={onTransitionEnd}
             ref={this._sliderFrame}
           >
-            {children}
+            {React.Children.map(children, (child, indexChild) => {
+              let hidden = true
+              if (indexChild === currentSlide) {
+                hidden = false
+              }
+
+              return React.cloneElement(child, { 'aria-hidden': hidden })
+            })}
           </SliderFrameTag>
         </RootTag>
       </Fragment>
