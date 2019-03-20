@@ -15,10 +15,15 @@ class SlideComponent extends PureComponent {
         this.fit()
       }, props.sliderTransitionDuration)
     }, props.resizeDebounce)
+
+    this.state = {
+      firstRender: true
+    }
   }
 
   componentDidMount() {
     this.ensureImageCover()
+    this.setState({ firstRender: false })
   }
 
   componentDidUpdate() {
@@ -76,11 +81,13 @@ class SlideComponent extends PureComponent {
       ...rootProps
     } = this.props
 
+    const { firstRender } = this.state
+
     return (
       <RootComponent
         ref={innerRef}
         className={classnames(className, 'inline-flex h-100 relative overflow-hidden')}
-        style={defaultWidth ? { width: defaultWidth } : style}
+        style={defaultWidth && firstRender ? { ...style, width: defaultWidth } : style}
         {...rootProps}
       >
         <EventListener target="window" onResize={this.handleResize} />

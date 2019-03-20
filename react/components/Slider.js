@@ -91,6 +91,7 @@ class Slider extends PureComponent {
     draggable: true,
     duration: 250,
     easing: 'ease-out',
+    loop: true,
     perPage: 1,
     resizeDebounce: constants.defaultResizeDebounce,
     rootTag: 'div',
@@ -100,6 +101,11 @@ class Slider extends PureComponent {
   }
 
   static events = ['onTouchStart', 'onTouchEnd', 'onTouchMove', 'onMouseUp', 'onMouseDown', 'onMouseLeave', 'onMouseMove']
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const perPage = resolveSlidesNumber(nextProps.perPage)
+    
+  }
 
   constructor(props) {
     super(props)
@@ -117,19 +123,28 @@ class Slider extends PureComponent {
     this.handleResize = debounce(this.fit, props.resizeDebounce)
 
     this.state = {
-      firstRender: true
+      firstRender: true,
+      currentSlide: props.currentSlide,
+      renderCount: 0
     }
   }
 
   componentDidMount() {
-    this.setState({ firstRender: false })
+    const { onChangeSlide, currentSlide, loop } = this.props
+    if (loop) {
+      onChangeSlide(currentSlide + this.perPage)
+    }
+    this.setState({
+      firstRender: false,
+      renderCount: 1
+    })
   }
 
   componentWillUnmount() {
     this.handleResize.clear()
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const { currentSlide, easing, duration, cursor } = this.props
 
     this.setSelectorWidth()
@@ -149,6 +164,18 @@ class Slider extends PureComponent {
     })
     const newCurrentSlide = Math.min(Math.max(currentSlide, 0), this.totalSlides - this.perPage)
     this.slideToCurrent(!getDisplaySameSlide(prevProps, this.props), newCurrentSlide)
+
+    if (prevState.renderCount === 1) {
+      this.setState({ renderCount: 2 })
+    }
+  }
+
+  isNextSlideClone = (newCurrentSlide, howManySlides) => {
+    return newCurrentSlide + howManySlides > this.innerElements.length - this.perPage    
+  }
+
+  isPrevSlideClone = (newCurrentSlide, howManySlides) => {
+    return newCurrentSlide - howManySlides < 0
   }
 
   fit = () => {
@@ -157,9 +184,6 @@ class Slider extends PureComponent {
     const newCurrentSlide = Math.floor(currentSlide / this.perPage) * this.perPage
 
     this.setSelectorWidth()
-    setStyle(this._sliderFrame.current, {
-      width: `${this.totalSlides / this.perPage * 100}%`
-    })
     this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
 
     if (currentSlide !== newCurrentSlide) {
@@ -179,7 +203,19 @@ class Slider extends PureComponent {
   }
 
   get totalSlides() {
-    return this.props.children ? React.Children.count(this.props.children) : 0
+    const { loop, children } = this.props
+    const { firstRender } = this.state
+
+    if (children) {
+      const totalChildren = React.Children.count(this.props.children)
+      return totalChildren + (loop && !firstRender ? 2 * this.perPage : 0)
+    }
+
+    return 0
+  }
+
+  get childrenLength() {
+      return this.props.children ? React.Children.count(this.props.children) : 0
   }
 
   prev = (howManySlides = 1) => {
@@ -187,9 +223,25 @@ class Slider extends PureComponent {
       return
     }
 
-    const { onChangeSlide, currentSlide } = this.props
+    const { onChangeSlide, currentSlide, loop, draggable, easing } = this.props
 
-    const newCurrentSlide = Math.max(currentSlide - howManySlides, 0)
+    const newCurrentSlide =  Math.max(currentSlide - howManySlides, 0)
+
+    if (loop) {
+      if (this.isNextSlideClone(currentSlide, howManySlides)) {
+        const mirrorIndex = currentSlide + this.totalSlides
+        const mirrorIndexOffset = this.perPage
+        const moveTo = mirrorIndex + mirrorIndexOffset
+        const offset = -1 * moveTo * (this.selectorWidth / this.perPage)
+        const dragDistante = draggable ? this.drag.endX - this.drag.startX : 0
+        const percentageTranslation = (offset + dragDistante) / this._sliderFrameWidth * 100
+
+        setStyle(this._sliderFrame.current, {
+          ...getStylingTransition(easing),
+          ...getTranslateProperty(percentageTranslation)
+        })
+      }
+    }
 
     if (newCurrentSlide !== currentSlide) {
       this.slideToCurrent(true, newCurrentSlide)
@@ -206,7 +258,6 @@ class Slider extends PureComponent {
 
     const { onChangeSlide, currentSlide } = this.props
     const newCurrentSlide = Math.min(currentSlide + howManySlides, this.totalSlides - this.perPage)
-    console.log('next', currentSlide + howManySlides, this.totalSlides - this.perPage)
     if (newCurrentSlide !== currentSlide) {
       this.slideToCurrent(true, newCurrentSlide)
       onChangeSlide(newCurrentSlide)
@@ -317,12 +368,13 @@ class Slider extends PureComponent {
   }
 
   onMouseDown = e => {
+    const { cursorOnMouseDown } = this.props
     e.preventDefault()
     this.pointerDown = true
     this.drag.startX = e.pageX
 
     setStyle(this._sliderFrame.current, {
-      cursor: this.props.cursorOnMouseDown
+      cursor: cursorOnMouseDown
     })
   }
 
@@ -402,9 +454,9 @@ class Slider extends PureComponent {
       rootTag: RootTag,
       classes: classesProp,
       currentSlide,
-      onTransitionEnd
+      loop
     } = this.props
-    const { firstRender } = this.state
+    const { firstRender, renderCount } = this.state
     if (!this.perPage) {
       this.perPage = resolveSlidesNumber(this.props.perPage)
     }
@@ -412,6 +464,19 @@ class Slider extends PureComponent {
     const classes = {
       ...Slider.defaultProps.classes,
       ...classesProp
+    }
+
+    const arrayChildren = React.Children.toArray(children)
+
+    let sliderFrameStyle = {
+      width: `${100 * this.totalSlides / this.perPage}%`,
+    }
+
+    if (loop && renderCount === 1) {
+      sliderFrameStyle = {
+        ...sliderFrameStyle,
+        ...getTranslateProperty((loop ? currentSlide + this.perPage : currentSlide) / this.totalSlides * -100)
+      }
     }
 
     return (
@@ -425,18 +490,51 @@ class Slider extends PureComponent {
           <EventListener target="window" onResize={this.handleResize} />
           <SliderFrameTag
             className={classnames(classes.sliderFrame, styles.sliderFrame, 'list pa0 h-100 ma0 flex')}
-            style={firstRender ? { width: `${100 * this.totalSlides / this.perPage}%` } : {}}
-            onTransitionEnd={onTransitionEnd}
+            style={sliderFrameStyle}
             ref={this._sliderFrame}
           >
-            {React.Children.map(children, (child, indexChild) => {
+            {!firstRender && React.Children.map(arrayChildren.slice(children.length - this.perPage, children.length),
+              (child, indexChild) => {
+                let hidden = true
+                if (indexChild === currentSlide) {
+                  hidden = false
+                }
+                return React.cloneElement(child, {
+                  'aria-hidden': hidden,
+                  style: {
+                    ...(child.props.style ? child.props.style : {}),
+                    width: `${100 / this.totalSlides}%`,
+                  }
+                })
+              })}
+            {React.Children.map(arrayChildren, (child, indexChild) => {
               let hidden = true
               if (indexChild === currentSlide) {
                 hidden = false
               }
 
-              return React.cloneElement(child, { 'aria-hidden': hidden })
+              return React.cloneElement(child, {
+                'aria-hidden': hidden,
+                style: {
+                  ...(child.props.style ? child.props.style : {}), 
+                  width: `${100 / this.totalSlides}%`,
+                }
+              })
             })}
+            {!firstRender && React.Children.map(arrayChildren.slice(children.length - this.perPage, children.length),
+              (child, indexChild) => {
+                let hidden = true
+                if (indexChild === currentSlide) {
+                  hidden = false
+                }
+                return React.cloneElement(child, {
+                  'aria-hidden': hidden,
+                  style: {
+                    ...(child.props.style ? child.props.style : {}),
+                    width: `${100 / this.totalSlides}%`,
+                  }
+                })
+              })}
           </SliderFrameTag>
         </RootTag>
       </Fragment>
