@@ -102,11 +102,6 @@ class Slider extends PureComponent {
 
   static events = ['onTouchStart', 'onTouchEnd', 'onTouchMove', 'onMouseUp', 'onMouseDown', 'onMouseLeave', 'onMouseMove']
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const perPage = resolveSlidesNumber(nextProps.perPage)
-    
-  }
-
   constructor(props) {
     super(props)
 
@@ -125,18 +120,25 @@ class Slider extends PureComponent {
     this.state = {
       firstRender: true,
       currentSlide: props.currentSlide,
-      renderCount: 0
+      enableTransition: false
     }
   }
 
   componentDidMount() {
     const { onChangeSlide, currentSlide, loop } = this.props
+    let stateCurrentSlide = currentSlide
     if (loop) {
-      onChangeSlide(currentSlide + this.perPage)
+      if (this.isNegativeClone(currentSlide)) {
+        onChangeSlide(currentSlide + this.perPage)
+        stateCurrentSlide += this.perPage
+      } else if (this.isPositiveClone(currentSlide)) {
+        const mirrorIndex = this.childrenLength + this.perpage - currentSlide - 1
+        onChangeSlide(mirrorIndex)
+      }
     }
     this.setState({
       firstRender: false,
-      renderCount: 1
+      currentSlide: stateCurrentSlide
     })
   }
 
@@ -144,34 +146,40 @@ class Slider extends PureComponent {
     this.handleResize.clear()
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { currentSlide, easing, duration, cursor } = this.props
+  componentDidUpdate() {
+    if (this.props.currentSlide !== this.state.currentSlide) {
+      this.props.onChangeSlide(this.state.currentSlide)
+      this.setState({ enableTransition: true })
+    }
 
     this.setSelectorWidth()
     this.setInnerElements()
     this.perPage = resolveSlidesNumber(this.props.perPage)
-    setStyle(this._sliderFrame.current, {
-      ...getStylingTransition(easing, duration),
-      width: `${this.totalSlides / this.perPage * 100}%`,
-      ...(this.totalSlides > 1 ? { cursor } : {}),
-    })
     this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
-
-    this.innerElements.forEach(el => {
-      setStyle(el, {
-        width: `${100 / this.totalSlides}%`,
-      })
-    })
-    const newCurrentSlide = Math.min(Math.max(currentSlide, 0), this.totalSlides - this.perPage)
-    this.slideToCurrent(!getDisplaySameSlide(prevProps, this.props), newCurrentSlide)
-
-    if (prevState.renderCount === 1) {
-      this.setState({ renderCount: 2 })
-    }
   }
 
   isNextSlideClone = (newCurrentSlide, howManySlides) => {
     return newCurrentSlide + howManySlides > this.innerElements.length - this.perPage    
+  }
+
+  isNegativeClone = index => {
+    return index < this.perPage
+  }
+
+  isPositiveClone = index => {
+    return index >= this.props.children.length + this.perPage
+  }
+
+  mirrorPositiveClone = index => {
+    return this.totalSlides - index - 1
+  }
+
+  mirrorNegativeClone = index => {
+    return index + this.perPage
+  }
+
+  getNegativeClone = index => {
+    return index - 2 * this.perPage
   }
 
   isPrevSlideClone = (newCurrentSlide, howManySlides) => {
@@ -252,14 +260,34 @@ class Slider extends PureComponent {
   }
 
   next = (howManySlides = 1) => {
+    const { onChangeSlide, currentSlide, loop } = this.props
+    let newCurrentSlide = currentSlide
+    let stateCurrentSlide
+    let enableTransition = true
+
     if (this.totalSlides <= this.perPage) {
       return
     }
 
-    const { onChangeSlide, currentSlide } = this.props
-    const newCurrentSlide = Math.min(currentSlide + howManySlides, this.totalSlides - this.perPage)
+    if (loop) {
+      if (this.isPositiveClone(currentSlide + howManySlides)) {
+        newCurrentSlide = this.getNegativeClone(currentSlide)
+        enableTransition = false
+        stateCurrentSlide = newCurrentSlide + howManySlides
+      } else {
+        newCurrentSlide = currentSlide + howManySlides
+        stateCurrentSlide = newCurrentSlide
+      }
+    } else {
+      newCurrentSlide = Math.min(currentSlide + howManySlides, this.totalSlides - this.perPage)
+      stateCurrentSlide = newCurrentSlide
+    }
+
     if (newCurrentSlide !== currentSlide) {
-      this.slideToCurrent(true, newCurrentSlide)
+      this.setState({
+        enableTransition,
+        currentSlide: stateCurrentSlide
+      })
       onChangeSlide(newCurrentSlide)
     }
 
@@ -447,6 +475,15 @@ class Slider extends PureComponent {
     ) : arrows
   }
 
+  renderChild = child => {
+    return React.cloneElement(child, {
+      style: {
+        ...(child.props.style ? child.props.style : {}),
+        width: `${100 / this.totalSlides}%`,
+      }
+    })
+  }
+
   render() {
     const {
       children,
@@ -454,9 +491,12 @@ class Slider extends PureComponent {
       rootTag: RootTag,
       classes: classesProp,
       currentSlide,
+      easing,
+      duration,
+      cursor,
       loop
     } = this.props
-    const { firstRender, renderCount } = this.state
+    const { firstRender, enableTransition } = this.state
     if (!this.perPage) {
       this.perPage = resolveSlidesNumber(this.props.perPage)
     }
@@ -470,13 +510,9 @@ class Slider extends PureComponent {
 
     let sliderFrameStyle = {
       width: `${100 * this.totalSlides / this.perPage}%`,
-    }
-
-    if (loop && renderCount === 1) {
-      sliderFrameStyle = {
-        ...sliderFrameStyle,
-        ...getTranslateProperty((loop ? currentSlide + this.perPage : currentSlide) / this.totalSlides * -100)
-      }
+      ...getTranslateProperty(currentSlide / this.totalSlides * -100),
+      ...getStylingTransition(easing, enableTransition ? duration : 0),
+      ...(this.childrenLength > 1 ? { cursor } : {}),
     }
 
     return (
@@ -493,48 +529,11 @@ class Slider extends PureComponent {
             style={sliderFrameStyle}
             ref={this._sliderFrame}
           >
-            {!firstRender && React.Children.map(arrayChildren.slice(children.length - this.perPage, children.length),
-              (child, indexChild) => {
-                let hidden = true
-                if (indexChild === currentSlide) {
-                  hidden = false
-                }
-                return React.cloneElement(child, {
-                  'aria-hidden': hidden,
-                  style: {
-                    ...(child.props.style ? child.props.style : {}),
-                    width: `${100 / this.totalSlides}%`,
-                  }
-                })
-              })}
-            {React.Children.map(arrayChildren, (child, indexChild) => {
-              let hidden = true
-              if (indexChild === currentSlide) {
-                hidden = false
-              }
-
-              return React.cloneElement(child, {
-                'aria-hidden': hidden,
-                style: {
-                  ...(child.props.style ? child.props.style : {}), 
-                  width: `${100 / this.totalSlides}%`,
-                }
-              })
-            })}
-            {!firstRender && React.Children.map(arrayChildren.slice(children.length - this.perPage, children.length),
-              (child, indexChild) => {
-                let hidden = true
-                if (indexChild === currentSlide) {
-                  hidden = false
-                }
-                return React.cloneElement(child, {
-                  'aria-hidden': hidden,
-                  style: {
-                    ...(child.props.style ? child.props.style : {}),
-                    width: `${100 / this.totalSlides}%`,
-                  }
-                })
-              })}
+            {!firstRender && loop
+              && React.Children.map(arrayChildren.slice(children.length - this.perPage, children.length), this.renderChild)}
+            {React.Children.map(arrayChildren, this.renderChild)}
+            {!firstRender && loop
+              && React.Children.map(arrayChildren.slice(0, this.perPage), this.renderChild)}
           </SliderFrameTag>
         </RootTag>
       </Fragment>
