@@ -12,14 +12,14 @@ class SliderContainerComponent extends PureComponent {
       clearInterval(this.intervalRef)
     }
 
-    // this.intervalRef = setInterval(() => {
-    //   onNextSlide && onNextSlide()
-    // }, autoplayInterval)
+    this.intervalRef = setInterval(() => {
+      onNextSlide && onNextSlide()
+    }, autoplayInterval)
   }
 
   componentDidMount() {
     if (this.props.autoplay) {
-      this.setNewInterval() 
+      this.setNewInterval()
     }
   }
 

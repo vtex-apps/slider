@@ -76,7 +76,7 @@ class Slider extends PureComponent {
     rootTag: 'div',
     showArrows: false,
     sliderFrameTag: 'ul',
-    threshold: 20
+    threshold: 50
   }
 
   static events = ['onTouchStart', 'onTouchEnd', 'onTouchMove', 'onMouseUp', 'onMouseDown', 'onMouseLeave', 'onMouseMove']
@@ -306,6 +306,14 @@ class Slider extends PureComponent {
       this.prev(howManySlidesToSlide, dragDistance)
     } else if (movement < 0 && movementDistance > threshold && this.totalSlides > this.perPage) {
       this.next(howManySlidesToSlide, dragDistance)
+    } else {
+      const { easing, duration, currentSlide } = this.props
+
+      this.setState({ enableTransition: true, dragDistance: 0 })
+      setStyle(this._sliderFrame.current, {
+        ...getStylingTransition(easing, duration),
+        ...getTranslateProperty(currentSlide / this.totalSlides * -100)
+      })
     }
   }
 
@@ -326,10 +334,8 @@ class Slider extends PureComponent {
   }
 
   onTouchEnd = () => {
-    const { easing, duration } = this.props
-
     this.pointerDown = false
-    setStyle(this._sliderFrame.current, { ...getStylingTransition(easing, duration) })
+    this
     if (this.drag.endX) {
       this.updateAfterDrag()
     }
@@ -382,7 +388,7 @@ class Slider extends PureComponent {
   }
 
   onMouseMove = e => {
-    const { currentSlide, draggable, cursorOnMouseDown, easing } = this.props
+    const { currentSlide, draggable, cursorOnMouseDown } = this.props
     e.preventDefault()
     if (this.pointerDown && draggable) {
       // TODO prevent link clicks
@@ -395,11 +401,11 @@ class Slider extends PureComponent {
         cursor: cursorOnMouseDown,
         ...getTranslateProperty(offset)
       })
+      console.log('offset', offset)
     }
   }
 
   onMouseLeave = e => {
-
     if (this.pointerDown) {
       const { cursor, draggable } = this.props
       this.pointerDown = false
@@ -474,6 +480,8 @@ class Slider extends PureComponent {
       ...getStylingTransition(easing, enableTransition ? duration : 0),
       ...(this.childrenLength > 1 ? { cursor } : {}),
     }
+
+    console.log('render', sliderFrameStyle, dragDistance)
 
     return (
       <Fragment>
