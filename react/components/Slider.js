@@ -42,6 +42,8 @@ class Slider extends PureComponent {
     duration: PropTypes.number,
     /** Transition function */
     easing: PropTypes.string,
+    /** If the slides should be looping */
+    loop: PropTypes.bool,
     /** Function to change the value of currentSlide */
     onChangeSlide: PropTypes.func.isRequired,
     /** Amount of slides to be on the screen, if a number is passed, then thats the slides that will be shown,
@@ -70,7 +72,7 @@ class Slider extends PureComponent {
     draggable: true,
     duration: 250,
     easing: 'ease-out',
-    loop: true,
+    loop: false,
     perPage: 1,
     resizeDebounce: constants.defaultResizeDebounce,
     rootTag: 'div',
@@ -80,6 +82,20 @@ class Slider extends PureComponent {
   }
 
   static events = ['onTouchStart', 'onTouchEnd', 'onTouchMove', 'onMouseUp', 'onMouseDown', 'onMouseLeave', 'onMouseMove']
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.currentSlide !== prevState.currentSlide) {
+      const { currentSlide, children } = nextProps
+      const perPage = resolveSlidesNumber(nextProps.perPage)
+      const currentSlideIsClone = (currentSlide < perPage || currentSlide >= React.Children.count(children) + perPage)
+      return {
+        currentSlide: currentSlideIsClone ? prevState.currentSlide : currentSlide,
+        enableTransition: !currentSlideIsClone
+      }
+    }
+
+    return null
+  }
 
   constructor(props) {
     super(props)
@@ -127,11 +143,28 @@ class Slider extends PureComponent {
   }
 
   componentDidUpdate() {
+
+    const newState = {
+      currentSlide: this.state.currentSlide,
+      dragDistance: 0,
+      enableTransition: true
+    }
+
     if (this.props.currentSlide !== this.state.currentSlide) {
-      this.props.onChangeSlide(this.state.currentSlide)
-      this.setState({ enableTransition: true, dragDistance: 0 })
+      const { currentSlide } = this.state
+      const { onChangeSlide } = this.props
+      if (this.isNegativeClone(currentSlide)) {
+        newState.currentSlide = currentSlide + this.perPage
+        onChangeSlide(newState.currentSlide)
+      } else if (this.isPositiveClone(currentSlide)) {
+        newState.currentSlide = this.totalSlides - currentSlide
+        onChangeSlide(newState.currentSlide)
+      } else {
+        onChangeSlide(currentSlide)
+      }
+      this.setState(newState)
     } else if (this.state.dragDistance) {
-      this.setState({ enableTransition: true, dragDistance: 0 })
+      this.setState(newState)
     }
 
     this.setSelectorWidth()
@@ -140,16 +173,12 @@ class Slider extends PureComponent {
     this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
   }
 
-  isNextSlideClone = (newCurrentSlide, howManySlides) => {
-    return newCurrentSlide + howManySlides > this.innerElements.length - this.perPage    
-  }
-
   isNegativeClone = index => {
     return index < this.perPage
   }
 
   isPositiveClone = index => {
-    return index >= this.props.children.length + this.perPage
+    return index >= this.childrenLength + this.perPage
   }
 
   getNegativeClone = index => {
@@ -278,24 +307,6 @@ class Slider extends PureComponent {
     this.next(this.perPage)
   }
 
-  goTo = index => {
-    const { onChangeSlide, currentSlide } = this.props
-
-    if (this.totalSlides <= this.perPage) {
-      return
-    }
-
-    const newCurrentSlide = Math.min(Math.max(index, 0), this.totalSlides - this.perPage)
-
-    if (newCurrentSlide !== currentSlide) {
-      this.setState({
-        enableTransition: true,
-        currentSlide: newCurrentSlide
-      })
-      onChangeSlide(newCurrentSlide)
-    }
-  }
-
   updateAfterDrag = () => {
     const { threshold } = this.props
     const movement = this.drag.endX - this.drag.startX
@@ -401,7 +412,6 @@ class Slider extends PureComponent {
         cursor: cursorOnMouseDown,
         ...getTranslateProperty(offset)
       })
-      console.log('offset', offset)
     }
   }
 
@@ -480,8 +490,6 @@ class Slider extends PureComponent {
       ...getStylingTransition(easing, enableTransition ? duration : 0),
       ...(this.childrenLength > 1 ? { cursor } : {}),
     }
-
-    console.log('render', sliderFrameStyle, dragDistance)
 
     return (
       <Fragment>

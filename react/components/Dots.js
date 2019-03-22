@@ -21,6 +21,8 @@ class Dots extends PureComponent {
     dotSize: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     /** Tag to be rendered in the dot element */
     dotTag: PropTypes.string,
+    /** If the slides should be looping */
+    loop: PropTypes.bool,
     /** Function to change the currentSlide */
     onChangeSlide: PropTypes.func.isRequired,
     /** This prop works the same way the perPage of Slider and this component should receive the same value of Slider */
@@ -44,6 +46,7 @@ class Dots extends PureComponent {
       notActiveDot: ''
     },
     dotTag: 'li',
+    loop: false,
     perPage: 1,
     rootTag: 'ul',
     showDotsPerPage: false,
@@ -63,16 +66,15 @@ class Dots extends PureComponent {
   }
 
   get selectedDot() {
-    const { showDotsPerPage, currentSlide, totalSlides } = this.props
-    const realCurrentSlide = currentSlide < 0 ? currentSlide + totalSlides : currentSlide
-
+    const { showDotsPerPage, currentSlide, loop } = this.props
+    const realCurrentSlide = loop ? currentSlide - this.perPage : currentSlide
     return showDotsPerPage ? Math.floor(realCurrentSlide / this.perPage) : realCurrentSlide
   }
 
   handleDotClick = index => {
-    const { showDotsPerPage, onChangeSlide } = this.props
+    const { showDotsPerPage, onChangeSlide, loop } = this.props
     const slideToGo = showDotsPerPage ? index * this.perPage : index
-    onChangeSlide(slideToGo)
+    onChangeSlide(loop ? slideToGo + this.perPage : slideToGo)
   }
 
   componentWillUnmount() {
