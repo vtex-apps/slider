@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.4.0] - 2019-03-22
+### Added
+- Add `loop` prop.
+
 ## [0.3.3] - 2019-03-13
 ### Fixed
 - Add events and rendering arrows and dots when there is only one slide.

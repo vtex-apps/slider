@@ -19,7 +19,7 @@ class SliderContainerComponent extends PureComponent {
 
   componentDidMount() {
     if (this.props.autoplay) {
-      this.setNewInterval() 
+      this.setNewInterval()
     }
   }
 

@@ -4,8 +4,8 @@ import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import EventListener from 'react-event-listener'
 import styles from './styles.css'
+import resolveSlidesNumber from '../utils/resolveSlidesNumber'
 import {
-  resolveSlidesNumber,
   getStylingTransition,
   getTranslateProperty,
   setStyle,
@@ -42,6 +42,8 @@ class Slider extends PureComponent {
     duration: PropTypes.number,
     /** Transition function */
     easing: PropTypes.string,
+    /** If the slides should be looping */
+    loop: PropTypes.bool,
     /** Function to change the value of currentSlide */
     onChangeSlide: PropTypes.func.isRequired,
     /** Amount of slides to be on the screen, if a number is passed, then thats the slides that will be shown,
@@ -70,15 +72,30 @@ class Slider extends PureComponent {
     draggable: true,
     duration: 250,
     easing: 'ease-out',
+    loop: false,
     perPage: 1,
     resizeDebounce: constants.defaultResizeDebounce,
     rootTag: 'div',
     showArrows: false,
     sliderFrameTag: 'ul',
-    threshold: 20
+    threshold: 50
   }
 
   static events = ['onTouchStart', 'onTouchEnd', 'onTouchMove', 'onMouseUp', 'onMouseDown', 'onMouseLeave', 'onMouseMove']
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.currentSlide !== prevState.currentSlide) {
+      const { currentSlide, children } = nextProps
+      const perPage = resolveSlidesNumber(nextProps.perPage)
+      const currentSlideIsClone = (currentSlide < perPage || currentSlide >= React.Children.count(children) + perPage)
+      return {
+        currentSlide: currentSlideIsClone ? prevState.currentSlide : currentSlide,
+        enableTransition: !currentSlideIsClone
+      }
+    }
+
+    return null
+  }
 
   constructor(props) {
     super(props)
@@ -96,12 +113,29 @@ class Slider extends PureComponent {
     this.handleResize = debounce(this.fit, props.resizeDebounce)
 
     this.state = {
-      firstRender: true
+      firstRender: true,
+      currentSlide: props.currentSlide,
+      enableTransition: false,
+      dragDistance: 0
     }
   }
 
   componentDidMount() {
-    this.setState({ firstRender: false })
+    const { onChangeSlide, currentSlide, loop } = this.props
+    let stateCurrentSlide = currentSlide
+    if (loop) {
+      if (this.isNegativeClone(currentSlide)) {
+        onChangeSlide(currentSlide + this.perPage)
+        stateCurrentSlide += this.perPage
+      } else if (this.isPositiveClone(currentSlide)) {
+        const mirrorIndex = this.childrenLength + this.perpage - currentSlide - 1
+        onChangeSlide(mirrorIndex)
+      }
+    }
+    this.setState({
+      firstRender: false,
+      currentSlide: stateCurrentSlide
+    })
   }
 
   componentWillUnmount() {
@@ -109,26 +143,50 @@ class Slider extends PureComponent {
   }
 
   componentDidUpdate() {
-    const { draggable, currentSlide, easing, duration, cursor } = this.props
+
+    const newState = {
+      currentSlide: this.state.currentSlide,
+      dragDistance: 0,
+      enableTransition: true
+    }
+
+    if (this.props.currentSlide !== this.state.currentSlide) {
+      const { currentSlide } = this.state
+      const { onChangeSlide } = this.props
+      if (this.isNegativeClone(currentSlide)) {
+        newState.currentSlide = currentSlide + this.perPage
+        onChangeSlide(newState.currentSlide)
+      } else if (this.isPositiveClone(currentSlide)) {
+        newState.currentSlide = this.totalSlides - currentSlide
+        onChangeSlide(newState.currentSlide)
+      } else {
+        onChangeSlide(currentSlide)
+      }
+      this.setState(newState)
+    } else if (this.state.dragDistance) {
+      this.setState(newState)
+    }
 
     this.setSelectorWidth()
     this.setInnerElements()
     this.perPage = resolveSlidesNumber(this.props.perPage)
-
-    setStyle(this._sliderFrame.current, {
-      ...getStylingTransition(easing, duration),
-      width: `${this.totalSlides / this.perPage * 100}%`,
-      ...(draggable && this.totalSlides > 1 ? { cursor } : {}),
-    })
     this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
+  }
 
-    this.innerElements.forEach(el => {
-      setStyle(el, {
-        width: `${100 / this.totalSlides}%`,
-      })
-    })
-    const newCurrentSlide = Math.min(Math.max(currentSlide, 0), this.totalSlides - this.perPage)
-    this.slideToCurrent(false, newCurrentSlide)
+  isNegativeClone = index => {
+    return index < this.perPage
+  }
+
+  isPositiveClone = index => {
+    return index >= this.childrenLength + this.perPage
+  }
+
+  getNegativeClone = index => {
+    return index - this.childrenLength
+  }
+
+  getPositiveClone = index => {
+    return index + this.childrenLength
   }
 
   fit = () => {
@@ -137,16 +195,15 @@ class Slider extends PureComponent {
     const newCurrentSlide = Math.floor(currentSlide / this.perPage) * this.perPage
 
     this.setSelectorWidth()
-    setStyle(this._sliderFrame.current, {
-      width: `${this.totalSlides / this.perPage * 100}%`
-    })
     this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
 
     if (currentSlide !== newCurrentSlide) {
+      this.setState({
+        currentSlide: newCurrentSlide,
+        enableTransition: false
+      })
       onChangeSlide(newCurrentSlide)
     }
-
-    this.slideToCurrent(false, newCurrentSlide)
     this.forceUpdate()
   }
 
@@ -159,40 +216,87 @@ class Slider extends PureComponent {
   }
 
   get totalSlides() {
-    return this.props.children ? React.Children.count(this.props.children) : 0
+    const { loop, children } = this.props
+    const { firstRender } = this.state
+
+    if (children) {
+      const totalChildren = React.Children.count(this.props.children)
+      return totalChildren + (loop && !firstRender ? 2 * this.perPage : 0)
+    }
+
+    return 0
   }
 
-  prev = (howManySlides = 1) => {
+  get childrenLength() {
+      return this.props.children ? React.Children.count(this.props.children) : 0
+  }
+
+  prev = (howManySlides = 1, dragDistance = 0) => {
+    const { onChangeSlide, currentSlide, loop } = this.props
+    let newCurrentSlide = currentSlide
+    let stateCurrentSlide
+    let enableTransition = true
+
     if (this.totalSlides <= this.perPage) {
       return
     }
 
-    const { onChangeSlide, currentSlide } = this.props
-
-    const newCurrentSlide = Math.max(currentSlide - howManySlides, 0)
-
+    if (loop) {
+      if (this.isNegativeClone(currentSlide - howManySlides)) {
+        newCurrentSlide = this.getPositiveClone(currentSlide)
+        enableTransition = false
+        stateCurrentSlide = newCurrentSlide - howManySlides
+      } else {
+        newCurrentSlide = currentSlide - howManySlides
+        stateCurrentSlide = newCurrentSlide
+      }
+    } else {
+      newCurrentSlide = Math.max(currentSlide - howManySlides, 0)
+      stateCurrentSlide = newCurrentSlide
+    }
+    
     if (newCurrentSlide !== currentSlide) {
-      this.slideToCurrent(false, newCurrentSlide)
+      this.setState({
+        enableTransition,
+        currentSlide: stateCurrentSlide,
+        dragDistance
+      })
       onChangeSlide(newCurrentSlide)
     }
-
-    return newCurrentSlide
   }
 
-  next = (howManySlides = 1) => {
+  next = (howManySlides = 1, dragDistance = 0) => {
+    const { onChangeSlide, currentSlide, loop } = this.props
+    let newCurrentSlide = currentSlide
+    let stateCurrentSlide
+    let enableTransition = true
+
     if (this.totalSlides <= this.perPage) {
       return
     }
 
-    const { onChangeSlide, currentSlide } = this.props
-    const newCurrentSlide = Math.min(currentSlide + howManySlides, this.totalSlides - this.perPage)
-
-    if (newCurrentSlide !== currentSlide) {
-      this.slideToCurrent(false, newCurrentSlide)
-      onChangeSlide(newCurrentSlide)
+    if (loop) {
+      if (this.isPositiveClone(currentSlide + howManySlides)) {
+        newCurrentSlide = this.getNegativeClone(currentSlide)
+        enableTransition = false
+        stateCurrentSlide = newCurrentSlide + howManySlides
+      } else {
+        newCurrentSlide = currentSlide + howManySlides
+        stateCurrentSlide = newCurrentSlide
+      }
+    } else {
+      newCurrentSlide = Math.min(currentSlide + howManySlides, this.totalSlides - this.perPage)
+      stateCurrentSlide = newCurrentSlide
     }
 
-    return newCurrentSlide
+    if (newCurrentSlide !== currentSlide) {
+      this.setState({
+        enableTransition,
+        currentSlide: stateCurrentSlide,
+        dragDistance
+      })
+      onChangeSlide(newCurrentSlide)
+    }
   }
 
   prevPage = () => {
@@ -203,49 +307,25 @@ class Slider extends PureComponent {
     this.next(this.perPage)
   }
 
-  goTo = index => {
-    const { onChangeSlide, currentSlide } = this.props
-
-    if (this.totalSlides <= this.perPage) {
-      return
-    }
-
-    const newCurrentSlide = Math.min(Math.max(index, 0), this.totalSlides - this.perPage)
-
-    if (newCurrentSlide !== currentSlide) {
-      this.slideToCurrent(false, newCurrentSlide)
-      onChangeSlide(newCurrentSlide)
-    }
-  }
-
-  slideToCurrent = (shouldEnableTransition, currentSlide) => {
-    const offset = -1 * currentSlide * 100 / this.totalSlides
-    if (shouldEnableTransition) {
-      const { easing, duration } = this.props
-      setStyle(this._sliderFrame.current, {
-        ...getStylingTransition(easing, duration), // enable transition
-        ...getTranslateProperty(offset)
-      })
-    } else {
-      setStyle(this._sliderFrame.current, {
-        ...getTranslateProperty(offset)
-      })
-    }
-  }
-
   updateAfterDrag = () => {
-    const { threshold, currentSlide } = this.props
+    const { threshold } = this.props
     const movement = this.drag.endX - this.drag.startX
     const movementDistance = Math.abs(movement)
-    const howManySliderToSlide = Math.ceil(movementDistance / (this.selectorWidth / this.perPage))
-
-    let newCurrentSlide = currentSlide
+    const howManySlidesToSlide = Math.ceil(movementDistance / (this.selectorWidth / this.perPage))
+    const dragDistance = movement / this._sliderFrameWidth * 100
     if (movement > 0 && movementDistance > threshold && this.totalSlides > this.perPage) {
-      newCurrentSlide = this.prev(howManySliderToSlide)
+      this.prev(howManySlidesToSlide, dragDistance)
     } else if (movement < 0 && movementDistance > threshold && this.totalSlides > this.perPage) {
-      newCurrentSlide = this.next(howManySliderToSlide)
+      this.next(howManySlidesToSlide, dragDistance)
+    } else {
+      const { easing, duration, currentSlide } = this.props
+
+      this.setState({ enableTransition: true, dragDistance: 0 })
+      setStyle(this._sliderFrame.current, {
+        ...getStylingTransition(easing, duration),
+        ...getTranslateProperty(currentSlide / this.totalSlides * -100)
+      })
     }
-    this.slideToCurrent(false, newCurrentSlide)
   }
 
   _clearDrag = () => {
@@ -261,13 +341,11 @@ class Slider extends PureComponent {
     this.pointerDown = true
     this.drag.startX = e.touches[0].pageX
     this.drag.startY = e.touches[0].pageY
+    this.setState({ enableTransition: false })
   }
 
   onTouchEnd = () => {
-    const { easing, duration } = this.props
-
     this.pointerDown = false
-    setStyle(this._sliderFrame.current, { ...getStylingTransition(easing, duration) })
     if (this.drag.endX) {
       this.updateAfterDrag()
     }
@@ -280,7 +358,7 @@ class Slider extends PureComponent {
     }
 
     if (this.pointerDown && this.drag.letItGo) {
-      const { easing, currentSlide } = this.props
+      const { currentSlide } = this.props
 
       this.drag.endX = e.touches[0].pageX
 
@@ -289,31 +367,29 @@ class Slider extends PureComponent {
       const offset = (currentOffset - dragOffset) / this._sliderFrameWidth * -100
 
       setStyle(this._sliderFrame.current, {
-        ...getStylingTransition(easing),
         ...getTranslateProperty(offset),
       })
     }
   }
 
   onMouseDown = e => {
+    const { cursorOnMouseDown } = this.props
     e.preventDefault()
     this.pointerDown = true
     this.drag.startX = e.pageX
 
     setStyle(this._sliderFrame.current, {
-      cursor: this.props.cursorOnMouseDown
+      cursor: cursorOnMouseDown
     })
+
+    this.setState({ enableTransition: false })
   }
 
-  onMouseUp = e => {
-    const { draggable, cursor, easing, duration } = this.props
+  onMouseUp = () => {
+    const { cursor } = this.props
 
     this.pointerDown = false
-    setStyle(this._sliderFrame.current, {
-      ...getStylingTransition(easing, duration),
-      ...(draggable ? { cursor } : {})
-    })
-
+    setStyle(this._sliderFrame.current, { cursor })
     if (this.drag.endX) {
       this.updateAfterDrag()
     }
@@ -322,37 +398,31 @@ class Slider extends PureComponent {
   }
 
   onMouseMove = e => {
-    const { currentSlide, draggable, cursorOnMouseDown, easing } = this.props
-
+    const { currentSlide, draggable, cursorOnMouseDown } = this.props
     e.preventDefault()
     if (this.pointerDown && draggable) {
       // TODO prevent link clicks
-
       this.drag.endX = e.pageX
 
       const currentOffset = currentSlide * (this.selectorWidth / this.perPage)
-      const dragOffset = (this.drag.endX - this.drag.startX)
+      const dragOffset = this.drag.endX - this.drag.startX
       const offset = (currentOffset - dragOffset) / this._sliderFrameWidth * -100
-
       setStyle(this._sliderFrame.current, {
         cursor: cursorOnMouseDown,
-        ...getStylingTransition(easing),
         ...getTranslateProperty(offset)
       })
     }
   }
 
   onMouseLeave = e => {
-
     if (this.pointerDown) {
-      const { cursor, draggable, easing, duration } = this.props
+      const { cursor, draggable } = this.props
       this.pointerDown = false
       this.drag.endX = e.pageX
 
-      setStyle(this._sliderFrame.current, {
-        ...getStylingTransition(easing, duration),
-        ...(draggable ? { cursor } : {}),
-      })
+      if (draggable) {
+        setStyle(this._sliderFrame.current, { cursor })
+      }
       this.updateAfterDrag()
       this._clearDrag()
     }
@@ -381,14 +451,28 @@ class Slider extends PureComponent {
     ) : arrows
   }
 
+  renderChild = child => {
+    return React.cloneElement(child, {
+      style: {
+        ...(child.props.style ? child.props.style : {}),
+        width: `${100 / this.totalSlides}%`,
+      }
+    })
+  }
+
   render() {
     const {
       children,
       sliderFrameTag: SliderFrameTag,
       rootTag: RootTag,
-      classes: classesProp
+      classes: classesProp,
+      currentSlide,
+      easing,
+      duration,
+      cursor,
+      loop
     } = this.props
-    const { firstRender } = this.state
+    const { firstRender, enableTransition, dragDistance } = this.state
     if (!this.perPage) {
       this.perPage = resolveSlidesNumber(this.props.perPage)
     }
@@ -396,6 +480,14 @@ class Slider extends PureComponent {
     const classes = {
       ...Slider.defaultProps.classes,
       ...classesProp
+    }
+
+    const arrayChildren = React.Children.toArray(children)
+    const sliderFrameStyle = {
+      width: `${100 * this.totalSlides / this.perPage}%`,
+      ...getTranslateProperty(currentSlide / this.totalSlides * -100 + dragDistance),
+      ...getStylingTransition(easing, enableTransition ? duration : 0),
+      ...(this.childrenLength > 1 ? { cursor } : {}),
     }
 
     return (
@@ -409,10 +501,14 @@ class Slider extends PureComponent {
           <EventListener target="window" onResize={this.handleResize} />
           <SliderFrameTag
             className={classnames(classes.sliderFrame, styles.sliderFrame, 'list pa0 h-100 ma0 flex')}
-            style={firstRender ? { width: `${100 * this.totalSlides / this.perPage}%` } : {}}
+            style={sliderFrameStyle}
             ref={this._sliderFrame}
           >
-            {children}
+            {!firstRender && loop
+              && React.Children.map(arrayChildren.slice(children.length - this.perPage, children.length), this.renderChild)}
+            {React.Children.map(arrayChildren, this.renderChild)}
+            {!firstRender && loop
+              && React.Children.map(arrayChildren.slice(0, this.perPage), this.renderChild)}
           </SliderFrameTag>
         </RootTag>
       </Fragment>
