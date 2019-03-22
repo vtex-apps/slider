@@ -346,7 +346,6 @@ class Slider extends PureComponent {
 
   onTouchEnd = () => {
     this.pointerDown = false
-    this
     if (this.drag.endX) {
       this.updateAfterDrag()
     }
