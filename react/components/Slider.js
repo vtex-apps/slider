@@ -4,8 +4,8 @@ import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import EventListener from 'react-event-listener'
 import styles from './styles.css'
+import resolveSlidesNumber from '../utils/resolveSlidesNumber'
 import {
-  resolveSlidesNumber,
   getStylingTransition,
   getTranslateProperty,
   setStyle,

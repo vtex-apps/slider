@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import debounce from 'debounce'
 import EventListener from 'react-event-listener'
-import { resolveSlidesNumber, constants } from '../utils'
+import { constants } from '../utils'
+import resolveSlidesNumber from '../utils/resolveSlidesNumber'
 import styles from './styles'
 
 class Dots extends PureComponent {
