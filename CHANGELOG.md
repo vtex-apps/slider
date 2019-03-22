@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
-- ´virtualize` HOC.
+- Add `loop` prop.
 
 ## [0.3.3] - 2019-03-13
 ### Fixed
