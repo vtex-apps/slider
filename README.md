@@ -229,26 +229,6 @@ You can style this app by using the props `classeName` and `classes` of the comp
 ### CSS namespaces
 :construction: :construction: :construction:
 
-<!-- TODO add missing css namespaces
-This app provides some CSS classes as an API for style customization.
-
-To use this CSS API, you ust add the `styles` builder and create an app styling CSS file. But keep in mind that if you use this API it will change every slider of your app.
-
-1. Add tye `styles` builder to your `manifest.json`:
-```json
-"builders": {
-  "styles": "1.x"
-}
-```
-
-2. Create a file called `vtex.slider.css` inside the `styles/css` folder. Add your custom styles:
-```css
-.sliderContainer {
-
-}
-``` -->
-
-
 ## Troubleshooting
 
 You can check if other are passing through similar issues [here](https://github.com/vtex-apps/slider/issues). Also feel free to [open issues](https://github.com/vtex-apps/slider/issues/new).
