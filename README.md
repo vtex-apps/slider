@@ -15,7 +15,6 @@ The VTEX Slider is a slider that aims a good support for SSR and can display one
     - [Dots](#dots)
   - [Styles API](#styles-api)
     - [CSS namespaces](#css-namespaces)
-- [Troubleshooting](#troubleshooting)
 - [Tests](#tests)
 
 
@@ -69,6 +68,9 @@ render() {
   const { currentSlide } = this.state
   const { myProducts } = this.props
 
+  // The keys of the object represent the size of the window in px.
+  // In this case if the window is 1300px large or bigger it will show 5 items,
+  // If it has 900px or any size until 1299px it will show 4 items 
   const perPage = {
     1300: 5,
     900: 4,
@@ -228,10 +230,6 @@ You can style this app by using the props `classeName` and `classes` of the comp
 
 ### CSS namespaces
 :construction: :construction: :construction:
-
-## Troubleshooting
-
-You can check if other are passing through similar issues [here](https://github.com/vtex-apps/slider/issues). Also feel free to [open issues](https://github.com/vtex-apps/slider/issues/new).
 
 ## Tests
 :construction: :construction: :construction:
