@@ -92,7 +92,7 @@ render() {
 }
 ```
 
-And all the components together:
+Bellow is an example with all the components together:
 ```javascript
 arrowRender = ({ orientation, onClick }) => {
   return (
