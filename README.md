@@ -180,7 +180,7 @@ render() {
 | `easing` | `string` | :no_entry_sign: | `'ease-out'` | Transition function |
 | `loop` | `bool` | :no_entry_sign: | `false` | If the slides should be looping |
 | `onChangeSlide` | `func` | :heavy_check_mark: | :no_entry_sign: | Function to change the value of currentSlide. The function should expect a `number` as it's only parameter |
-| `perPage` | `number/object` | :no_entry_sign: | `1` | Amount of slides to be on the screen, if a number is passed, then that's the number of slides that will be shown, if an objecdt with breakpoints is passed, then the component will check the size of the screen to see how many slides will be on the screen at the same time |
+| `perPage` | `number/object` | :no_entry_sign: | `1` | Amount of slides to be on the screen, if a number is passed, then that's the number of slides that will be shown, if an object with breakpoints is passed, then the component will check the size of the screen to see how many slides will be on the screen at the same time |
 | `resizeDebounce` | `number` | :no_entry_sign: | `250` | Resize debounce timer in milliseconds |
 | `rootTag` | `string` | :no_entry_sign: | `'div'` | Tag to be rendered in the root of the slider |
 | `sliderFrameTag` | `string` | :no_entry_sign: | `'ul'` | Tag to be rendered in the slider frame element |
