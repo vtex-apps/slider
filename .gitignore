@@ -102,7 +102,6 @@ lib
 dist
 build
 lib
-.eslintrc
 lerna-debug.log
 yarn-error.log
 *.orig
