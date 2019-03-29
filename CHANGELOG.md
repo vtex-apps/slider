@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.4.1] - 2019-03-29
 ### Fixed
 - When there is only one slide and `loop` prop is set to `true` the component is rendering the arrows adding the slide events.
 
