@@ -237,12 +237,11 @@ class Slider extends PureComponent {
   }
 
   get totalSlides() {
-    const { loop, children } = this.props
-    const { firstRender } = this.state
+    const { children } = this.props
 
     if (children) {
       const totalChildren = React.Children.count(this.props.children)
-      return totalChildren + (loop && !firstRender ? 2 * this.perPage : 0)
+      return totalChildren + (this.shouldAddClones ? 2 * this.perPage : 0)
     }
 
     return 0
@@ -505,6 +504,16 @@ class Slider extends PureComponent {
     })
   }
 
+  get isMultiPage() {
+    return this.childrenLength > this.perPage
+  }
+
+  get shouldAddClones() {
+    const { loop } = this.props
+    const { firstRender } = this.state
+    return !firstRender && loop && this.isMultiPage
+  }
+
   render() {
     const {
       children,
@@ -515,9 +524,8 @@ class Slider extends PureComponent {
       easing,
       duration,
       cursor,
-      loop,
     } = this.props
-    const { firstRender, enableTransition, dragDistance } = this.state
+    const { enableTransition, dragDistance } = this.state
     if (!this.perPage) {
       this.perPage = resolveSlidesNumber(this.props.perPage)
     }
@@ -529,26 +537,27 @@ class Slider extends PureComponent {
 
     const arrayChildren = React.Children.toArray(children)
     const sliderFrameStyle = {
-      width: `${(100 * this.totalSlides) / this.perPage}%`,
-      ...getTranslateProperty(
-        (currentSlide / this.totalSlides) * -100 + dragDistance
-      ),
+      width: `${(100 * this.totalSlides) /
+        Math.min(this.perPage, this.childrenLength)}%`,
+      ...(this.isMultiPage &&
+        getTranslateProperty(
+          (currentSlide / this.totalSlides) * -100 + dragDistance
+        )),
       ...getStylingTransition(easing, enableTransition ? duration : 0),
-      ...(this.childrenLength > 1 ? { cursor } : {}),
+      ...(this.isMultiPage && { cursor }),
     }
 
     return (
       <Fragment>
-        {this.childrenLength > 1 && this.renderArrows()}
+        {this.isMultiPage && this.renderArrows()}
         <RootTag
           className={classnames(classes.root, 'overflow-hidden h-100')}
           ref={this._selector}
-          {...(this.childrenLength > 1
-            ? Slider.events.reduce(
-                (props, event) => ({ ...props, [event]: this[event] }),
-                {}
-              )
-            : {})}
+          {...this.isMultiPage &&
+            Slider.events.reduce(
+              (props, event) => ({ ...props, [event]: this[event] }),
+              {}
+            )}
         >
           <EventListener target="window" onResize={this.handleResize} />
           <SliderFrameTag
@@ -560,8 +569,7 @@ class Slider extends PureComponent {
             style={sliderFrameStyle}
             ref={this._sliderFrame}
           >
-            {!firstRender &&
-              loop &&
+            {this.shouldAddClones &&
               React.Children.map(
                 arrayChildren.slice(
                   children.length - this.perPage,
@@ -570,8 +578,7 @@ class Slider extends PureComponent {
                 this.renderChild
               )}
             {React.Children.map(arrayChildren, this.renderChild)}
-            {!firstRender &&
-              loop &&
+            {this.shouldAddClones &&
               React.Children.map(
                 arrayChildren.slice(0, this.perPage),
                 this.renderChild
