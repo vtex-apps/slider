@@ -59,6 +59,8 @@ class Slider extends PureComponent {
     sliderFrameTag: PropTypes.string,
     /** Threshold of pixels to drag to the slider let it go to the next/prev slide */
     threshold: PropTypes.number,
+    /** If should scroll by page or one item at a time */
+    scrollByPage: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -78,7 +80,8 @@ class Slider extends PureComponent {
     rootTag: 'div',
     showArrows: false,
     sliderFrameTag: 'ul',
-    threshold: 50
+    threshold: 50,
+    scrollByPage: false,
   }
 
   static events = ['onTouchStart', 'onTouchEnd', 'onTouchMove', 'onMouseUp', 'onMouseDown', 'onMouseLeave', 'onMouseMove']
@@ -228,7 +231,7 @@ class Slider extends PureComponent {
   }
 
   get childrenLength() {
-      return this.props.children ? React.Children.count(this.props.children) : 0
+    return this.props.children ? React.Children.count(this.props.children) : 0
   }
 
   prev = (howManySlides = 1, dragDistance = 0) => {
@@ -254,7 +257,7 @@ class Slider extends PureComponent {
       newCurrentSlide = Math.max(currentSlide - howManySlides, 0)
       stateCurrentSlide = newCurrentSlide
     }
-    
+
     if (newCurrentSlide !== currentSlide) {
       this.setState({
         enableTransition,
@@ -431,7 +434,8 @@ class Slider extends PureComponent {
   renderArrows = () => {
     const {
       arrowsContainerComponent: ArrowsContainerComponent,
-      arrowRender
+      arrowRender,
+      scrollByPage,
     } = this.props
 
     if (!arrowRender) {
@@ -440,8 +444,8 @@ class Slider extends PureComponent {
 
     const arrows = (
       <Fragment>
-        {arrowRender({ orientation: 'left', onClick: this.prevPage })}
-        {arrowRender({ orientation: 'right', onClick: this.nextPage })}
+        {arrowRender({ orientation: 'left', onClick: scrollByPage ? this.prevPage : () => this.prev() })}
+        {arrowRender({ orientation: 'right', onClick: scrollByPage ? this.nextPage : () => this.next() })}
       </Fragment>
     )
     return ArrowsContainerComponent ? (
