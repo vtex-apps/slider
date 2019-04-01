@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Add eslint-vtex configuration.
+- Add slide per page option.
 
 ## [0.4.1] - 2019-03-29
 
