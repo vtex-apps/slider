@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.5.1] - 2019-04-02
+
 ### Fixed
 
 - When there was less items than the number of itens to show per slide.
