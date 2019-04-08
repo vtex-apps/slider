@@ -1,4 +1,5 @@
 import { JSDOM } from 'jsdom'
+
 import resolveSlidesNumber from '../utils/resolveSlidesNumber'
 import { setStyle, getTranslateProperty, getStylingTransition } from '../utils'
 
