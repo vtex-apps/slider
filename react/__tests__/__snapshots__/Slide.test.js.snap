@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Slide /> component should match snapshot 1`] = `
+<DocumentFragment>
+  <li
+    class="inline-flex h-100 relative overflow-hidden"
+  >
+    <div>
+      <p>
+        Testing
+      </p>
+    </div>
+  </li>
+</DocumentFragment>
+`;
