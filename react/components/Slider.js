@@ -129,6 +129,7 @@ class Slider extends PureComponent {
     this._sliderFrame = React.createRef()
     this._sliderFrameWidth = 0
     this.handleResize = debounce(this.fit, props.resizeDebounce)
+    this.perPage = resolveSlidesNumber(props.perPage)
 
     this.state = {
       firstRender: true,
@@ -188,6 +189,7 @@ class Slider extends PureComponent {
     this.setSelectorWidth()
     this.setInnerElements()
     this.perPage = resolveSlidesNumber(this.props.perPage)
+    console.log('perPage', this.perPage, this.props.perPage)
     this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
   }
 
@@ -210,6 +212,7 @@ class Slider extends PureComponent {
   fit = () => {
     const { perPage, currentSlide, onChangeSlide } = this.props
     this.perPage = resolveSlidesNumber(perPage)
+    console.log('perPage', this.perPage, this.props.perPage)
     const newCurrentSlide =
       Math.floor(currentSlide / this.perPage) * this.perPage
 
@@ -525,10 +528,7 @@ class Slider extends PureComponent {
       duration,
       cursor,
     } = this.props
-    const { enableTransition, dragDistance } = this.state
-    if (!this.perPage) {
-      this.perPage = resolveSlidesNumber(this.props.perPage)
-    }
+    const { enableTransition, dragDistance, firstRender } = this.state
 
     const classes = {
       ...Slider.defaultProps.classes,
@@ -536,9 +536,12 @@ class Slider extends PureComponent {
     }
 
     const arrayChildren = React.Children.toArray(children)
+    const sliderFrameWidth =
+      this.perPage < this.childrenLength || firstRender
+        ? (100 * this.totalSlides) / this.perPage
+        : 100
     const sliderFrameStyle = {
-      width: `${(100 * this.totalSlides) /
-        Math.min(this.perPage, this.childrenLength)}%`,
+      width: `${sliderFrameWidth}%`,
       ...(this.isMultiPage &&
         getTranslateProperty(
           (currentSlide / this.totalSlides) * -100 + dragDistance
