@@ -5,6 +5,10 @@
   "files": [
     "react"
   ],
+  "scripts": {
+    "test": "vtex-test-tools test",
+    "test:watch": "vtex-test-tools test --watch"
+  },
   "dependencies": {
     "classnames": "^2.2.6",
     "debounce": "^1.2.0",
@@ -14,8 +18,10 @@
     "react-event-listener": "^0.6.5"
   },
   "devDependencies": {
+    "@vtex/test-tools": "^0.2.0",
     "eslint": "^5.15.3",
     "eslint-config-vtex-react": "^4.0.0",
+    "jsdom": "^14.0.0",
     "prettier": "^1.16.4",
     "typescript": "^3.3.4000"
   }
