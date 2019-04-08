@@ -6,8 +6,11 @@
     "react"
   ],
   "scripts": {
+    "pretest": "yarn",
     "test": "vtex-test-tools test",
-    "test:watch": "vtex-test-tools test --watch"
+    "test:watch": "vtex-test-tools test --watch",
+    "test:coverage": "vtex-test-tools test --collectCoverage",
+    "gen:coveralls": "yarn test:coverage && cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
     "classnames": "^2.2.6",
@@ -19,6 +22,7 @@
   },
   "devDependencies": {
     "@vtex/test-tools": "^0.2.0",
+    "coveralls": "^3.0.3",
     "eslint": "^5.15.3",
     "eslint-config-vtex-react": "^4.0.0",
     "jsdom": "^14.0.0",

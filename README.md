@@ -1,8 +1,8 @@
 # VTEX Slider
 
 ## Description
-The VTEX Slider is a slider that aims a good support for SSR and can display one or more slides per page.
 
+The VTEX Slider is a slider that aims a good support for SSR and can display one or more slides per page.
 
 :loudspeaker: **Disclaimer:** Don't fork this project; use, contribute, or open issue with your feature request
 
@@ -17,8 +17,8 @@ The VTEX Slider is a slider that aims a good support for SSR and can display one
     - [CSS namespaces](#css-namespaces)
 - [Tests](#tests)
 
-
 ## Usage
+
 To import it you can add to you `manifest.json` the following:
 
 ```json
@@ -30,6 +30,7 @@ To import it you can add to you `manifest.json` the following:
 ```
 
 And then in your component you can import the components exported from the slider:
+
 ```javascript
 import { Slider, Slide } from 'vtex.slider'
 ```
@@ -70,7 +71,7 @@ render() {
 
   // The keys of the object represent the size of the window in px.
   // In this case if the window is 1300px large or bigger it will show 5 items,
-  // If it has 900px or any size until 1299px it will show 4 items 
+  // If it has 900px or any size until 1299px it will show 4 items
   const perPage = {
     1300: 5,
     900: 4,
@@ -95,6 +96,7 @@ render() {
 ```
 
 Bellow is an example with all the components together:
+
 ```javascript
 arrowRender = ({ orientation, onClick }) => {
   return (
@@ -169,6 +171,7 @@ render() {
 ### Configuration
 
 #### Slider
+
 | Prop name | Type | isRequired | defaultValue | Description |
 | --- | --- | --- | --- | -- |
 | `arrowRender` | `func` | :no_entry_sign: | :no_entry_sign: | A render function that will receive as props an orientation prop and an onClick callback |
@@ -189,6 +192,7 @@ render() {
 | `threshold` | `number` | :no_entry_sign: | `50` | Minimum of pixels to drag until the slider change the `currentSlide` |
 
 #### Slide
+
 | Prop name | Type | isRequired | defaultValue | Description |
 | --- | --- | --- | --- | --- |
 | `children` | `node` | :heavy_check_mark: | :no_entry_sign: | Node to render |
@@ -200,6 +204,7 @@ render() {
 | `sliderTransitionDuration` | `number` | :no_entry_sign: | `250` | Duration of transition passed to Slider (must be the same), if nothing is passed to any of the components it will apply the same default value |
 
 #### SliderContainer
+
 | Prop name | Type | isRequired | defaultValue | Description |
 | --- | --- | --- | --- | --- |
 | `autoplay` | `bool` | :no_entry_sign: | `false` | If the slider should be passing automatically |
@@ -211,6 +216,7 @@ render() {
 | `tag` | `string` | :no_entry_sign: | `'div'` | Tag to render the component | 
 
 #### Dots
+
 | Prop name | Type | isRequired | defaultValue | Description |
 | --- | --- | --- | --- | --- |
 | `classes` | `object` | :no_entry_sign: | No extra classes applied to any element | Classes to style the elements of the component |
@@ -226,13 +232,17 @@ render() {
 | `showDotsPerPage` | `bool` | :no_entry_sign: | `false` | If this frag is true, then every dot represent a page of slides (e.g. if `perPage = 2` and you have 4 elements, then you have 2 dots), if false, then it will render one dot to each slide |
 
 ## Styles API
+
 You can style this app by using the props `classeName` and `classes` of the components. But if you want to style every slider of your app you need to use the [CSS namespaces](#css-namespaces) to do it.
 
 ### CSS namespaces
+
 :construction: :construction: :construction:
 
 ## Tests
-:construction: :construction: :construction:
+
+[![Coverage Status](https://coveralls.io/repos/github/vtex-apps/slider/badge.svg?branch=master)](https://coveralls.io/github/vtex-apps/slider?branch=master)
 
 ## Travis CI
-:construction: :construction: :construction:
+
+[![Build Status](https://travis-ci.org/vtex-apps/slider.svg?branch=master)](https://travis-ci.org/vtex-apps/slider)
