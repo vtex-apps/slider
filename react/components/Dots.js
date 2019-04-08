@@ -5,7 +5,7 @@ import debounce from 'debounce'
 import EventListener from 'react-event-listener'
 import { constants } from '../utils'
 import resolveSlidesNumber from '../utils/resolveSlidesNumber'
-import styles from './styles'
+import styles from './styles.css'
 
 class Dots extends PureComponent {
   static propTypes = {
@@ -14,7 +14,7 @@ class Dots extends PureComponent {
       root: PropTypes.string,
       dot: PropTypes.string,
       activeDot: PropTypes.string,
-      notActiveDot: PropTypes.string
+      notActiveDot: PropTypes.string,
     }),
     /** Extra props to be applied to the dot element */
     dotProps: PropTypes.object,
@@ -44,14 +44,14 @@ class Dots extends PureComponent {
       root: '',
       dot: '',
       activeDot: '',
-      notActiveDot: ''
+      notActiveDot: '',
     },
     dotTag: 'li',
     loop: false,
     perPage: 1,
     rootTag: 'ul',
     showDotsPerPage: false,
-    resizeDebounce: constants.defaultResizeDebounce
+    resizeDebounce: constants.defaultResizeDebounce,
   }
 
   constructor(props) {
@@ -62,14 +62,23 @@ class Dots extends PureComponent {
 
   get slideIndeces() {
     const { showDotsPerPage, totalSlides } = this.props
-    return this.perPage ? [...Array(showDotsPerPage ? Math.ceil(totalSlides / this.perPage) : totalSlides).keys()]
+    return this.perPage
+      ? [
+          ...Array(
+            showDotsPerPage
+              ? Math.ceil(totalSlides / this.perPage)
+              : totalSlides
+          ).keys(),
+        ]
       : []
   }
 
   get selectedDot() {
     const { showDotsPerPage, currentSlide, loop } = this.props
     const realCurrentSlide = loop ? currentSlide - this.perPage : currentSlide
-    return showDotsPerPage ? Math.floor(realCurrentSlide / this.perPage) : realCurrentSlide
+    return showDotsPerPage
+      ? Math.floor(realCurrentSlide / this.perPage)
+      : realCurrentSlide
   }
 
   handleDotClick = index => {
@@ -106,7 +115,7 @@ class Dots extends PureComponent {
 
     const classes = {
       ...Dots.defaultProps.classes,
-      ...classesProp
+      ...classesProp,
     }
 
     if (totalSlides < 2) {
@@ -119,14 +128,18 @@ class Dots extends PureComponent {
 
     return (
       <RootTag
-        className={classnames(styles.dotsContainer, classes.root, 'absolute ma0 pa0 dib list')}
+        className={classnames(
+          styles.dotsContainer,
+          classes.root,
+          'absolute ma0 pa0 dib list'
+        )}
         {...otherProps}
       >
         <EventListener target="window" onResize={this.handleResize} />
         {this.slideIndeces.map(i => {
           const dotClasses = classnames(classes.dot, 'dib', {
             [classes.activeDot]: i === this.selectedDot,
-            [classes.notActiveDot]: i !== this.selectedDot
+            [classes.notActiveDot]: i !== this.selectedDot,
           })
           return (
             <DotTag
