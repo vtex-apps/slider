@@ -189,7 +189,6 @@ class Slider extends PureComponent {
     this.setSelectorWidth()
     this.setInnerElements()
     this.perPage = resolveSlidesNumber(this.props.perPage)
-    console.log('perPage', this.perPage, this.props.perPage)
     this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
   }
 
@@ -212,7 +211,6 @@ class Slider extends PureComponent {
   fit = () => {
     const { perPage, currentSlide, onChangeSlide } = this.props
     this.perPage = resolveSlidesNumber(perPage)
-    console.log('perPage', this.perPage, this.props.perPage)
     const newCurrentSlide =
       Math.floor(currentSlide / this.perPage) * this.perPage
 
