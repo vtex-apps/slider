@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from '@vtex/test-tools/react'
+import { render, fireEvent } from '@vtex/test-tools/react'
 
 import Slider from '../components/Slider.js'
 import Slide from '../components/Slide.js'
@@ -44,5 +44,10 @@ describe('<SliderContainer /> component', () => {
   it('should match snapshot with another tag', () => {
     const { asFragment } = renderComponent({ tag: 'span' })
     expect(asFragment()).toMatchSnapshot()
+  })
+
+  it('should generate with tag', () => {
+    const { container } = renderComponent({ tag: 'span' })
+    expect(container.querySelector('span')).toBeTruthy()
   })
 })

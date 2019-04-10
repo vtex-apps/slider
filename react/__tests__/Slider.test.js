@@ -7,6 +7,10 @@ import Slide from '../components/Slide.js'
 describe('<Slider /> component', () => {
   const renderComponent = customProps => {
     const props = {
+      loop: true,
+      arrowRender: ({ orientation }) => {
+        return <div>arrow {orientation}</div>
+      },
       onChangeSlide: () => {},
       ...customProps,
     }
