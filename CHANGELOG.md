@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.5.2] - 2019-04-10
+### Fixed
+- Condition on `width` of `sliderFrame` when there is less items than the number of itens to show per page.
+
 ## [0.5.1] - 2019-04-02
 
 ### Fixed
