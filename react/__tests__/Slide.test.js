@@ -29,4 +29,20 @@ describe('<Slide /> component', () => {
     const { asFragment } = renderComponent()
     expect(asFragment()).toMatchSnapshot()
   })
+
+  it('should generate with the correct tag', () => {
+    const { container, rerender } = renderComponent({ tag: 'span' })
+    expect(container.querySelector('span')).toBeTruthy()
+
+    rerender(<Slide tag="main" />)
+    expect(container.querySelector('main')).toBeTruthy()
+
+    rerender(<Slide tag="section" />)
+    expect(container.querySelector('section')).toBeTruthy()
+  })
+
+  it('should math snapshot with tag', () => {
+    const { asFragment } = renderComponent({ tag: 'span' })
+    expect(asFragment()).toMatchSnapshot()
+  })
 })
