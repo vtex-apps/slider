@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.5.3] - 2019-04-12
+
 ### Changed
 
 - Set draggable to false as default.
