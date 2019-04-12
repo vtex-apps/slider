@@ -10,7 +10,7 @@ exports[`<SliderContainer /> component should match snapshot 1`] = `
     >
       <ul
         class="sliderFrame list pa0 h-100 ma0 flex"
-        style="width: 200%; transform: translate3d(0, 0, 0); transition: all 0ms ease-out; cursor: -webkit-grab;"
+        style="width: 200%; transform: translate3d(0, 0, 0); transition: all 0ms ease-out; cursor: default;"
       >
         <li
           class="inline-flex h-100 relative overflow-hidden"
@@ -48,7 +48,7 @@ exports[`<SliderContainer /> component should match snapshot with another tag 1`
     >
       <ul
         class="sliderFrame list pa0 h-100 ma0 flex"
-        style="width: 200%; transform: translate3d(0, 0, 0); transition: all 0ms ease-out; cursor: -webkit-grab;"
+        style="width: 200%; transform: translate3d(0, 0, 0); transition: all 0ms ease-out; cursor: default;"
       >
         <li
           class="inline-flex h-100 relative overflow-hidden"
