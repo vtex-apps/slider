@@ -74,7 +74,7 @@ class Slider extends PureComponent {
     currentSlide: 0,
     cursor: '-webkit-grab',
     cursorOnMouseDown: '-webkit-grabbing',
-    draggable: true,
+    draggable: false,
     duration: 250,
     easing: 'ease-out',
     loop: false,
