@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import debounce from 'debounce'
@@ -23,32 +23,37 @@ const Dots = ({
   treePath,
   ...otherProps
 }) => {
-  const [state, setState] = useState(0)
+  const [state, setState] = useState(resolveSlidesNumber(perPage))
 
   useEffect(() => {
     const handleResize = debounce(
-      setState(resolveSlidesNumber(perPage)),
+      () => setState(resolveSlidesNumber(perPage)),
       resizeDebounce
     )
     window.addEventListener('resize', handleResize)
-    return window.removeEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
   }, [])
 
-  const getSlideIndeces = () =>
-    state
-      ? [
-          ...Array(
-            showDotsPerPage ? Math.ceil(totalSlides / state) : totalSlides
-          ).keys(),
-        ]
-      : []
+  const slideIndeces = useMemo(
+    () =>
+      state
+        ? [
+            ...Array(
+              showDotsPerPage ? Math.ceil(totalSlides / state) : totalSlides
+            ).keys(),
+          ]
+        : [],
+    [state]
+  )
 
-  const getSelectedDot = () => {
+  const selectedDot = useMemo(() => {
     const realCurrentSlide = loop ? currentSlide - state : currentSlide
     return showDotsPerPage
       ? Math.floor(realCurrentSlide / state)
       : realCurrentSlide
-  }
+  }, [currentSlide])
 
   const handleDotClick = index => {
     const slideToGo = showDotsPerPage ? index * state : index
@@ -69,10 +74,10 @@ const Dots = ({
       )}
       {...otherProps}
     >
-      {getSlideIndeces().map(i => {
+      {slideIndeces.map(i => {
         const dotClasses = classnames(classes.dot, 'dib', {
-          [classes.activeDot]: i === getSelectedDot(),
-          [classes.notActiveDot]: i !== getSelectedDot(),
+          [classes.activeDot]: i === selectedDot,
+          [classes.notActiveDot]: i !== selectedDot,
         })
         return (
           <DotTag
