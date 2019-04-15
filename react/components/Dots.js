@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
-import debounce from 'debounce'
 
+import useSlidesPerPage from '../hooks/useSlidesPerPage'
 import { constants } from '../utils'
-import resolveSlidesNumber from '../utils/resolveSlidesNumber'
 import styles from './styles.css'
 
 const Dots = ({
@@ -23,41 +22,34 @@ const Dots = ({
   treePath,
   ...otherProps
 }) => {
-  const [state, setState] = useState(resolveSlidesNumber(perPage))
-
-  useEffect(() => {
-    const handleResize = debounce(
-      () => setState(resolveSlidesNumber(perPage)),
-      resizeDebounce
-    )
-    window.addEventListener('resize', handleResize)
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
+  const visibleSlides = useSlidesPerPage(resizeDebounce, perPage)
 
   const slideIndeces = useMemo(
     () =>
-      state
+      visibleSlides
         ? [
             ...Array(
-              showDotsPerPage ? Math.ceil(totalSlides / state) : totalSlides
+              showDotsPerPage
+                ? Math.ceil(totalSlides / visibleSlides)
+                : totalSlides
             ).keys(),
           ]
         : [],
-    [state]
+    [visibleSlides]
   )
 
   const selectedDot = useMemo(() => {
-    const realCurrentSlide = loop ? currentSlide - state : currentSlide
+    const realCurrentSlide = loop ? currentSlide - visibleSlides : currentSlide
     return showDotsPerPage
-      ? Math.floor(realCurrentSlide / state)
+      ? Math.floor(realCurrentSlide / visibleSlides)
       : realCurrentSlide
   }, [currentSlide])
 
   const handleDotClick = index => {
-    const slideToGo = showDotsPerPage ? index * state : index
-    onChangeSlide(loop ? slideToGo + state : slideToGo)
+    console.log('OnClick', visibleSlides)
+    const slideToGo = showDotsPerPage ? index * visibleSlides : index
+    onChangeSlide(loop ? slideToGo + visibleSlides : slideToGo)
+    console.log('At end', visibleSlides)
   }
 
   const classes = {
