@@ -12,6 +12,8 @@ import {
   constants,
 } from '../utils'
 
+import Dots from './Dots'
+
 class Slider extends PureComponent {
   static propTypes = {
     /** A render function that will receive as props an orientation prop
@@ -64,6 +66,18 @@ class Slider extends PureComponent {
     threshold: PropTypes.number,
     /** If should scroll by page or one item at a time */
     scrollByPage: PropTypes.bool,
+    /** Dots props */
+    dots: PropTypes.shape({
+      /** if should show dots or not */
+      show: PropTypes.bool,
+      /** classes for dots */
+      classes: PropTypes.shape({
+        root: PropTypes.string,
+        dot: PropTypes.string,
+        activeDot: PropTypes.string,
+        notActiveDot: PropTypes.string,
+      }),
+    }),
   }
 
   static defaultProps = {
@@ -85,6 +99,10 @@ class Slider extends PureComponent {
     sliderFrameTag: 'ul',
     threshold: 50,
     scrollByPage: false,
+    dots: {
+      show: false,
+      classes: '',
+    },
   }
 
   static events = [
@@ -525,6 +543,7 @@ class Slider extends PureComponent {
       easing,
       duration,
       cursor,
+      dots,
     } = this.props
     const { enableTransition, dragDistance, firstRender } = this.state
 
@@ -586,6 +605,16 @@ class Slider extends PureComponent {
               )}
           </SliderFrameTag>
         </RootTag>
+        {dots.show && (
+          <Dots
+            showDotsPerPage={true} //TODO
+            perPage={4} //TODO
+            currentSlide={1} //TODO
+            totalSlides={10} //TODO
+            onChangeSlide={() => console.log('TODO')} // TODO
+            classes={dots.classes}
+          />
+        )}
       </Fragment>
     )
   }
