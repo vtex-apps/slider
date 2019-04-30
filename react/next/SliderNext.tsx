@@ -156,7 +156,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     if (this.containerRef && this.containerRef.current) {
       const containerWidth = this.containerRef.current.offsetWidth
       const itemWidth: number = getItemClientSideWidth(
-        this.props,
         slidesToShow,
         containerWidth
       )
