@@ -1,4 +1,4 @@
-import { responsiveType, CarouselProps } from '../types'
+import { responsiveType, SliderProps } from '../types'
 
 function getParitialVisibilityGutter(
   responsive: responsiveType,
@@ -27,7 +27,7 @@ function getWidthFromDeviceType(
 }
 
 function getItemClientSideWidth(
-  props: CarouselProps,
+  props: SliderProps,
   slidesToShow: number,
   containerWidth: number
 ): number {
