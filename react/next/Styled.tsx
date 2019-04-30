@@ -6,6 +6,12 @@ interface SliderTrackProps {
   transform: number
 }
 
+interface SlideProps {
+  flex: string
+  width: string
+  position: string
+}
+
 export const StyledArrow = styled.button`
   position: absolute;
   outline: none;
@@ -62,4 +68,16 @@ export const SliderTrack = styled.ul<SliderTrackProps>`
   transition: ${props => props.transition};
   overflow: ${props => (props.shouldRenderOnSSR ? 'hidden' : 'unset')};
   transform: ${props => `translate3d(${props.transform}px,0,0)`};
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    overflow: visible !important;
+  }
+`
+
+export const StyledSlide = styled.li<SlideProps>`
+  flex: ${props => props.flex};
+  position: ${props => props.position};
+  width: ${props => props.width};
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    flex-shrink: 0 !important;
+  }
 `
