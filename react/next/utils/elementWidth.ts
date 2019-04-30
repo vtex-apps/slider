@@ -1,23 +1,14 @@
-import { responsiveType, SliderProps } from '../types'
+import { responsiveType } from '../types'
 
-function getWidthFromDeviceType(
+const getWidthFromDeviceType = (
   deviceType: string,
   responsive: responsiveType
-): number | string | undefined {
-  let itemWidth
-  if (responsive[deviceType]) {
-    const { items } = responsive[deviceType]
-    itemWidth = (100 / items).toFixed(1)
-  }
-  return itemWidth
-}
+): number | string | undefined =>
+  responsive[deviceType] ? (100 / responsive[deviceType].items).toFixed(1) : 0
 
-function getItemClientSideWidth(
-  props: SliderProps,
+const getItemClientSideWidth = (
   slidesToShow: number,
   containerWidth: number
-): number {
-  return Math.round(containerWidth / slidesToShow)
-}
+): number => Math.round(containerWidth / slidesToShow)
 
 export { getWidthFromDeviceType, getItemClientSideWidth }
