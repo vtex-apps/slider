@@ -15,12 +15,12 @@ export interface SliderProps {
   ssr?: boolean
   /** Number of slides that are passed each time */
   slidesToSlide?: number
-  /** If should show arrows */
-  arrows?: boolean
-  /** With device types that arrows should be hidden */
-  removeArrowOnDeviceType?: string | Array<string>
   /** Elements to render  */
   children: any
+  /** If should show arrows */
+  showArrows?: boolean
+  /** With device types that arrows should be hidden */
+  removeArrowOnDeviceType?: string | Array<string>
   /** Custom arrow on left */
   customLeftArrow?: React.ReactElement<any> | null
   /** Custom arrow on right */

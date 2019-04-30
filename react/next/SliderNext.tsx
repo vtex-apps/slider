@@ -22,17 +22,13 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
   static defaultProps = {
     slidesToSlide: 1,
     infinite: false,
-    draggable: true,
-    swipeable: true,
-    arrows: true,
+    showArrows: true,
     containerClass: '',
     sliderClass: '',
     itemClass: '',
     autoPlaySpeed: 3000,
     showDots: false,
-    minimumTouchDrag: 80,
     dotListClass: '',
-    focusOnSelect: false,
   }
 
   /**
@@ -380,7 +376,7 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     const {
       deviceType,
       slidesToSlide,
-      arrows,
+      showArrows,
       removeArrowOnDeviceType,
       infinite,
       containerClass,
@@ -397,7 +393,7 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       this.state.totalItems
     )
     const shouldShowArrows =
-      arrows &&
+      showArrows &&
       !(
         removeArrowOnDeviceType &&
         ((deviceType && removeArrowOnDeviceType.indexOf(deviceType) > -1) ||
