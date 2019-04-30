@@ -18,9 +18,12 @@
     "prop-types": "^15.6.2",
     "ramda": "^0.26.1",
     "react": "^16.6.3",
-    "react-event-listener": "^0.6.5"
+    "react-event-listener": "^0.6.5",
+    "styled-components": "^4.2.0"
   },
   "devDependencies": {
+    "@types/react": "^16.8.15",
+    "@types/styled-components": "^4.1.14",
     "@vtex/test-tools": "^0.2.0",
     "coveralls": "^3.0.3",
     "eslint": "^5.15.3",
