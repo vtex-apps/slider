@@ -41,16 +41,12 @@ export interface SliderProps {
   containerClass?: string
   /** Custom class for dots */
   dotListClass?: string
-  /** show previous and next set of items paritially */
-  centerMode?: boolean //TODO
   /** If should autoplay */
   autoPlay?: boolean
   /** Autoplay speed */
   autoPlaySpeed?: number
   /** If should show dots or not */
   showDots?: boolean
-  /** If is partial visible */
-  partialVisbile?: boolean
   /** Custom transitions */
   customTransition?: string
   /** Custom transition duration */
@@ -89,5 +85,4 @@ export interface SliderInternalState {
   deviceType?: string
   transform: number
   isSliding?: boolean
-  clones: any[]
 }

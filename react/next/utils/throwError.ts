@@ -1,12 +1,7 @@
 import { SliderInternalState, SliderProps } from '../types'
 
 function throwError(state: SliderInternalState, props: SliderProps): any {
-  const { partialVisbile, centerMode, ssr, responsive, infinite } = props
-  if (partialVisbile && centerMode) {
-    throw new Error(
-      'center mode can not be used at the same time with partialVisbile'
-    )
-  }
+  const { ssr, responsive } = props
   if (!responsive) {
     if (ssr) {
       throw new Error(

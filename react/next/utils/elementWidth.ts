@@ -1,19 +1,5 @@
 import { responsiveType, SliderProps } from '../types'
 
-function getParitialVisibilityGutter(
-  responsive: responsiveType,
-  partialVisbile?: boolean,
-  serverSideDeviceType?: string | undefined,
-  clientSideDeviceType?: string | undefined
-): number | undefined {
-  let gutter: number | undefined = 0
-  const deviceType = clientSideDeviceType || serverSideDeviceType
-  if (partialVisbile && deviceType) {
-    gutter = responsive[deviceType].paritialVisibilityGutter
-  }
-  return gutter
-}
-
 function getWidthFromDeviceType(
   deviceType: string,
   responsive: responsiveType
@@ -31,13 +17,7 @@ function getItemClientSideWidth(
   slidesToShow: number,
   containerWidth: number
 ): number {
-  return Math.round(
-    containerWidth / (slidesToShow + (props.centerMode ? 1 : 0))
-  )
+  return Math.round(containerWidth / slidesToShow)
 }
 
-export {
-  getWidthFromDeviceType,
-  getParitialVisibilityGutter,
-  getItemClientSideWidth,
-}
+export { getWidthFromDeviceType, getItemClientSideWidth }
