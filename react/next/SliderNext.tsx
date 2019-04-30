@@ -17,7 +17,7 @@ import { SliderList, SliderTrack } from './Styled'
 import { SliderInternalState, SliderProps } from './types'
 import Dots from './Dots'
 import { LeftArrow, RightArrow } from './Arrows'
-import SliderItems from './SliderItems'
+import Slides from './Slides'
 
 const defaultTransitionDuration = 400
 const defaultTransition = 'transform 400ms ease-in-out'
@@ -442,16 +442,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     )
   }
 
-  renderCarouselItems(): any {
-    return (
-      <SliderItems
-        goToSlide={this.goToSlide}
-        state={this.state}
-        props={this.props}
-      />
-    )
-  }
-
   public render(): React.ReactNode {
     const { slidesToShow } = this.state
 
@@ -516,7 +506,7 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
           onTouchMove={this.handleMove}
           onTouchEnd={this.handleOut}
         >
-          {this.renderCarouselItems()}
+          <Slides state={this.state} props={this.props} />
         </SliderTrack>
         {shouldShowArrows && !disableLeftArrow && this.renderLeftArrow()}
         {shouldShowArrows && !disableRightArrow && this.renderRightArrow()}
