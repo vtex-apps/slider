@@ -22,11 +22,6 @@ const SliderItems = ({ props, state, goToSlide }: SliderItemsProps): any => {
     return clones.map((child: any, index: number) => (
       <li
         key={index}
-        onClick={() => {
-          if (props.focusOnSelect) {
-            goToSlide(index)
-          }
-        }}
         aria-hidden={getIfSlideIsVisbile(index, state) ? 'false' : 'true'}
         data-index={index}
         style={{
@@ -50,11 +45,6 @@ const SliderItems = ({ props, state, goToSlide }: SliderItemsProps): any => {
     <li
       key={index}
       data-index={index}
-      onClick={() => {
-        if (props.focusOnSelect) {
-          goToSlide(index)
-        }
-      }}
       aria-hidden={getIfSlideIsVisbile(index, state) ? 'false' : 'true'}
       style={{
         flex: shouldRenderOnSSR ? `1 0 ${flexBisis}%` : 'auto',
