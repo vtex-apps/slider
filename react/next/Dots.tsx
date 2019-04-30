@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { SliderInternalState, SliderProps, stateCallBack } from './types'
 import { getOriginalCounterPart, getCloneCounterPart } from './utils/index'
+import { StyledDotList, StyledDot } from './Styled'
 
 interface DotsTypes {
   props: SliderProps
@@ -26,7 +27,7 @@ const Dots = ({
   const { currentSlide } = state
   const childrenArr = React.Children.toArray(children)
   return (
-    <ul className={`react-multi-carousel-dot-list ${dotListClass}`}>
+    <StyledDotList className={dotListClass}>
       {Array(childrenArr.length)
         .fill(0)
         .map((item, index: number) => {
@@ -52,18 +53,15 @@ const Dots = ({
             })
           }
           return (
-            <li
-              data-index={index}
-              key={index}
-              className={`react-multi-carousel-dot ${
-                isActive ? 'react-multi-carousel-dot--active' : ''
-              }`}
-            >
-              <button onClick={() => goToSlide(slideIndex)} />
+            <li data-index={index} key={index}>
+              <StyledDot
+                isActive={isActive}
+                onClick={() => goToSlide(slideIndex)}
+              />
             </li>
           )
         })}
-    </ul>
+    </StyledDotList>
   )
 }
 

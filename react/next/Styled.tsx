@@ -12,6 +12,10 @@ interface SlideProps {
   position: string
 }
 
+interface DotProps {
+  isActive: boolean
+}
+
 export const StyledArrow = styled.button`
   position: absolute;
   outline: none;
@@ -79,5 +83,42 @@ export const StyledSlide = styled.li<SlideProps>`
   width: ${props => props.width};
   @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
     flex-shrink: 0 !important;
+  }
+`
+
+export const StyledDotList = styled.ul`
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  left: 0;
+  right: 0;
+  justify-content: center;
+  margin: auto;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  text-align: center;
+`
+
+export const StyledDot = styled.button<DotProps>`
+  display: inline-block;
+  background: ${props => (props.isActive ? '#080808' : '#cecece')};
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  opacity: 1;
+  padding: 5px 5px 5px 5px;
+  box-shadow: none;
+  transition: background 0.5s;
+  border-width: 2px;
+  border-style: solid;
+  border-color: grey;
+  padding: 0;
+  margin: 0;
+  margin-right: 6px;
+  outline: 0;
+  cursor: pointer;
+  :hover {
+    background: #080808;
   }
 `
