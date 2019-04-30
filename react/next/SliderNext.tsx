@@ -2,15 +2,11 @@ import * as React from 'react'
 
 import {
   throttle,
-  getClones,
-  whenEnteredClones, // handle when there are clones appear on the screen, only apply to infinite mode.
   getInitialState,
-  getTransformForCenterMode,
-  getTransformForPartialVsibile,
   throwError,
-  getItemClientSideWidth, // get the width of each item on client side only.
-  populateNextSlides, // for "next" functionality
-  populatePreviousSlides, // for "previous" functionality
+  getItemClientSideWidth,
+  populateNextSlides,
+  populatePreviousSlides,
 } from './utils/index'
 
 import { SliderList, SliderTrack } from './Styled'
@@ -37,7 +33,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     minimumTouchDrag: 80,
     dotListClass: '',
     focusOnSelect: false,
-    centerMode: false,
   }
 
   /**
@@ -47,7 +42,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
   public initialPosition: number
   public lastPosition: number
   public isAnimationAllowed: boolean
-  public direction: string
   public autoPlay?: any
   public isInThrottle?: boolean
 
@@ -59,7 +53,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       itemWidth: 0,
       slidesToShow: 0,
       currentSlide: 0,
-      clones: React.Children.toArray(props.children),
       totalItems: React.Children.count(props.children),
       deviceType: '',
       domLoaded: false,
@@ -91,7 +84,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     this.initialPosition = 0
     this.lastPosition = 0
     this.isAnimationAllowed = false
-    this.direction = ''
     this.isInThrottle = false
   }
 
@@ -128,7 +120,7 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     }
     if (this.props.infinite) {
       // this is to quickly cancel the animation and move the items position to create the infinite effects.
-      this.correctClonesPosition({ domLoaded, isSliding })
+      // TODO
     }
   }
 
@@ -146,32 +138,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
    */
   setIsInThrottle(isInThrottle: boolean = false): void {
     this.isInThrottle = isInThrottle
-  }
-
-  /**
-   *We only want to set the clones on the client-side cause it relies on getting the width of the carousel items.
-   */
-  setClones(itemWidth?: number, forResizing?: boolean): void {
-    // if forResizing is true, means we are on client-side.
-    // if forResizing is false, means we are on server-side.
-    // because the first time we set the clones, we change the position of all carousel items when entering client-side from server-side.
-    // but still, we want to maintain the same position as it was on the server-side which is translateX(0) by getting the couter part of the original first slide.
-    this.isAnimationAllowed = false
-    const childrenArr = React.Children.toArray(this.props.children)
-    const { clones, initialSlide } = getClones(
-      this.state.slidesToShow,
-      childrenArr
-    )
-    this.setState(
-      {
-        clones,
-        totalItems: clones.length,
-        currentSlide: forResizing ? this.state.currentSlide : initialSlide,
-      },
-      () => {
-        this.correctItemsPosition(itemWidth || this.state.itemWidth)
-      }
-    )
   }
 
   setItemsToShow(shouldCorrectItemPosition?: boolean): void {
@@ -205,7 +171,7 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
         },
         () => {
           if (this.props.infinite) {
-            this.setClones(itemWidth, shouldCorrectItemPosition)
+            //TODO
           }
         }
       )
@@ -244,39 +210,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       }
     }
     this.setItemsToShow(shouldCorrectItemPosition)
-  }
-
-  correctClonesPosition({
-    domLoaded, // this domLoaded comes from previous state, only use to tell if we are on client-side or server-side because this functin relies the dom.
-    isSliding,
-  }: {
-    domLoaded?: boolean
-    isSliding?: boolean
-  }): void {
-    const childrenArr = React.Children.toArray(this.props.children)
-    const {
-      hasEnterClonedAfter,
-      hasEnterClonedBefore,
-      nextSlide,
-      nextPosition,
-    } = whenEnteredClones(this.state, childrenArr, this.props)
-    if (
-      // this is to prevent this gets called on the server-side.
-      this.state.domLoaded &&
-      domLoaded &&
-      isSliding &&
-      !this.state.isSliding
-    ) {
-      if (hasEnterClonedAfter || hasEnterClonedBefore) {
-        this.isAnimationAllowed = false
-        setTimeout(() => {
-          this.setState({
-            transform: nextPosition,
-            currentSlide: nextSlide,
-          })
-        }, this.props.transitionDuration || defaultTransitionDuration)
-      }
-    }
   }
 
   next(slidesHavePassed = 0): void {
@@ -391,7 +324,7 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       },
       () => {
         if (this.props.infinite) {
-          this.correctClonesPosition({ domLoaded: true, isSliding: true })
+          //TODO
         }
         if (typeof afterChange === 'function') {
           setTimeout(() => {
@@ -405,7 +338,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
   getState(): any {
     return {
       ...this.state,
-      direction: this.direction,
     }
   }
 
@@ -454,16 +386,11 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       containerClass,
       sliderClass,
       customTransition,
-      partialVisbile,
-      centerMode,
     } = this.props
 
     throwError(this.state, this.props)
 
-    const { shouldRenderOnSSR, paritialVisibilityGutter } = getInitialState(
-      this.state,
-      this.props
-    )
+    const { shouldRenderOnSSR } = getInitialState(this.state, this.props)
     const isLeftEndReach = !(this.state.currentSlide - slidesToSlide! >= 0)
     const isRightEndReach = !(
       this.state.currentSlide + 1 + slidesToShow <=
@@ -480,12 +407,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     const disableLeftArrow = !infinite && isLeftEndReach
     const disableRightArrow = !infinite && isRightEndReach
 
-    const currentTransform = partialVisbile
-      ? getTransformForPartialVsibile(this.state, paritialVisibilityGutter)
-      : centerMode
-      ? getTransformForCenterMode(this.state, this.props)
-      : this.state.transform
-
     return (
       <SliderList className={containerClass} ref={this.containerRef}>
         <SliderTrack
@@ -496,7 +417,7 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
               : 'none'
           }
           shouldRenderOnSSR={shouldRenderOnSSR}
-          transform={currentTransform}
+          transform={this.state.transform}
           onMouseMove={this.handleMove}
           onMouseDown={this.handleDown}
           onMouseUp={this.handleOut}

@@ -1,7 +1,6 @@
 import * as React from 'react'
 
 import { SliderInternalState, SliderProps, stateCallBack } from './types'
-import { getOriginalCounterPart, getCloneCounterPart } from './utils/index'
 import { StyledDotList, StyledDot } from './Styled'
 
 interface DotsTypes {
@@ -31,12 +30,8 @@ const Dots = ({
       {Array(childrenArr.length)
         .fill(0)
         .map((item, index: number) => {
-          const slideIndex = infinite
-            ? getOriginalCounterPart(index, state, childrenArr)
-            : index
-          const cloneIndex = infinite
-            ? getCloneCounterPart(index, state, childrenArr)
-            : null
+          const slideIndex = index //threat infinite
+          const cloneIndex = null //threat infinite
           let isActive
           if (cloneIndex !== undefined) {
             isActive =
