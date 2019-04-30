@@ -7,41 +7,54 @@ export interface responsiveType {
   }
 }
 export interface SliderProps {
+  /** Number of elements per breakpoint */
   responsive: responsiveType
+  /** Device type */
   deviceType?: string
+  /** If is on SSR */
   ssr?: boolean
+  /** Number of slides that are passed each time */
   slidesToSlide?: number
-  draggable?: boolean
-  arrows?: boolean // show or hide arrows.
-  swipeable?: boolean
+  /** If should show arrows */
+  arrows?: boolean
+  /** With device types that arrows should be hidden */
   removeArrowOnDeviceType?: string | Array<string>
+  /** Elements to render  */
   children: any
+  /** Custom arrow on left */
   customLeftArrow?: React.ReactElement<any> | null
+  /** Custom arrow on right */
   customRightArrow?: React.ReactElement<any> | null
+  /** Custom dots */
   customDot?: React.ReactElement<any> | null
-  customButtonGroup?: React.ReactElement<any> | null
-  infinite?: boolean
-  minimumTouchDrag?: number // default 50px. The amount of distance to drag / swipe in order to move to the next slide.
-  afterChange?: (previousSlide: number, state: stateCallBack) => void // Change callback after sliding everytime. `(previousSlide, currentState) => ...`
-  beforeChange?: (nextSlide: number, state: stateCallBack) => void // Change callback before sliding everytime. `(previousSlide, currentState) => ...`
-  sliderClass?: string // Use this to style your own track list.
-  itemClass?: string // Use this to style your own Carousel item. For example add padding-left and padding-right
-  containerClass?: string // Use this to style the whole container. For example add padding to allow the "dots" or "arrows" to go to other places without being overflown.
-  dotListClass?: string // Use this to style the dot list.
-  centerMode?: boolean // show previous and next set of items paritially
+  /** Whatever is infinite mode or not */
+  infinite?: boolean // TODO
+  /** Change callback after sliding everytime || (previousSlide, currentState) => ... */
+  afterChange?: (previousSlide: number, state: stateCallBack) => void // `
+  /** Change callback before sliding everytime || (previousSlide, currentState) => ... */
+  beforeChange?: (nextSlide: number, state: stateCallBack) => void
+  /** Custom class for slider */
+  sliderClass?: string
+  /** Custom class for items */
+  itemClass?: string
+  /** Custom class for container */
+  containerClass?: string
+  /** Custom class for dots */
+  dotListClass?: string
+  /** show previous and next set of items paritially */
+  centerMode?: boolean //TODO
+  /** If should autoplay */
   autoPlay?: boolean
-  autoPlaySpeed?: number // default 3000ms
+  /** Autoplay speed */
+  autoPlaySpeed?: number
+  /** If should show dots or not */
   showDots?: boolean
-  // Show next/previous item partially, if its right, only show the next item partially, else show both
-  // partialVisbile has to be used in conjunction with the responsive props, details are in documentation.
-  // it shows the next set of items partially, different from centerMode as it shows both.
+  /** If is partial visible */
   partialVisbile?: boolean
+  /** Custom transitions */
   customTransition?: string
+  /** Custom transition duration */
   transitionDuration?: number
-  // if you are using customTransition, make sure to put the duration here.
-  // for example, customTransition="all .5"  then put transitionDuration as 500.
-  // this is needed for the resizing to work.
-  focusOnSelect?: boolean
 }
 
 export interface stateCallBack extends SliderInternalState {

@@ -19,7 +19,6 @@ import throttle from './throttle'
 import throwError from './throwError'
 import { populateNextSlides } from './next'
 import { populatePreviousSlides } from './previous'
-import { populateSlidesOnMouseTouchMove } from './mouseOrTouchMove'
 
 export {
   getOriginalCounterPart,
@@ -37,5 +36,4 @@ export {
   throwError,
   populateNextSlides,
   populatePreviousSlides,
-  populateSlidesOnMouseTouchMove,
 }

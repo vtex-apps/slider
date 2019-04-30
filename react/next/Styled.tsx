@@ -1,25 +1,29 @@
 import styled from 'styled-components'
 
+interface SliderTrackProps {
+  transition: string
+  shouldRenderOnSSR: boolean
+  transform: number
+}
+
 export const StyledArrow = styled.button`
   position: absolute;
   outline: none;
   transition: all 0.5s;
-  border-radius: 35px;
   z-index: 1000;
   border: none;
-  background: rgba(0, 0, 0, 0.5);
-  min-width: 43px;
-  min-height: 43px;
-  opacity: 1;
+  background: rgba(0, 0, 0, 0.2);
+  min-width: 3rem;
+  min-height: 3rem;
   cursor: pointer;
+
   :hover {
     background: rgba(0, 0, 0, 0.8);
   }
+
   ::before {
-    font-size: 20px;
     color: #fff;
     display: block;
-    font-family: Arial, Helvetica, sans-serif;
     text-align: center;
     z-index: 2;
     position: relative;
@@ -47,7 +51,7 @@ export const SliderList = styled.div`
   position: relative;
 `
 
-export const SliderTrack = styled.ul`
+export const SliderTrack = styled.ul<SliderTrackProps>`
   list-style: none;
   padding: 0;
   margin: 0;
@@ -55,4 +59,7 @@ export const SliderTrack = styled.ul`
   flex-direction: row;
   position: relative;
   will-change: transform;
+  transition: ${props => props.transition};
+  overflow: ${props => (props.shouldRenderOnSSR ? 'hidden' : 'unset')};
+  transform: ${props => `translate3d(${props.transform}px,0,0)`};
 `

@@ -11,7 +11,6 @@ import {
   getItemClientSideWidth, // get the width of each item on client side only.
   populateNextSlides, // for "next" functionality
   populatePreviousSlides, // for "previous" functionality
-  populateSlidesOnMouseTouchMove, // this is to get the values for handling onTouchMove / onMouseMove;
 } from './utils/index'
 
 import { SliderList, SliderTrack } from './Styled'
@@ -45,7 +44,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
    * Declarations
    */
   private readonly containerRef: React.RefObject<any>
-  public onMove: boolean
   public initialPosition: number
   public lastPosition: number
   public isAnimationAllowed: boolean
@@ -69,28 +67,27 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       containerWidth: 0,
       isSliding: false,
     }
-    this.onResize = this.onResize.bind(this)
-    this.handleDown = this.handleDown.bind(this)
-    this.handleMove = this.handleMove.bind(this)
-    this.handleOut = this.handleOut.bind(this)
-    this.handleEnter = this.handleEnter.bind(this)
+
     this.setIsInThrottle = this.setIsInThrottle.bind(this)
+
     this.next = throttle(
       this.next.bind(this),
       props.transitionDuration || defaultTransitionDuration,
       this.setIsInThrottle
     )
+
     this.previous = throttle(
       this.previous.bind(this),
       props.transitionDuration || defaultTransitionDuration,
       this.setIsInThrottle
     )
+
     this.goToSlide = throttle(
       this.goToSlide.bind(this),
       props.transitionDuration || defaultTransitionDuration,
       this.setIsInThrottle
     )
-    this.onMove = false
+
     this.initialPosition = 0
     this.lastPosition = 0
     this.isAnimationAllowed = false
@@ -234,10 +231,7 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     })
   }
 
-  onResize(value?: any): void {
-    // value here can be html event or a boolean.
-    // if its in infinite mode, we want to keep the current slide index no matter what.
-    // if its not infinite mode, keeping the current slide index has already been taken care of
+  onResize = (value?: any): void => {
     const { infinite } = this.props
     let shouldCorrectItemPosition
     if (!infinite) {
@@ -356,109 +350,27 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     )
   }
 
-  resetMoveStatus(): void {
-    this.onMove = false
-    this.initialPosition = 0
-    this.lastPosition = 0
-    this.direction = ''
+  handleDown = (e: any): void => {
+    //TODO Mouse DOWN! Implement drag and swipe!
   }
 
-  handleDown(e: any): void {
-    if (
-      (e.touches && !this.props.swipeable) ||
-      (e && !e.touches && !this.props.draggable) ||
-      this.isInThrottle
-    ) {
-      return
-    }
-    const { clientX } = e.touches ? e.touches[0] : e
-    this.onMove = true
-    this.initialPosition = clientX
-    this.lastPosition = clientX
-    this.isAnimationAllowed = false
+  handleMove = (e: any): void => {
+    //TODO Mouse MOVE! Implement drag and swipe!
   }
 
-  handleMove(e: any): void {
-    if (
-      (e.touches && !this.props.swipeable) ||
-      (e && !e.touches && !this.props.draggable)
-    ) {
-      return
-    }
-    const { clientX } = e.touches ? e.touches[0] : e
-    if (e.touches && this.autoPlay && this.props.autoPlay) {
-      clearInterval(this.autoPlay)
-      this.autoPlay = undefined
-    }
-    if (this.onMove) {
-      const {
-        direction,
-        nextPosition,
-        canContinue,
-      } = populateSlidesOnMouseTouchMove(
-        this.state,
-        this.props,
-        this.initialPosition,
-        this.lastPosition,
-        clientX
-      )
-      if (direction) {
-        this.direction = direction
-        if (canContinue && nextPosition !== undefined) {
-          // nextPosition can be 0;
-          this.setState({ transform: nextPosition })
-        }
-      }
-      this.lastPosition = clientX
-    }
-  }
-
-  handleOut(e: any): void {
+  handleOut = (e: any): void => {
     if (this.props.autoPlay && !this.autoPlay) {
       this.autoPlay = setInterval(this.next, this.props.autoPlaySpeed)
     }
-    const shouldDisableOnMobile = e.type === 'touchend' && !this.props.swipeable
-    const shouldDisableOnDesktop =
-      (e.type === 'mouseleave' || e.type === 'mouseup') && !this.props.draggable
-    if (shouldDisableOnMobile || shouldDisableOnDesktop) {
-      return
-    }
-    if (this.onMove) {
-      if (this.direction === 'right') {
-        const canGoNext =
-          this.initialPosition - this.lastPosition >=
-          this.props.minimumTouchDrag!
-        if (canGoNext) {
-          const slidesHavePassed = Math.round(
-            (this.initialPosition - this.lastPosition) / this.state.itemWidth
-          )
-          this.next(slidesHavePassed)
-        } else {
-          this.correctItemsPosition(this.state.itemWidth, true)
-        }
-      }
-      if (this.direction === 'left') {
-        const canGoNext =
-          this.lastPosition - this.initialPosition >
-          this.props.minimumTouchDrag!
-        if (canGoNext) {
-          const slidesHavePassed = Math.round(
-            (this.lastPosition - this.initialPosition) / this.state.itemWidth
-          )
-          this.previous(slidesHavePassed)
-        } else {
-          this.correctItemsPosition(this.state.itemWidth, true)
-        }
-      }
-      this.resetMoveStatus()
-    }
+    //TODO Mouse OUT! Implement drag and swipe!
   }
 
-  handleEnter(): void {
+  handleEnter = (): void => {
     if (this.autoPlay && this.props.autoPlay) {
       clearInterval(this.autoPlay)
       this.autoPlay = undefined
     }
+    //TODO Mouse ENTER! Implement drag and swipe!
   }
 
   goToSlide(slide: number): void {
@@ -493,7 +405,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
   getState(): any {
     return {
       ...this.state,
-      onMove: this.onMove,
       direction: this.direction,
     }
   }
@@ -520,19 +431,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     )
   }
 
-  renderButtonGroups(): React.ReactElement<any> | null {
-    const { customButtonGroup } = this.props
-    if (customButtonGroup) {
-      return React.cloneElement(customButtonGroup, {
-        previous: () => this.previous(),
-        next: () => this.next(),
-        goToSlide: (slideIndex: number) => this.goToSlide(slideIndex),
-        carouselState: this.getState(),
-      })
-    }
-    return null
-  }
-
   renderDotsList(): React.ReactElement<any> | null {
     return (
       <Dots
@@ -556,6 +454,7 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
 
   public render(): React.ReactNode {
     const { slidesToShow } = this.state
+
     const {
       deviceType,
       slidesToSlide,
@@ -568,7 +467,9 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       partialVisbile,
       centerMode,
     } = this.props
+
     throwError(this.state, this.props)
+
     const { shouldRenderOnSSR, paritialVisibilityGutter } = getInitialState(
       this.state,
       this.props
@@ -589,24 +490,23 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     const disableLeftArrow = !infinite && isLeftEndReach
     const disableRightArrow = !infinite && isRightEndReach
 
-    // this lib supports showing next set of items paritially as well as center mode which shows both.
     const currentTransform = partialVisbile
       ? getTransformForPartialVsibile(this.state, paritialVisibilityGutter)
       : centerMode
       ? getTransformForCenterMode(this.state, this.props)
       : this.state.transform
+
     return (
       <SliderList className={containerClass} ref={this.containerRef}>
         <SliderTrack
           className={sliderClass}
-          // @ts-ignore
-          style={{
-            transition: this.isAnimationAllowed
+          transition={
+            this.isAnimationAllowed
               ? customTransition || defaultTransition
-              : 'none',
-            overflow: shouldRenderOnSSR ? 'hidden' : 'unset',
-            transform: `translate3d(${currentTransform}px,0,0)`,
-          }}
+              : 'none'
+          }
+          shouldRenderOnSSR={shouldRenderOnSSR}
+          transform={currentTransform}
           onMouseMove={this.handleMove}
           onMouseDown={this.handleDown}
           onMouseUp={this.handleOut}
@@ -620,7 +520,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
         </SliderTrack>
         {shouldShowArrows && !disableLeftArrow && this.renderLeftArrow()}
         {shouldShowArrows && !disableRightArrow && this.renderRightArrow()}
-        {this.renderButtonGroups()}
         {this.renderDotsList()}
       </SliderList>
     )
