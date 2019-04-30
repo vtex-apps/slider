@@ -2,11 +2,11 @@ import {
   getParitialVisibilityGutter,
   getWidthFromDeviceType,
 } from './elementWidth'
-import { CarouselInternalState, CarouselProps } from '../types'
+import { SliderInternalState, SliderProps } from '../types'
 
 function getInitialState(
-  state: CarouselInternalState,
-  props: CarouselProps
+  state: SliderInternalState,
+  props: SliderProps
 ): {
   shouldRenderOnSSR: boolean
   flexBisis: number | string | undefined
@@ -41,15 +41,15 @@ function getInitialState(
 
 function getIfSlideIsVisbile(
   index: number,
-  state: CarouselInternalState
+  state: SliderInternalState
 ): boolean {
   const { currentSlide, slidesToShow } = state
   return index >= currentSlide && index < currentSlide + slidesToShow
 }
 
 function getTransformForCenterMode(
-  state: CarouselInternalState,
-  props: CarouselProps
+  state: SliderInternalState,
+  props: SliderProps
 ) {
   if (state.currentSlide === 0 && !props.infinite) {
     return state.transform
@@ -58,7 +58,7 @@ function getTransformForCenterMode(
   }
 }
 function getTransformForPartialVsibile(
-  state: CarouselInternalState,
+  state: SliderInternalState,
   paritialVisibilityGutter: number = 0
 ) {
   return state.transform + state.currentSlide * paritialVisibilityGutter

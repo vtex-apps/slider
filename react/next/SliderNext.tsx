@@ -24,7 +24,7 @@ const defaultTransitionDuration = 400
 const defaultTransition = 'transform 400ms ease-in-out'
 
 class SliderNext extends React.Component<SliderProps, SliderInternalState> {
-  public static defaultProps = {
+  static defaultProps = {
     slidesToSlide: 1,
     infinite: false,
     draggable: true,
@@ -33,7 +33,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     containerClass: '',
     sliderClass: '',
     itemClass: '',
-    keyBoardControl: true,
     autoPlaySpeed: 3000,
     showDots: false,
     minimumTouchDrag: 80,
@@ -42,6 +41,9 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     centerMode: false,
   }
 
+  /**
+   * Declarations
+   */
   private readonly containerRef: React.RefObject<any>
   public onMove: boolean
   public initialPosition: number
@@ -51,6 +53,7 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
   public autoPlay?: any
   public isInThrottle?: boolean
 
+  /** Bindings and init */
   constructor(props: SliderProps) {
     super(props)
     this.containerRef = React.createRef()
@@ -70,7 +73,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     this.handleDown = this.handleDown.bind(this)
     this.handleMove = this.handleMove.bind(this)
     this.handleOut = this.handleOut.bind(this)
-    this.onKeyUp = this.onKeyUp.bind(this)
     this.handleEnter = this.handleEnter.bind(this)
     this.setIsInThrottle = this.setIsInThrottle.bind(this)
     this.next = throttle(
@@ -95,26 +97,64 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     this.direction = ''
     this.isInThrottle = false
   }
-  public setIsInThrottle(isInThrottle: boolean = false): void {
-    this.isInThrottle = isInThrottle
-  }
-  public componentDidMount(): void {
+
+  componentDidMount(): void {
     this.setState({ domLoaded: true })
     this.setItemsToShow()
     window.addEventListener('resize', this.onResize)
     this.onResize(true)
-    if (this.props.keyBoardControl) {
-      window.addEventListener('keyup', this.onKeyUp)
-    }
     if (this.props.autoPlay && this.props.autoPlaySpeed) {
       this.autoPlay = setInterval(this.next, this.props.autoPlaySpeed)
     }
   }
 
-  /*
-    We only want to set the clones on the client-side cause it relies on getting the width of the carousel items.
-    */
-  public setClones(itemWidth?: number, forResizing?: boolean): void {
+  componentDidUpdate(
+    { autoPlay }: SliderProps,
+    { containerWidth, domLoaded, isSliding }: SliderInternalState
+  ): void {
+    if (
+      this.containerRef &&
+      this.containerRef.current &&
+      this.containerRef.current.offsetWidth !== containerWidth
+    ) {
+      // this is for handing resizing only.
+      setTimeout(() => {
+        this.setItemsToShow(true)
+      }, this.props.transitionDuration || defaultTransitionDuration)
+    }
+    if (autoPlay && !this.props.autoPlay && this.autoPlay) {
+      clearInterval(this.autoPlay)
+      this.autoPlay = undefined
+    }
+    if (!autoPlay && this.props.autoPlay && !this.autoPlay) {
+      this.autoPlay = setInterval(this.next, this.props.autoPlaySpeed)
+    }
+    if (this.props.infinite) {
+      // this is to quickly cancel the animation and move the items position to create the infinite effects.
+      this.correctClonesPosition({ domLoaded, isSliding })
+    }
+  }
+
+  public componentWillUnmount(): void {
+    window.removeEventListener('resize', this.onResize)
+    if (this.props.autoPlay && this.autoPlay) {
+      clearInterval(this.autoPlay)
+      this.autoPlay = undefined
+    }
+  }
+
+  /**
+   * Sets whatever is in throttle or not
+   * @param isInThrottle
+   */
+  setIsInThrottle(isInThrottle: boolean = false): void {
+    this.isInThrottle = isInThrottle
+  }
+
+  /**
+   *We only want to set the clones on the client-side cause it relies on getting the width of the carousel items.
+   */
+  setClones(itemWidth?: number, forResizing?: boolean): void {
     // if forResizing is true, means we are on client-side.
     // if forResizing is false, means we are on server-side.
     // because the first time we set the clones, we change the position of all carousel items when entering client-side from server-side.
@@ -136,7 +176,8 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       }
     )
   }
-  public setItemsToShow(shouldCorrectItemPosition?: boolean): void {
+
+  setItemsToShow(shouldCorrectItemPosition?: boolean): void {
     const { responsive } = this.props
     Object.keys(responsive).forEach(item => {
       const { breakpoint, items } = responsive[item]
@@ -147,8 +188,9 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       }
     })
   }
+
   // this is for resizing only or the first time when we entered client-side from server-side.
-  public setContainerAndItemWidth(
+  setContainerAndItemWidth(
     slidesToShow: number,
     shouldCorrectItemPosition?: boolean
   ): void {
@@ -175,10 +217,8 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       }
     }
   }
-  public correctItemsPosition(
-    itemWidth: number,
-    isAnimationAllowed?: boolean
-  ): void {
+
+  correctItemsPosition(itemWidth: number, isAnimationAllowed?: boolean): void {
     /*
         For swipe, drag and resizing, they changed the position of the carousel, but the position are not always correct.
         Hence, this is to make sure our items are in the correct place.
@@ -193,7 +233,8 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       transform: -(itemWidth * this.state.currentSlide),
     })
   }
-  public onResize(value?: any): void {
+
+  onResize(value?: any): void {
     // value here can be html event or a boolean.
     // if its in infinite mode, we want to keep the current slide index no matter what.
     // if its not infinite mode, keeping the current slide index has already been taken care of
@@ -210,36 +251,8 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     }
     this.setItemsToShow(shouldCorrectItemPosition)
   }
-  public componentDidUpdate(
-    { keyBoardControl, autoPlay }: SliderProps,
-    { containerWidth, domLoaded, isSliding }: SliderInternalState
-  ): void {
-    if (
-      this.containerRef &&
-      this.containerRef.current &&
-      this.containerRef.current.offsetWidth !== containerWidth
-    ) {
-      // this is for handing resizing only.
-      setTimeout(() => {
-        this.setItemsToShow(true)
-      }, this.props.transitionDuration || defaultTransitionDuration)
-    }
-    if (keyBoardControl && !this.props.keyBoardControl) {
-      window.removeEventListener('keyup', this.onKeyUp)
-    }
-    if (autoPlay && !this.props.autoPlay && this.autoPlay) {
-      clearInterval(this.autoPlay)
-      this.autoPlay = undefined
-    }
-    if (!autoPlay && this.props.autoPlay && !this.autoPlay) {
-      this.autoPlay = setInterval(this.next, this.props.autoPlaySpeed)
-    }
-    if (this.props.infinite) {
-      // this is to quickly cancel the animation and move the items position to create the infinite effects.
-      this.correctClonesPosition({ domLoaded, isSliding })
-    }
-  }
-  public correctClonesPosition({
+
+  correctClonesPosition({
     domLoaded, // this domLoaded comes from previous state, only use to tell if we are on client-side or server-side because this functin relies the dom.
     isSliding,
   }: {
@@ -271,7 +284,8 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       }
     }
   }
-  public next(slidesHavePassed = 0): void {
+
+  next(slidesHavePassed = 0): void {
     const { afterChange, beforeChange } = this.props
     /*
         two cases:
@@ -308,7 +322,8 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       }
     )
   }
-  public previous(slidesHavePassed = 0): void {
+
+  previous(slidesHavePassed = 0): void {
     const { afterChange, beforeChange } = this.props
     const { nextSlides, nextPosition } = populatePreviousSlides(
       this.state,
@@ -340,23 +355,15 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       }
     )
   }
-  public componentWillUnmount(): void {
-    window.removeEventListener('resize', this.onResize)
-    if (this.props.keyBoardControl) {
-      window.removeEventListener('keyup', this.onKeyUp)
-    }
-    if (this.props.autoPlay && this.autoPlay) {
-      clearInterval(this.autoPlay)
-      this.autoPlay = undefined
-    }
-  }
-  public resetMoveStatus(): void {
+
+  resetMoveStatus(): void {
     this.onMove = false
     this.initialPosition = 0
     this.lastPosition = 0
     this.direction = ''
   }
-  public handleDown(e: any): void {
+
+  handleDown(e: any): void {
     if (
       (e.touches && !this.props.swipeable) ||
       (e && !e.touches && !this.props.draggable) ||
@@ -370,7 +377,8 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     this.lastPosition = clientX
     this.isAnimationAllowed = false
   }
-  public handleMove(e: any): void {
+
+  handleMove(e: any): void {
     if (
       (e.touches && !this.props.swipeable) ||
       (e && !e.touches && !this.props.draggable)
@@ -404,7 +412,8 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       this.lastPosition = clientX
     }
   }
-  public handleOut(e: any): void {
+
+  handleOut(e: any): void {
     if (this.props.autoPlay && !this.autoPlay) {
       this.autoPlay = setInterval(this.next, this.props.autoPlaySpeed)
     }
@@ -444,21 +453,15 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       this.resetMoveStatus()
     }
   }
-  public onKeyUp(e: any): void {
-    switch (e.keyCode) {
-      case 37:
-        return this.previous()
-      case 39:
-        return this.next()
-    }
-  }
-  public handleEnter(): void {
+
+  handleEnter(): void {
     if (this.autoPlay && this.props.autoPlay) {
       clearInterval(this.autoPlay)
       this.autoPlay = undefined
     }
   }
-  public goToSlide(slide: number): void {
+
+  goToSlide(slide: number): void {
     if (this.isInThrottle) {
       return
     }
@@ -486,14 +489,16 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       }
     )
   }
-  public getState(): any {
+
+  getState(): any {
     return {
       ...this.state,
       onMove: this.onMove,
       direction: this.direction,
     }
   }
-  public renderLeftArrow(): React.ReactNode {
+
+  renderLeftArrow(): React.ReactNode {
     const { customLeftArrow } = this.props
     return (
       <LeftArrow
@@ -503,7 +508,8 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       />
     )
   }
-  public renderRightArrow(): React.ReactNode {
+
+  renderRightArrow(): React.ReactNode {
     const { customRightArrow } = this.props
     return (
       <RightArrow
@@ -513,7 +519,8 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       />
     )
   }
-  public renderButtonGroups(): React.ReactElement<any> | null {
+
+  renderButtonGroups(): React.ReactElement<any> | null {
     const { customButtonGroup } = this.props
     if (customButtonGroup) {
       return React.cloneElement(customButtonGroup, {
@@ -525,7 +532,8 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     }
     return null
   }
-  public renderDotsList(): React.ReactElement<any> | null {
+
+  renderDotsList(): React.ReactElement<any> | null {
     return (
       <Dots
         state={this.state}
@@ -535,7 +543,8 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       />
     )
   }
-  public renderCarouselItems(): any {
+
+  renderCarouselItems(): any {
     return (
       <SliderItems
         goToSlide={this.goToSlide}
