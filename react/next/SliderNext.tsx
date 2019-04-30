@@ -95,14 +95,13 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
 
   componentDidUpdate(
     { autoPlay }: SliderProps,
-    { containerWidth, domLoaded, isSliding }: SliderInternalState
+    { containerWidth }: SliderInternalState
   ): void {
     if (
       this.containerRef &&
       this.containerRef.current &&
       this.containerRef.current.offsetWidth !== containerWidth
     ) {
-      // this is for handing resizing only.
       setTimeout(() => {
         this.setItemsToShow(true)
       }, this.props.transitionDuration || defaultTransitionDuration)
@@ -115,7 +114,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       this.autoPlay = setInterval(this.next, this.props.autoPlaySpeed)
     }
     if (this.props.infinite) {
-      // this is to quickly cancel the animation and move the items position to create the infinite effects.
       // TODO
     }
   }
@@ -128,10 +126,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     }
   }
 
-  /**
-   * Sets whatever is in throttle or not
-   * @param isInThrottle
-   */
   setIsInThrottle(isInThrottle: boolean = false): void {
     this.isInThrottle = isInThrottle
   }
@@ -148,7 +142,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     })
   }
 
-  // this is for resizing only or the first time when we entered client-side from server-side.
   setContainerAndItemWidth(
     slidesToShow: number,
     shouldCorrectItemPosition?: boolean
@@ -177,10 +170,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
   }
 
   correctItemsPosition(itemWidth: number, isAnimationAllowed?: boolean): void {
-    /*
-        For swipe, drag and resizing, they changed the position of the carousel, but the position are not always correct.
-        Hence, this is to make sure our items are in the correct place.
-        */
     if (isAnimationAllowed) {
       this.isAnimationAllowed = true
     }
@@ -209,11 +198,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
 
   next(slidesHavePassed = 0): void {
     const { afterChange, beforeChange } = this.props
-    /*
-        two cases:
-        1. We are not over-sliding.
-        2. We are sliding over to what we have, that means nextslides > this.props.children.length. (does not apply to the inifnite mode)
-        */
     const { nextSlides, nextPosition } = populateNextSlides(
       this.state,
       this.props,
@@ -221,7 +205,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     )
     const previousSlide = this.state.currentSlide
     if (nextSlides === undefined || nextPosition === undefined) {
-      // they can be 0.
       return
     }
     if (typeof beforeChange === 'function') {
