@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useMemo } from 'react'
 
 import { SliderInternalState, SliderProps, stateCallBack } from './types'
 import { StyledDotList, StyledDot } from './Styled'
@@ -19,43 +19,58 @@ const Dots = ({
   goToSlide,
   getState,
 }: DotsTypes): React.ReactElement<any> | null => {
-  const { showDots, customDot, dotListClass, infinite, children } = props
+  const { slidesToShow, totalItems, currentSlide, domLoaded } = state
+  const {
+    showDots,
+    customDot,
+    dotListClass,
+    infinite,
+    slideVisibleSlides,
+  } = props
+
+  const slideIndexes = useMemo(
+    () =>
+      slidesToShow
+        ? [
+            ...Array(
+              slideVisibleSlides
+                ? Math.ceil(totalItems / slidesToShow)
+                : totalItems
+            ).keys(),
+          ]
+        : [],
+    [slidesToShow]
+  )
+
+  const selectedDot = useMemo(() => {
+    const realCurrentSlide = slideVisibleSlides
+      ? currentSlide + (slidesToShow - 1)
+      : currentSlide
+    return slideVisibleSlides
+      ? Math.floor(realCurrentSlide / slidesToShow)
+      : realCurrentSlide
+  }, [currentSlide, domLoaded])
+
+  const handleDotClick = (index: number) => {
+    const slideToGo = slideVisibleSlides ? index * slidesToShow : index
+    goToSlide(infinite ? slideToGo : slideToGo)
+  }
+
   if (!showDots) {
     return null
   }
-  const { currentSlide } = state
-  const childrenArr = React.Children.toArray(children)
+
   return (
     <StyledDotList className={dotListClass}>
-      {Array(childrenArr.length)
-        .fill(0)
-        .map((item, index: number) => {
-          const slideIndex = index //threat infinite
-          const cloneIndex = null //threat infinite
-          let isActive
-          if (cloneIndex !== undefined) {
-            isActive =
-              currentSlide === cloneIndex || currentSlide === slideIndex
-          } else {
-            isActive = currentSlide === slideIndex
-          }
-          if (customDot) {
-            return React.cloneElement(customDot, {
-              index,
-              active: isActive,
-              onClick: () => goToSlide(slideIndex),
-              carouselState: getState(),
-            })
-          }
-          return (
-            <li data-index={index} key={index}>
-              <StyledDot
-                isActive={isActive}
-                onClick={() => goToSlide(slideIndex)}
-              />
-            </li>
-          )
-        })}
+      {slideIndexes.map(index => {
+        return (
+          <StyledDot
+            key={index}
+            isActive={index === selectedDot}
+            onClick={() => handleDotClick(index)}
+          />
+        )
+      })}
     </StyledDotList>
   )
 }
