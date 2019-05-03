@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import { SliderInternalState, SliderProps, stateCallBack } from './types'
 import { StyledDotList, StyledDot } from './Styled'
 
-interface DotsTypes {
+interface DotsProps {
   props: SliderProps
   state: SliderInternalState
   goToSlide: (index: number) => void
@@ -18,15 +18,9 @@ const Dots = ({
   state,
   goToSlide,
   getState,
-}: DotsTypes): React.ReactElement<any> | null => {
+}: DotsProps): React.ReactElement<any> | null => {
   const { slidesToShow, totalItems, currentSlide, domLoaded } = state
-  const {
-    showDots,
-    customDot,
-    dotListClass,
-    infinite,
-    slideVisibleSlides,
-  } = props
+  const { showDots, customDot, dotListClass, slideVisibleSlides } = props
 
   const slideIndexes = useMemo(
     () =>
@@ -53,7 +47,13 @@ const Dots = ({
 
   const handleDotClick = (index: number) => {
     const slideToGo = slideVisibleSlides ? index * slidesToShow : index
-    goToSlide(infinite ? slideToGo : slideToGo)
+
+    const isLastDot = index === slideIndexes.length - 1
+    const isExactDivision = totalItems % slidesToShow === 0
+    const overslideThreshold =
+      !isExactDivision && isLastDot ? Math.floor(totalItems / slidesToShow) : 0
+
+    goToSlide(slideToGo - overslideThreshold)
   }
 
   if (!showDots) {
