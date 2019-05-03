@@ -12,7 +12,7 @@ interface SlidesProps {
 const Slides = ({ props, state }: SlidesProps): any => {
   const { itemWidth } = state
   const { children, itemClass } = props
-  const { flexBisis, shouldRenderOnSSR, domFullyLoaded } = getInitialState(
+  const { flexBasis, shouldRenderOnSSR, domFullyLoaded } = getInitialState(
     state,
     props
   )
@@ -23,7 +23,7 @@ const Slides = ({ props, state }: SlidesProps): any => {
       data-index={index}
       aria-hidden={getIfSlideIsVisbile(index, state) ? 'false' : 'true'}
       width={domFullyLoaded ? `${itemWidth}px` : 'auto'}
-      flex={shouldRenderOnSSR ? `1 0 ${flexBisis}%` : 'auto'}
+      flex={shouldRenderOnSSR ? `1 0 ${flexBasis}%` : 'auto'}
       position="relative"
       className={itemClass}
     >
