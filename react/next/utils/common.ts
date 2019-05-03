@@ -1,38 +1,44 @@
 import { getWidthFromDeviceType } from './elementWidth'
 import { SliderInternalState, SliderProps } from '../types'
 
-function getInitialState(
+interface InitalState {
+  shouldRenderOnSSR: boolean
+  flexBasis: number | string | undefined
+  domFullyLoaded: boolean
+}
+
+const getInitialState = (
   state: SliderInternalState,
   props: SliderProps
-): {
-  shouldRenderOnSSR: boolean
-  flexBisis: number | string | undefined
-  domFullyLoaded: boolean
-} {
+): InitalState => {
   const { domLoaded, slidesToShow, containerWidth, itemWidth } = state
   const { deviceType, responsive, ssr } = props
-  let flexBisis: number | string | undefined
+
+  let flexBasis: number | string | undefined
+
   const domFullyLoaded = Boolean(
     domLoaded && slidesToShow && containerWidth && itemWidth
   )
+
   if (ssr && deviceType && !domFullyLoaded) {
-    flexBisis = getWidthFromDeviceType(deviceType, responsive)
+    flexBasis = getWidthFromDeviceType(deviceType, responsive)
   }
+
   const shouldRenderOnSSR = Boolean(
-    ssr && deviceType && !domFullyLoaded && flexBisis
+    ssr && deviceType && !domFullyLoaded && flexBasis
   )
 
   return {
     shouldRenderOnSSR,
-    flexBisis,
+    flexBasis,
     domFullyLoaded,
   }
 }
 
-function getIfSlideIsVisbile(
+const getIfSlideIsVisbile = (
   index: number,
   state: SliderInternalState
-): boolean {
+): boolean => {
   const { currentSlide, slidesToShow } = state
   return index >= currentSlide && index < currentSlide + slidesToShow
 }

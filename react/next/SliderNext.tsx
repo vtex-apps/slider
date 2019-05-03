@@ -163,9 +163,7 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
           }
         }
       )
-      if (shouldCorrectItemPosition) {
-        this.correctItemsPosition(itemWidth)
-      }
+      shouldCorrectItemPosition && this.correctItemsPosition(itemWidth)
     }
   }
 

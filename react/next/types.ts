@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 export interface responsiveType {
   [key: string]: {
     breakpoint: { max: number; min: number }
@@ -58,12 +58,6 @@ export interface stateCallBack extends SliderInternalState {
   direction: string | undefined
 }
 
-export interface buttonGroupProps {
-  previous?: () => void
-  next?: () => void
-  goToSlide?: (index: number) => void
-  carouselState?: stateCallBack
-}
 export interface ArrowProps {
   onClick?: () => void
   carouselState?: stateCallBack
