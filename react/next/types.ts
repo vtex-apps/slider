@@ -15,6 +15,8 @@ export interface SliderProps {
   ssr?: boolean
   /** Number of slides that are passed each time */
   slidesToSlide?: number
+  /** Pass all the visible slides */
+  slideVisibleSlides?: boolean
   /** Elements to render  */
   children: any
   /** If should show arrows */
