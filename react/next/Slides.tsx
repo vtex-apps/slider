@@ -22,10 +22,11 @@ const Slides = ({ props, state }: SlidesProps): any => {
       key={index}
       data-index={index}
       aria-hidden={getIfSlideIsVisbile(index, state) ? 'false' : 'true'}
-      width={domFullyLoaded ? `${itemWidth}px` : 'auto'}
-      flex={shouldRenderOnSSR ? `1 0 ${flexBasis}%` : 'auto'}
-      position="relative"
-      className={itemClass}
+      width={itemWidth}
+      basis={flexBasis}
+      domFullyLoaded={domFullyLoaded}
+      shouldRenderOnSSR={shouldRenderOnSSR}
+      className={`${itemClass} relative`}
     >
       {child}
     </StyledSlide>

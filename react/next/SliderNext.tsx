@@ -9,7 +9,7 @@ import {
   populatePreviousSlides,
 } from './utils/index'
 
-import { SliderList, SliderTrack } from './Styled'
+import { SliderTrack } from './Styled'
 import { SliderInternalState, SliderProps } from './types'
 import Dots from './Dots'
 import { LeftArrow, RightArrow } from './Arrows'
@@ -385,9 +385,12 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     const disableRightArrow = !infinite && isRightEndReach
 
     return (
-      <SliderList className={containerClass} ref={this.containerRef}>
+      <div
+        className={`${containerClass} flex items-center relative overflow-hidden`}
+        ref={this.containerRef}
+      >
         <SliderTrack
-          className={sliderClass}
+          className={`${sliderClass} flex relative pa0 ma0`}
           transition={
             this.isAnimationAllowed
               ? customTransition || defaultTransition
@@ -409,7 +412,7 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
         {shouldShowArrows && !disableLeftArrow && this.renderLeftArrow()}
         {shouldShowArrows && !disableRightArrow && this.renderRightArrow()}
         {this.renderDotsList()}
-      </SliderList>
+      </div>
     )
   }
 }
