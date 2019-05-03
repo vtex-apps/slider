@@ -1,6 +1,6 @@
 import { SliderInternalState, SliderProps } from '../types'
 
-function throwError(state: SliderInternalState, props: SliderProps): any {
+const throwError = (state: SliderInternalState, props: SliderProps): any => {
   const { ssr, responsive } = props
   if (!responsive) {
     if (ssr) {

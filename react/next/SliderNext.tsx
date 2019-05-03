@@ -29,6 +29,7 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     autoPlaySpeed: 3000,
     showDots: false,
     dotListClass: '',
+    slideVisibleSlides: false,
   }
 
   /**

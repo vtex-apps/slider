@@ -14,7 +14,7 @@ function populateNextSlides(
   nextPosition: number | undefined
 } {
   const { slidesToShow, currentSlide, itemWidth, totalItems } = state
-  const { slidesToSlide } = props
+  const { slidesToSlide, slideVisibleSlides } = props
   let nextSlides
   let nextPosition
   // possibile next number of slides that don't go over what we have, this doesn't apply to the infinite mode.
@@ -24,13 +24,21 @@ function populateNextSlides(
     1 +
     slidesHavePassed +
     slidesToShow +
-    (slidesHavePassed > 0 ? 0 : slidesToSlide!)
+    (slidesHavePassed > 0
+      ? 0
+      : slideVisibleSlides
+      ? slidesToShow
+      : slidesToSlide!)
   if (nextMaximumSlides <= totalItems) {
     // It means if we have next slides go back to on the right-hand side.
     nextSlides =
       currentSlide +
       slidesHavePassed +
-      (slidesHavePassed > 0 ? 0 : slidesToSlide!)
+      (slidesHavePassed > 0
+        ? 0
+        : slideVisibleSlides
+        ? slidesToShow
+        : slidesToSlide!)
     nextPosition = -(itemWidth * nextSlides)
   } else if (
     nextMaximumSlides > totalItems &&
