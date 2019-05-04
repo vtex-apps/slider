@@ -58,8 +58,6 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
       isSliding: false,
     }
 
-    this.setIsInThrottle = this.setIsInThrottle.bind(this)
-
     this.next = throttle(
       this.next.bind(this),
       props.transitionDuration || defaultTransitionDuration,
@@ -127,11 +125,11 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     }
   }
 
-  setIsInThrottle(isInThrottle: boolean = false): void {
+  setIsInThrottle = (isInThrottle: boolean = false) => {
     this.isInThrottle = isInThrottle
   }
 
-  setItemsToShow(shouldCorrectItemPosition?: boolean): void {
+  setItemsToShow = (shouldCorrectItemPosition?: boolean) => {
     const { responsive } = this.props
     Object.keys(responsive).forEach(item => {
       const { breakpoint, items } = responsive[item]
@@ -143,10 +141,10 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     })
   }
 
-  setContainerAndItemWidth(
+  setContainerAndItemWidth = (
     slidesToShow: number,
     shouldCorrectItemPosition?: boolean
-  ): void {
+  ) => {
     if (this.containerRef && this.containerRef.current) {
       const containerWidth = this.containerRef.current.offsetWidth
       const itemWidth: number = getItemClientSideWidth(
@@ -168,7 +166,7 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     }
   }
 
-  correctItemsPosition(itemWidth: number, isAnimationAllowed?: boolean): void {
+  correctItemsPosition = (itemWidth: number, isAnimationAllowed?: boolean) => {
     if (isAnimationAllowed) {
       this.isAnimationAllowed = true
     }
@@ -195,7 +193,7 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     this.setItemsToShow(shouldCorrectItemPosition)
   }
 
-  next(slidesHavePassed = 0): void {
+  next = (slidesHavePassed = 0) => {
     const { afterChange, beforeChange } = this.props
     const { nextSlides, nextPosition } = populateNextSlides(
       this.state,
@@ -227,7 +225,7 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     )
   }
 
-  previous(slidesHavePassed = 0): void {
+  previous = (slidesHavePassed = 0) => {
     const { afterChange, beforeChange } = this.props
     const { nextSlides, nextPosition } = populatePreviousSlides(
       this.state,
@@ -283,7 +281,7 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     //TODO Mouse ENTER! Implement drag and swipe!
   }
 
-  goToSlide(slide: number): void {
+  goToSlide = (slide: number): void => {
     if (this.isInThrottle) {
       return
     }
@@ -312,13 +310,13 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     )
   }
 
-  getState(): any {
+  getState = (): any => {
     return {
       ...this.state,
     }
   }
 
-  renderLeftArrow(): React.ReactNode {
+  renderLeftArrow = (): React.ReactNode => {
     const { customLeftArrow } = this.props
     return (
       <LeftArrow
@@ -329,7 +327,7 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     )
   }
 
-  renderRightArrow(): React.ReactNode {
+  renderRightArrow = (): React.ReactNode => {
     const { customRightArrow } = this.props
     return (
       <RightArrow
@@ -340,7 +338,7 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
     )
   }
 
-  renderDotsList(): React.ReactElement<any> | null {
+  renderDotsList = (): React.ReactElement<any> | null => {
     return (
       <Dots
         state={this.state}
