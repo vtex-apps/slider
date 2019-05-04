@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react'
 
 import { SliderInternalState, SliderProps, stateCallBack } from './types'
-import { StyledDotList, StyledDot } from './Styled'
 
 interface DotsProps {
   props: SliderProps
@@ -61,17 +60,22 @@ const Dots = ({
   }
 
   return (
-    <StyledDotList className={dotListClass}>
+    <div
+      className={`${dotListClass} flex absolute justify-center pa0 ma0 bottom-0 left-0 right-0`}
+    >
       {slideIndexes.map(index => {
+        const isActive = index === selectedDot
         return (
-          <StyledDot
+          <div
+            className={`${
+              isActive ? 'bg-emphasis' : 'bg-muted-3'
+            } grow dim dib w1 h1 br-100 pa2 mr2 bw0 pointer outline-0`}
             key={index}
-            isActive={index === selectedDot}
             onClick={() => handleDotClick(index)}
           />
         )
       })}
-    </StyledDotList>
+    </div>
   )
 }
 
