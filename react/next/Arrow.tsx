@@ -1,12 +1,12 @@
-import React, { ReactElement, cloneElement } from 'react'
+import React, { ReactElement, cloneElement, memo } from 'react'
 
 import { StyledLeftArrow, StyledRightArrow } from './Styled'
-import { stateCallBack } from './types'
+import { StateCallBack } from './types'
 
 interface Props {
   custom?: ReactElement<any> | null
   direction: 'left' | 'right'
-  getState: () => stateCallBack
+  getState: StateCallBack
   action: () => void
 }
 
@@ -28,4 +28,4 @@ const Arrow = ({
     <StyledRightArrow onClick={() => action()} />
   )
 
-export default React.memo(Arrow)
+export default memo(Arrow)

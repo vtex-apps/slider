@@ -4,10 +4,16 @@ import { useSpring, animated, config as springPresets } from 'react-spring'
 interface Props {
   className?: string
   transform: number
+  shouldRenderOnSSR: boolean
 }
 
-const SliderTrack: FC<Props> = ({ children, className, transform }) => {
-  const animationStyle =
+const SliderTrack: FC<Props> = ({
+  children,
+  className,
+  transform,
+  shouldRenderOnSSR,
+}) => {
+  const animation =
     !!window.requestAnimationFrame &&
     useSpring({
       config: springPresets.default,
@@ -17,7 +23,10 @@ const SliderTrack: FC<Props> = ({ children, className, transform }) => {
   return (
     <animated.div
       className={`${className} flex relative pa0 ma0`}
-      style={animationStyle}
+      style={{
+        ...animation,
+        overflow: shouldRenderOnSSR ? 'hidden' : 'unset',
+      }}
     >
       {children}
     </animated.div>

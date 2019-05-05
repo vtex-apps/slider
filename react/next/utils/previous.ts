@@ -5,6 +5,13 @@ interface NextSlides {
   nextPosition: number | undefined
 }
 
+/**
+ * Populate the previous slides
+ * TODO: Implement the 'fake' translate when in infinite mode when left end is reached
+ * @param state : slider current state
+ * @param props : slider props
+ * @param slidesHavePassed : slides that passed
+ */
 const populatePreviousSlides = (
   state: SliderInternalState,
   props: SliderProps,

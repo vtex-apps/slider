@@ -13,7 +13,11 @@ import Arrow from './Arrow'
 import Slides from './Slides'
 import SliderTrack from './SliderTrack'
 
+/**
+ * Slider's main component
+ */
 const SliderNext: FC<SliderProps> = props => {
+  const containerRef = useRef<HTMLDivElement>(null)
   const [state, setState] = useState<SliderInternalState>({
     itemWidth: 0,
     slidesToShow: 0,
@@ -23,10 +27,7 @@ const SliderNext: FC<SliderProps> = props => {
     domLoaded: false,
     transform: 0,
     containerWidth: 0,
-    isSliding: false,
   })
-
-  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const setNewState = (shouldCorrectItemPosition: boolean) => {
@@ -65,15 +66,7 @@ const SliderNext: FC<SliderProps> = props => {
     }
 
     const onResize = (value?: any): void => {
-      if (!props.infinite) {
-        setNewState(false)
-      } else {
-        if (typeof value === 'boolean' && value) {
-          setNewState(false)
-        } else {
-          setNewState(true)
-        }
-      }
+      setNewState(!(value && !props.infinite))
     }
 
     setNewState(false)
@@ -88,17 +81,14 @@ const SliderNext: FC<SliderProps> = props => {
   }
 
   const next = (slidesHavePassed = 0) => {
-    console.log('gotcha')
     const { nextSlides, nextPosition } = populateNextSlides(
       state,
       props,
       slidesHavePassed
     )
     if (nextSlides === undefined || nextPosition === undefined) {
-      console.log('out undefined')
       return
     }
-    console.log('nextTransform', nextPosition)
     setState({
       ...state,
       transform: nextPosition,
@@ -167,8 +157,6 @@ const SliderNext: FC<SliderProps> = props => {
     )
   }
 
-  throwError(state, props)
-
   const { shouldRenderOnSSR } = getInitialState(state, props)
   const isLeftEndReach = !(state.currentSlide - props.slidesToSlide! >= 0)
   const isRightEndReach = !(
@@ -189,6 +177,11 @@ const SliderNext: FC<SliderProps> = props => {
   const disableLeftArrow = !props.infinite && isLeftEndReach
   const disableRightArrow = !props.infinite && isRightEndReach
 
+  /**
+   * Points props inconsistencies
+   */
+  throwError(props)
+
   return (
     <div
       className={`${
@@ -196,7 +189,11 @@ const SliderNext: FC<SliderProps> = props => {
       } flex items-center relative overflow-hidden`}
       ref={containerRef}
     >
-      <SliderTrack className={props.sliderClass} transform={state.transform}>
+      <SliderTrack
+        className={props.sliderClass}
+        transform={state.transform}
+        shouldRenderOnSSR={shouldRenderOnSSR}
+      >
         <Slides state={state} props={props} />
       </SliderTrack>
       {shouldShowArrows && !disableLeftArrow && renderLeftArrow()}
@@ -213,7 +210,6 @@ SliderNext.defaultProps = {
   containerClass: '',
   sliderClass: '',
   itemClass: '',
-  autoPlaySpeed: 3000,
   showDots: false,
   dotListClass: '',
   slideVisibleSlides: false,

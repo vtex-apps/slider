@@ -7,6 +7,11 @@ interface InitalState {
   domFullyLoaded: boolean
 }
 
+/**
+ * Gets the slider initial state
+ * Stil needs some improvements
+ * Will be useful to display skeletons
+ */
 const getInitialState = (
   state: SliderInternalState,
   props: SliderProps
@@ -14,15 +19,14 @@ const getInitialState = (
   const { domLoaded, slidesToShow, containerWidth, itemWidth } = state
   const { deviceType, responsive, ssr } = props
 
-  let flexBasis: number | string | undefined
-
   const domFullyLoaded = Boolean(
     domLoaded && slidesToShow && containerWidth && itemWidth
   )
 
-  if (ssr && deviceType && !domFullyLoaded) {
-    flexBasis = getWidthFromDeviceType(deviceType, responsive)
-  }
+  const flexBasis =
+    ssr && deviceType && !domFullyLoaded
+      ? getWidthFromDeviceType(deviceType, responsive)
+      : undefined
 
   const shouldRenderOnSSR = Boolean(
     ssr && deviceType && !domFullyLoaded && flexBasis
@@ -35,6 +39,9 @@ const getInitialState = (
   }
 }
 
+/**
+ * Returns if the slide is visible or not
+ */
 const getIfSlideIsVisbile = (
   index: number,
   state: SliderInternalState
