@@ -60,10 +60,6 @@ export interface stateCallBack extends SliderInternalState {
   direction: string | undefined
 }
 
-export interface ArrowProps {
-  onClick?: () => void
-  carouselState?: stateCallBack
-}
 export interface DotProps {
   index?: number
   active?: boolean

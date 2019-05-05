@@ -12,7 +12,7 @@ import {
 } from './utils/index'
 
 import Dots from './Dots'
-import { LeftArrow, RightArrow } from './Arrows'
+import Arrow from './Arrow'
 import Slides from './Slides'
 
 const SliderNext: FC<SliderProps> = props => {
@@ -137,10 +137,11 @@ const SliderNext: FC<SliderProps> = props => {
   const renderLeftArrow = (): React.ReactNode => {
     const { customLeftArrow } = props
     return (
-      <LeftArrow
-        customLeftArrow={customLeftArrow}
+      <Arrow
+        custom={customLeftArrow}
+        direction="left"
         getState={() => getState()}
-        previous={previous}
+        action={previous}
       />
     )
   }
@@ -148,10 +149,11 @@ const SliderNext: FC<SliderProps> = props => {
   const renderRightArrow = (): React.ReactNode => {
     const { customRightArrow } = props
     return (
-      <RightArrow
-        customRightArrow={customRightArrow}
+      <Arrow
+        custom={customRightArrow}
         getState={() => getState()}
-        next={next}
+        direction="right"
+        action={next}
       />
     )
   }
