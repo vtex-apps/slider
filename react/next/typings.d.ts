@@ -22,7 +22,7 @@ interface SliderProps {
   children: any
   /** If should show arrows */
   showArrows?: boolean
-  /** With device types that arrows should be hidden */
+  /** Which device types that arrows should be hidden */
   removeArrowOnDeviceType?: string | Array<string>
   /** Custom arrow on left */
   customLeftArrow?: React.ReactElement<any> | null
