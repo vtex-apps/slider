@@ -12,7 +12,7 @@ import {
 import { SliderTrack } from './Styled'
 import { SliderInternalState, SliderProps } from './types'
 import Dots from './Dots'
-import { LeftArrow, RightArrow } from './Arrows'
+import Arrow from './Arrow'
 import Slides from './Slides'
 
 const defaultTransitionDuration = 400
@@ -319,10 +319,11 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
   renderLeftArrow = (): React.ReactNode => {
     const { customLeftArrow } = this.props
     return (
-      <LeftArrow
-        customLeftArrow={customLeftArrow}
+      <Arrow
+        custom={customLeftArrow}
+        direction="left"
         getState={() => this.getState()}
-        previous={this.previous}
+        action={this.previous}
       />
     )
   }
@@ -330,10 +331,11 @@ class SliderNext extends React.Component<SliderProps, SliderInternalState> {
   renderRightArrow = (): React.ReactNode => {
     const { customRightArrow } = this.props
     return (
-      <RightArrow
-        customRightArrow={customRightArrow}
+      <Arrow
+        custom={customRightArrow}
+        direction="right"
         getState={() => this.getState()}
-        next={this.next}
+        action={this.next}
       />
     )
   }
