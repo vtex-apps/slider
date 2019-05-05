@@ -7,6 +7,7 @@ The VTEX Slider is a slider that aims a good support for SSR and can display one
 :loudspeaker: **Disclaimer:** Don't fork this project; use, contribute, or open issue with your feature request
 
 ## Table of Contents
+
 - [Usage](#usage)
   - [Configuration](#configuration)
     - [Slider](#slider)
@@ -16,6 +17,7 @@ The VTEX Slider is a slider that aims a good support for SSR and can display one
   - [Styles API](#styles-api)
     - [CSS namespaces](#css-namespaces)
 - [Tests](#tests)
+- [Next](#next)
 
 ## Usage
 
@@ -194,27 +196,27 @@ render() {
 
 #### Slide
 
-| Prop name | Type | isRequired | defaultValue | Description |
-| --- | --- | --- | --- | --- |
-| `children` | `node` | :heavy_check_mark: | :no_entry_sign: | Node to render |
-| `className` | `string` | :no_entry_sign: | :no_entry_sign: | Classes to pass to the root element of the Slide |
-| `defaultWidth` | `number` | :no_entry_sign: | :no_entry_sign: | Default width of the slide (only applied in the first render) |
-| `tag` | `string` | :no_entry_sign: | `li` | Tag to be rendered in the root element |
-| `fitImg` | `bool` | :no_entry_sign: | `true` | If the slide component should try to fit the `img` (only works if children is an `img` element) |
-| `resizeDebounce` | `number` | :no_entry_sign: | `250` | Time of debounce of resize event listener |
-| `sliderTransitionDuration` | `number` | :no_entry_sign: | `250` | Duration of transition passed to Slider (must be the same), if nothing is passed to any of the components it will apply the same default value |
+| Prop name                  | Type     | isRequired         | defaultValue    | Description                                                                                                                                    |
+| -------------------------- | -------- | ------------------ | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `children`                 | `node`   | :heavy_check_mark: | :no_entry_sign: | Node to render                                                                                                                                 |
+| `className`                | `string` | :no_entry_sign:    | :no_entry_sign: | Classes to pass to the root element of the Slide                                                                                               |
+| `defaultWidth`             | `number` | :no_entry_sign:    | :no_entry_sign: | Default width of the slide (only applied in the first render)                                                                                  |
+| `tag`                      | `string` | :no_entry_sign:    | `li`            | Tag to be rendered in the root element                                                                                                         |
+| `fitImg`                   | `bool`   | :no_entry_sign:    | `true`          | If the slide component should try to fit the `img` (only works if children is an `img` element)                                                |
+| `resizeDebounce`           | `number` | :no_entry_sign:    | `250`           | Time of debounce of resize event listener                                                                                                      |
+| `sliderTransitionDuration` | `number` | :no_entry_sign:    | `250`           | Duration of transition passed to Slider (must be the same), if nothing is passed to any of the components it will apply the same default value |
 
 #### SliderContainer
 
-| Prop name | Type | isRequired | defaultValue | Description |
-| --- | --- | --- | --- | --- |
-| `autoplay` | `bool` | :no_entry_sign: | `false` | If the slider should be passing automatically |
-| `autoplayInterval` | `number` | :no_entry_sign: | `5000` | Time in milliseconds of the interval to change the currentSlider |
-| `children` | `node` | :heavy_check_mark: | :no_entry_sign: | Children of the component to render |
-| `className` | `string` | :no_entry_sign: | :no_entry_sign: | Classes to be applied to the root element |
-| `onNextSlide` | `func` | :no_entry_sign: | :no_entry_sign: | Function to be called if `autoplay={true}` |
-| `pauseOnHover` | `bool` | :no_entry_sign: | `true` | If the interval should not be executed when the mouse is hovering the component |
-| `tag` | `string` | :no_entry_sign: | `'div'` | Tag to render the component | 
+| Prop name          | Type     | isRequired         | defaultValue    | Description                                                                     |
+| ------------------ | -------- | ------------------ | --------------- | ------------------------------------------------------------------------------- |
+| `autoplay`         | `bool`   | :no_entry_sign:    | `false`         | If the slider should be passing automatically                                   |
+| `autoplayInterval` | `number` | :no_entry_sign:    | `5000`          | Time in milliseconds of the interval to change the currentSlider                |
+| `children`         | `node`   | :heavy_check_mark: | :no_entry_sign: | Children of the component to render                                             |
+| `className`        | `string` | :no_entry_sign:    | :no_entry_sign: | Classes to be applied to the root element                                       |
+| `onNextSlide`      | `func`   | :no_entry_sign:    | :no_entry_sign: | Function to be called if `autoplay={true}`                                      |
+| `pauseOnHover`     | `bool`   | :no_entry_sign:    | `true`          | If the interval should not be executed when the mouse is hovering the component |
+| `tag`              | `string` | :no_entry_sign:    | `'div'`         | Tag to render the component                                                     |
 
 #### Dots
 
@@ -248,3 +250,7 @@ You can style this app by using the props `classeName` and `classes` of the comp
 ## Travis CI
 
 [![Build Status](https://travis-ci.org/vtex-apps/slider.svg?branch=master)](https://travis-ci.org/vtex-apps/slider)
+
+## Next
+
+The SliderNext is the upcoming version of VTEX Slider. The main difference is that dots, arrows and slide transitions are now handled by Slider instead of its parent component. To use it, check the [docs](/react/next/README.md)
