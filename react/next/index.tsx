@@ -1,6 +1,6 @@
-import React, { FC, useState, useEffect, useRef } from 'react'
+import React, { FC, useReducer, useEffect, useRef } from 'react'
 
-import { SliderInternalState, SliderProps } from './typings'
+import { SliderProps } from './typings'
 import {
   getInitialState,
   throwError,
@@ -12,13 +12,14 @@ import Dots from './Dots'
 import Arrow from './Arrow'
 import Slides from './Slides'
 import SliderTrack from './SliderTrack'
+import reducer from './stateReducer'
 
 /**
  * Slider's main component
  */
 const SliderNext: FC<SliderProps> = props => {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [state, setState] = useState<SliderInternalState>({
+  const [state, dispatch] = useReducer(reducer, {
     itemWidth: 0,
     slidesToShow: 0,
     currentSlide: 0,
@@ -42,23 +43,23 @@ const SliderNext: FC<SliderProps> = props => {
               items,
               containerWidth
             )
-            setState({
-              ...state,
-              domLoaded: true,
-              slidesToShow: items,
-              deviceType: item,
-              containerWidth,
-              itemWidth,
-              transform: shouldCorrectItemPosition
-                ? -itemWidth * state.currentSlide
-                : state.transform,
+            dispatch({
+              type: 'loadAndCorrect',
+              payload: {
+                slidesToShow: items,
+                deviceType: item,
+                containerWidth,
+                itemWidth,
+                shouldCorrectItemPosition,
+              },
             })
           } else {
-            setState({
-              ...state,
-              domLoaded: true,
-              slidesToShow: items,
-              deviceType: item,
+            dispatch({
+              type: 'load',
+              payload: {
+                slidesToShow: items,
+                deviceType: item,
+              },
             })
           }
         }
@@ -89,10 +90,12 @@ const SliderNext: FC<SliderProps> = props => {
     if (nextSlides === undefined || nextPosition === undefined) {
       return
     }
-    setState({
-      ...state,
-      transform: nextPosition,
-      currentSlide: nextSlides,
+    dispatch({
+      type: 'slide',
+      payload: {
+        transform: nextPosition,
+        currentSlide: nextSlides,
+      },
     })
   }
 
@@ -106,19 +109,23 @@ const SliderNext: FC<SliderProps> = props => {
       // they can be 0, which goes back to the first slide.
       return
     }
-    setState({
-      ...state,
-      transform: nextPosition,
-      currentSlide: nextSlides,
+    dispatch({
+      type: 'slide',
+      payload: {
+        transform: nextPosition,
+        currentSlide: nextSlides,
+      },
     })
   }
 
   const goToSlide = (slide: number): void => {
     const { itemWidth } = state
-    setState({
-      ...state,
-      currentSlide: slide,
-      transform: -(itemWidth * slide),
+    dispatch({
+      type: 'slide',
+      payload: {
+        transform: -(itemWidth * slide),
+        currentSlide: slide,
+      },
     })
   }
 
