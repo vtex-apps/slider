@@ -4,12 +4,12 @@ import { SliderInternalState, SliderProps } from './types'
 import { getInitialState, getIfSlideIsVisbile } from './utils/index'
 import { StyledSlide } from './Styled'
 
-interface SlidesProps {
+interface Props {
   props: SliderProps
   state: SliderInternalState
 }
 
-const Slides = ({ props, state }: SlidesProps): any => {
+const Slides = ({ props, state }: Props): any => {
   const { itemWidth } = state
   const { children, itemClass } = props
   const { flexBasis, shouldRenderOnSSR, domFullyLoaded } = getInitialState(

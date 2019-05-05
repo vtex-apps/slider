@@ -55,28 +55,27 @@ const Dots = ({
     goToSlide(slideToGo - overslideThreshold)
   }
 
-  if (!showDots) {
-    return null
-  }
+  const renderDots = () =>
+    slideIndexes.map(index => {
+      const isActive = index === selectedDot
+      return (
+        <div
+          className={`${
+            isActive ? 'bg-emphasis' : 'bg-muted-3'
+          } grow dim dib w1 h1 br-100 pa2 mr2 bw0 pointer outline-0`}
+          key={index}
+          onClick={() => handleDotClick(index)}
+        />
+      )
+    })
 
-  return (
+  return showDots ? (
     <div
       className={`${dotListClass} flex absolute justify-center pa0 ma0 bottom-0 left-0 right-0`}
     >
-      {slideIndexes.map(index => {
-        const isActive = index === selectedDot
-        return (
-          <div
-            className={`${
-              isActive ? 'bg-emphasis' : 'bg-muted-3'
-            } grow dim dib w1 h1 br-100 pa2 mr2 bw0 pointer outline-0`}
-            key={index}
-            onClick={() => handleDotClick(index)}
-          />
-        )
-      })}
+      {renderDots()}
     </div>
-  )
+  ) : null
 }
 
-export default Dots
+export default React.memo(Dots)

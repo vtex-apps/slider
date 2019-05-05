@@ -28,4 +28,4 @@ const Arrow = ({
     <StyledRightArrow onClick={() => action()} />
   )
 
-export default Arrow
+export default React.memo(Arrow)

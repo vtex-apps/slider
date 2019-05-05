@@ -1,8 +1,6 @@
 import React, { FC, useState, useEffect, useRef } from 'react'
-import { useSpring, animated, config as springPresets } from 'react-spring'
 
 import { SliderInternalState, SliderProps } from './types'
-
 import {
   getInitialState,
   throwError,
@@ -10,10 +8,10 @@ import {
   populateNextSlides,
   populatePreviousSlides,
 } from './utils/index'
-
 import Dots from './Dots'
 import Arrow from './Arrow'
 import Slides from './Slides'
+import SliderTrack from './SliderTrack'
 
 const SliderNext: FC<SliderProps> = props => {
   const [state, setState] = useState<SliderInternalState>({
@@ -191,11 +189,6 @@ const SliderNext: FC<SliderProps> = props => {
   const disableLeftArrow = !props.infinite && isLeftEndReach
   const disableRightArrow = !props.infinite && isRightEndReach
 
-  const animationStyle = useSpring({
-    config: springPresets.default,
-    transform: `translate3d(${state.transform}px, 0, 0)`,
-  })
-
   return (
     <div
       className={`${
@@ -203,12 +196,9 @@ const SliderNext: FC<SliderProps> = props => {
       } flex items-center relative overflow-hidden`}
       ref={containerRef}
     >
-      <animated.div
-        className={`${props.sliderClass} flex relative pa0 ma0`}
-        style={animationStyle}
-      >
+      <SliderTrack className={props.sliderClass} transform={state.transform}>
         <Slides state={state} props={props} />
-      </animated.div>
+      </SliderTrack>
       {shouldShowArrows && !disableLeftArrow && renderLeftArrow()}
       {shouldShowArrows && !disableRightArrow && renderRightArrow()}
       {renderDotsList()}
