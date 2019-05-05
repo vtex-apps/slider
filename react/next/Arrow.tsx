@@ -1,7 +1,7 @@
 import React, { ReactElement, cloneElement, memo } from 'react'
 
 import { StyledLeftArrow, StyledRightArrow } from './Styled'
-import { StateCallBack } from './types'
+import { StateCallBack } from './typings'
 
 interface Props {
   custom?: ReactElement<any> | null

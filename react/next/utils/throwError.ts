@@ -1,4 +1,4 @@
-import { SliderProps } from '../types'
+import { SliderProps } from '../typings'
 
 const throwError = (props: SliderProps): any => {
   const { ssr, responsive } = props
