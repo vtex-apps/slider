@@ -1,12 +1,12 @@
 import React from 'react'
 
-import { SliderInternalState, SliderProps } from './typings'
+import { SliderState, SliderProps } from './typings'
 import { getInitialState, getIfSlideIsVisbile } from './utils/index'
 import { StyledSlide } from './Styled'
 
 interface Props {
   props: SliderProps
-  state: SliderInternalState
+  state: SliderState
 }
 
 const Slides = ({ props, state }: Props): any => {

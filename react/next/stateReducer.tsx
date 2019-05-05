@@ -1,26 +1,32 @@
-import { SliderInternalState } from './typings'
+import { SliderState } from './typings'
 
-type Action =
-  | { type: 'load'; payload: { slidesToShow: number; deviceType: string } }
-  | {
-      type: 'loadAndCorrect'
-      payload: {
-        slidesToShow: number
-        deviceType: string
-        containerWidth: number
-        itemWidth: number
-        shouldCorrectItemPosition: boolean
-      }
-    }
-  | {
-      type: 'slide'
-      payload: {
-        transform: number
-        currentSlide: number
-      }
-    }
+type LoadAction = {
+  type: 'load'
+  payload: { slidesToShow: number; deviceType: string }
+}
 
-const reducer = (state: SliderInternalState, action: Action) => {
+type LoadCorrectAction = {
+  type: 'loadAndCorrect'
+  payload: {
+    slidesToShow: number
+    deviceType: string
+    containerWidth: number
+    itemWidth: number
+    shouldCorrectItemPosition: boolean
+  }
+}
+
+type SlideAction = {
+  type: 'slide'
+  payload: {
+    transform: number
+    currentSlide: number
+  }
+}
+
+type Action = LoadAction | LoadCorrectAction | SlideAction
+
+const reducer = (state: SliderState, action: Action) => {
   switch (action.type) {
     case 'load':
       return {
