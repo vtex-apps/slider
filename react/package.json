@@ -19,6 +19,7 @@
     "ramda": "^0.26.1",
     "react": "^16.6.3",
     "react-event-listener": "^0.6.5",
+    "react-spring": "^8.0.20",
     "styled-components": "^4.2.0"
   },
   "devDependencies": {
