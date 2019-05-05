@@ -1,12 +1,12 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, memo } from 'react'
 
-import { SliderInternalState, SliderProps, stateCallBack } from './types'
+import { SliderInternalState, SliderProps, StateCallBack } from './types'
 
-interface DotsProps {
+interface Props {
   props: SliderProps
   state: SliderInternalState
   goToSlide: (index: number) => void
-  getState: () => stateCallBack
+  getState: StateCallBack
 }
 
 /**
@@ -17,7 +17,7 @@ const Dots = ({
   state,
   goToSlide,
   getState,
-}: DotsProps): React.ReactElement<any> | null => {
+}: Props): React.ReactElement<any> | null => {
   const { slidesToShow, totalItems, currentSlide, domLoaded } = state
   const { showDots, customDot, dotListClass, slideVisibleSlides } = props
 
@@ -32,7 +32,7 @@ const Dots = ({
             ).keys(),
           ]
         : [],
-    [slidesToShow]
+    [slidesToShow, slideVisibleSlides]
   )
 
   const selectedDot = useMemo(() => {
@@ -78,4 +78,4 @@ const Dots = ({
   ) : null
 }
 
-export default React.memo(Dots)
+export default memo(Dots)

@@ -1,11 +1,5 @@
 import styled from 'styled-components'
 
-interface SliderTrackProps {
-  transition: string
-  shouldRenderOnSSR: boolean
-  transform: number
-}
-
 interface SlideProps {
   shouldRenderOnSSR?: boolean
   domFullyLoaded?: boolean
@@ -44,17 +38,6 @@ export const StyledRightArrow = styled(StyledArrow)`
     transform: rotate(45deg);
   }
 `
-
-export const SliderTrack = styled('div')<SliderTrackProps>(
-  {
-    willChange: 'transform',
-  },
-  props => ({
-    transition: props.transition,
-    overflow: props.shouldRenderOnSSR ? 'hidden' : 'unset',
-    transform: `translate3d(${props.transform}px,0,0)`,
-  })
-)
 
 export const StyledSlide = styled('div')<SlideProps>(props => ({
   flex: props.shouldRenderOnSSR ? `1 0 ${props.basis}%` : 'auto',

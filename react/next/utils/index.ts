@@ -1,14 +1,12 @@
 import { getWidthFromDeviceType, getItemClientSideWidth } from './elementWidth'
 import { getInitialState, getIfSlideIsVisbile } from './common'
-import throttle from './throttle'
-import throwError from './throwError'
 import { populateNextSlides } from './next'
 import { populatePreviousSlides } from './previous'
+import throwError from './throwError'
 
 export {
   getWidthFromDeviceType,
   getItemClientSideWidth,
-  throttle,
   getInitialState,
   getIfSlideIsVisbile,
   throwError,

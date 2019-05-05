@@ -3,7 +3,6 @@ export interface responsiveType {
   [key: string]: {
     breakpoint: { max: number; min: number }
     items: number
-    paritialVisibilityGutter?: number
   }
 }
 export interface SliderProps {
@@ -31,10 +30,6 @@ export interface SliderProps {
   customDot?: React.ReactElement<any> | null
   /** Whatever is infinite mode or not */
   infinite?: boolean // TODO
-  /** Change callback after sliding everytime || (previousSlide, currentState) => ... */
-  afterChange?: (previousSlide: number, state: stateCallBack) => void // `
-  /** Change callback before sliding everytime || (previousSlide, currentState) => ... */
-  beforeChange?: (nextSlide: number, state: stateCallBack) => void
   /** Custom class for slider */
   sliderClass?: string
   /** Custom class for items */
@@ -43,38 +38,27 @@ export interface SliderProps {
   containerClass?: string
   /** Custom class for dots */
   dotListClass?: string
-  /** If should autoplay */
-  autoPlay?: boolean
-  /** Autoplay speed */
-  autoPlaySpeed?: number
   /** If should show dots or not */
   showDots?: boolean
-  /** Custom transitions */
-  customTransition?: string
-  /** Custom transition duration */
-  transitionDuration?: number
 }
 
-export interface stateCallBack extends SliderInternalState {
-  onMove: boolean
-  direction: string | undefined
-}
-
-export interface DotProps {
-  index?: number
-  active?: boolean
-  onClick?: () => void
-  carouselState?: stateCallBack
-}
+export type StateCallBack = () => SliderInternalState
 
 export interface SliderInternalState {
+  /** Width of each item */
   itemWidth: number
+  /** Width of the full container */
   containerWidth: number
+  /** Number of slides to show per page */
   slidesToShow: number
+  /** Index of the first item (left) of the current page */
   currentSlide: number
+  /** Total number of slides */
   totalItems: number
+  /** If the dom is loaded or not */
   domLoaded: boolean
+  /** Current device type (based on containerWidth and responsive prop) */
   deviceType?: string
+  /** Current transform value */
   transform: number
-  isSliding?: boolean
 }
