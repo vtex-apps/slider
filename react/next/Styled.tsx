@@ -13,10 +13,6 @@ interface SlideProps {
   width?: string | number
 }
 
-interface DotProps {
-  isActive: boolean
-}
-
 export const StyledArrow = styled('button')`
   position: absolute;
   border: none;
