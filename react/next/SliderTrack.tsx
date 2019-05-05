@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react'
+import React, { FC } from 'react'
 import { useSpring, animated, config as springPresets } from 'react-spring'
 
 interface Props {

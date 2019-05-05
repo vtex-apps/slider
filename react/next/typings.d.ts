@@ -1,11 +1,13 @@
 import React from 'react'
-export interface responsiveType {
+
+interface responsiveType {
   [key: string]: {
     breakpoint: { max: number; min: number }
     items: number
   }
 }
-export interface SliderProps {
+
+interface SliderProps {
   /** Number of elements per breakpoint */
   responsive: responsiveType
   /** Device type */
@@ -42,9 +44,9 @@ export interface SliderProps {
   showDots?: boolean
 }
 
-export type StateCallBack = () => SliderInternalState
+type StateCallBack = () => SliderInternalState
 
-export interface SliderInternalState {
+interface SliderInternalState {
   /** Width of each item */
   itemWidth: number
   /** Width of the full container */

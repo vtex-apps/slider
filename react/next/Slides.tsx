@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { SliderInternalState, SliderProps } from './types'
+import { SliderInternalState, SliderProps } from './typings'
 import { getInitialState, getIfSlideIsVisbile } from './utils/index'
 import { StyledSlide } from './Styled'
 

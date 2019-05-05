@@ -1,4 +1,4 @@
-import { SliderInternalState, SliderProps } from '../types'
+import { SliderInternalState, SliderProps } from '../typings'
 
 interface NextSlides {
   nextSlides: number | undefined

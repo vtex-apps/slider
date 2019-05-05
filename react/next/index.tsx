@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect, useRef } from 'react'
 
-import { SliderInternalState, SliderProps } from './types'
+import { SliderInternalState, SliderProps } from './typings'
 import {
   getInitialState,
   throwError,
