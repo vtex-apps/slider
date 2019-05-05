@@ -1,4 +1,4 @@
-import { SliderInternalState, SliderProps } from '../typings'
+import { SliderState, SliderProps } from '../typings'
 
 interface NextSlides {
   nextSlides: number | undefined
@@ -13,7 +13,7 @@ interface NextSlides {
  * @param slidesHavePassed : slides that passed
  */
 const populatePreviousSlides = (
-  state: SliderInternalState,
+  state: SliderState,
   props: SliderProps,
   slidesHavePassed: number = 0
 ): NextSlides => {

@@ -44,9 +44,9 @@ interface SliderProps {
   showDots?: boolean
 }
 
-type StateCallBack = () => SliderInternalState
+type StateCallBack = () => SliderState
 
-interface SliderInternalState {
+interface SliderState {
   /** Width of each item */
   itemWidth: number
   /** Width of the full container */

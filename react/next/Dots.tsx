@@ -1,10 +1,10 @@
 import React, { useMemo, memo } from 'react'
 
-import { SliderInternalState, SliderProps, StateCallBack } from './typings'
+import { SliderState, SliderProps, StateCallBack } from './typings'
 
 interface Props {
   props: SliderProps
-  state: SliderInternalState
+  state: SliderState
   goToSlide: (index: number) => void
   getState: StateCallBack
 }

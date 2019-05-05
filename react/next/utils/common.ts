@@ -1,5 +1,5 @@
 import { getWidthFromDeviceType } from './elementWidth'
-import { SliderInternalState, SliderProps } from '../typings'
+import { SliderState, SliderProps } from '../typings'
 
 interface InitalState {
   shouldRenderOnSSR: boolean
@@ -13,7 +13,7 @@ interface InitalState {
  * Will be useful to display skeletons
  */
 const getInitialState = (
-  state: SliderInternalState,
+  state: SliderState,
   props: SliderProps
 ): InitalState => {
   const { domLoaded, slidesToShow, containerWidth, itemWidth } = state
@@ -42,10 +42,7 @@ const getInitialState = (
 /**
  * Returns if the slide is visible or not
  */
-const getIfSlideIsVisbile = (
-  index: number,
-  state: SliderInternalState
-): boolean => {
+const getIfSlideIsVisbile = (index: number, state: SliderState): boolean => {
   const { currentSlide, slidesToShow } = state
   return index >= currentSlide && index < currentSlide + slidesToShow
 }
