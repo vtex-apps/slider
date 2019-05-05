@@ -98,25 +98,25 @@ So, on your component you will use it like:
 
 ### Configuration
 
-| Prop name                 | Type                             | isRequired | defaultValue | Description                                     |
-| ------------------------- | -------------------------------- | ---------- | ------------ | ----------------------------------------------- |
-| `responsive`              | `responsiveType`                 | 🚫         | 🚫           | Number of elements per breakpoint               |
-| `deviceType`              | `string`                         | 🚫         | 🚫           | The device type                                 |
-| `ssr`                     | `boolean`                        | 🚫         | false        | If is SSR mode or not                           |
-| `slidesToSlide`           | `number`                         | 🚫         | 1            | Number of slides that are passed each time      |
-| `slideVisibleSlides`      | `boolean`                        | 🚫         | false        | Pass all the visible slides at once             |
-| `children`                | `any`                            | ✅         | 🚫           | Elements to render                              |
-| `showArrows`              | `boolean`                        | 🚫         | true         | If should show arrows                           |
-| `showDots`                | `boolean`                        | 🚫         | true         | If should show dots                             |
-| `removeArrowOnDeviceType` | `string / Array<string>`         | 🚫         | 🚫           | Which device types that arrows should be hidden |
-| `customLeftArrow`         | `React.ReactElement<any> / null` | 🚫         | 🚫           | Custom arrow on left                            |
-| `customRightArrow`        | `React.ReactElement<any> / null` | 🚫         | 🚫           | Custom arrow on right                           |
-| `customDot`               | `React.ReactElement<any> / null` | 🚫         | 🚫           | Custom dots                                     |
-| `infinite`                | boolean                          | 🚫         | false        | Whatever is infinite mode or not                |
-| `sliderClass`             | string                           | 🚫         | ''           | Custom class for slider                         |
-| `itemClass`               | string                           | 🚫         | ''           | Custom class for item                           |
-| `containerClass`          | string                           | 🚫         | ''           | Custom class for container                      |
-| `dotListClass`            | string                           | 🚫         | ''           | Custom class for dots                           |
+| Prop name                 | Type                       | isRequired | defaultValue | Description                                     |
+| ------------------------- | -------------------------- | ---------- | ------------ | ----------------------------------------------- |
+| `responsive`              | `responsiveType`           | 🚫         | 🚫           | Number of elements per breakpoint               |
+| `deviceType`              | `String`                   | 🚫         | 🚫           | The device type                                 |
+| `ssr`                     | `Boolean`                  | 🚫         | false        | If is SSR mode or not                           |
+| `slidesToSlide`           | `Number`                   | 🚫         | 1            | Number of slides that are passed each time      |
+| `slideVisibleSlides`      | `Boolean`                  | 🚫         | false        | Pass all the visible slides at once             |
+| `children`                | `Node!`                    | ✅         | 🚫           | Elements to render                              |
+| `showArrows`              | `Boolean`                  | 🚫         | true         | If should show arrows                           |
+| `showDots`                | `Boolean`                  | 🚫         | true         | If should show dots                             |
+| `removeArrowOnDeviceType` | `String or Array<String>`  | 🚫         | 🚫           | Which device types that arrows should be hidden |
+| `customLeftArrow`         | `React.ReactElement<any>!` | 🚫         | 🚫           | Custom arrow on left                            |
+| `customRightArrow`        | `React.ReactElement<any>!` | 🚫         | 🚫           | Custom arrow on right                           |
+| `customDot`               | `React.ReactElement<any>!` | 🚫         | 🚫           | Custom dots                                     |
+| `infinite`                | `Boolean`                  | 🚫         | false        | Whatever is infinite mode or not                |
+| `sliderClass`             | `String`                   | 🚫         | ''           | Custom class for slider                         |
+| `itemClass`               | `String`                   | 🚫         | ''           | Custom class for item                           |
+| `containerClass`          | `String`                   | 🚫         | ''           | Custom class for container                      |
+| `dotListClass`            | `String`                   | 🚫         | ''           | Custom class for dots                           |
 
 ## Upcoming
 
