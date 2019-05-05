@@ -7,6 +7,7 @@ The VTEX Slider is a slider that aims a good support for SSR and can display one
 :loudspeaker: **Disclaimer:** Don't fork this project; use, contribute, or open issue with your feature request
 
 ## Table of Contents
+
 - [Usage](#usage)
   - [Configuration](#configuration)
     - [Slider](#slider)
@@ -16,6 +17,7 @@ The VTEX Slider is a slider that aims a good support for SSR and can display one
   - [Styles API](#styles-api)
     - [CSS namespaces](#css-namespaces)
 - [Tests](#tests)
+- [Next](#next)
 
 ## Usage
 
@@ -172,64 +174,64 @@ render() {
 
 #### Slider
 
-| Prop name | Type | isRequired | defaultValue | Description |
-| --- | --- | --- | --- | -- |
-| `arrowRender` | `func` | :no_entry_sign: | :no_entry_sign: | A render function that will receive as props an orientation prop and an onClick callback |
-| `arrowsContainerComponent` | `func/string` | :no_entry_sign: | :no_entry_sign: | The component used to contain both arrows. Either a string to use a DOM element or a component |
-| `children` | `element/array` | :heavy_check_mark: | :no_entry_sign: | The slides to render |
-| `classes` | `object` | :no_entry_sign: | No extra classes applied to any element | Classes to apply to the Slider elements |
-| `currentSlide` | `number` | :no_entry_sign: | `0` | Current slide on the screen, if you have perPage > 1, then the current slide is the most left slide on the screen (You should not use this variable to display the index of the slide on the screen if you're using `loop={true}`). |
-| `cursor` | `string` | :no_entry_sign: | `'-webkit-grab'` | Css value of cursor when mouse is hovering the slider frame |
-| `cursorOnMouseDown` | `string` | :no_entry_sign: | `'-webkit-grabbing'` | Css value of cursor when mouse is down |
-| `duration` | `number` | :no_entry_sign: | `250` | Duration of transitions |
-| `easing` | `string` | :no_entry_sign: | `'ease-out'` | Transition function |
-| `loop` | `bool` | :no_entry_sign: | `false` | If the slides should be looping |
-| `onChangeSlide` | `func` | :heavy_check_mark: | :no_entry_sign: | Function to change the value of currentSlide. The function should expect a `number` as it's only parameter |
-| `perPage` | `number/object` | :no_entry_sign: | `1` | Amount of slides to be on the screen, if a number is passed, then that's the number of slides that will be shown, if an object with breakpoints is passed, then the component will check the size of the screen to see how many slides will be on the screen at the same time |
-| `resizeDebounce` | `number` | :no_entry_sign: | `250` | Resize debounce timer in milliseconds |
-| `rootTag` | `string` | :no_entry_sign: | `'div'` | Tag to be rendered in the root of the slider |
-| `sliderFrameTag` | `string` | :no_entry_sign: | `'ul'` | Tag to be rendered in the slider frame element |
-| `threshold` | `number` | :no_entry_sign: | `50` | Minimum of pixels to drag until the slider change the `currentSlide` |
+| Prop name                  | Type            | isRequired         | defaultValue                            | Description                                                                                                                                                                                                                                                                   |
+| -------------------------- | --------------- | ------------------ | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `arrowRender`              | `func`          | :no_entry_sign:    | :no_entry_sign:                         | A render function that will receive as props an orientation prop and an onClick callback                                                                                                                                                                                      |
+| `arrowsContainerComponent` | `func/string`   | :no_entry_sign:    | :no_entry_sign:                         | The component used to contain both arrows. Either a string to use a DOM element or a component                                                                                                                                                                                |
+| `children`                 | `element/array` | :heavy_check_mark: | :no_entry_sign:                         | The slides to render                                                                                                                                                                                                                                                          |
+| `classes`                  | `object`        | :no_entry_sign:    | No extra classes applied to any element | Classes to apply to the Slider elements                                                                                                                                                                                                                                       |
+| `currentSlide`             | `number`        | :no_entry_sign:    | `0`                                     | Current slide on the screen, if you have perPage > 1, then the current slide is the most left slide on the screen (You should not use this variable to display the index of the slide on the screen if you're using `loop={true}`).                                           |
+| `cursor`                   | `string`        | :no_entry_sign:    | `'-webkit-grab'`                        | Css value of cursor when mouse is hovering the slider frame                                                                                                                                                                                                                   |
+| `cursorOnMouseDown`        | `string`        | :no_entry_sign:    | `'-webkit-grabbing'`                    | Css value of cursor when mouse is down                                                                                                                                                                                                                                        |
+| `duration`                 | `number`        | :no_entry_sign:    | `250`                                   | Duration of transitions                                                                                                                                                                                                                                                       |
+| `easing`                   | `string`        | :no_entry_sign:    | `'ease-out'`                            | Transition function                                                                                                                                                                                                                                                           |
+| `loop`                     | `bool`          | :no_entry_sign:    | `false`                                 | If the slides should be looping                                                                                                                                                                                                                                               |
+| `onChangeSlide`            | `func`          | :heavy_check_mark: | :no_entry_sign:                         | Function to change the value of currentSlide. The function should expect a `number` as it's only parameter                                                                                                                                                                    |
+| `perPage`                  | `number/object` | :no_entry_sign:    | `1`                                     | Amount of slides to be on the screen, if a number is passed, then that's the number of slides that will be shown, if an object with breakpoints is passed, then the component will check the size of the screen to see how many slides will be on the screen at the same time |
+| `resizeDebounce`           | `number`        | :no_entry_sign:    | `250`                                   | Resize debounce timer in milliseconds                                                                                                                                                                                                                                         |
+| `rootTag`                  | `string`        | :no_entry_sign:    | `'div'`                                 | Tag to be rendered in the root of the slider                                                                                                                                                                                                                                  |
+| `sliderFrameTag`           | `string`        | :no_entry_sign:    | `'ul'`                                  | Tag to be rendered in the slider frame element                                                                                                                                                                                                                                |
+| `threshold`                | `number`        | :no_entry_sign:    | `50`                                    | Minimum of pixels to drag until the slider change the `currentSlide`                                                                                                                                                                                                          |
 
 #### Slide
 
-| Prop name | Type | isRequired | defaultValue | Description |
-| --- | --- | --- | --- | --- |
-| `children` | `node` | :heavy_check_mark: | :no_entry_sign: | Node to render |
-| `className` | `string` | :no_entry_sign: | :no_entry_sign: | Classes to pass to the root element of the Slide |
-| `defaultWidth` | `number` | :no_entry_sign: | :no_entry_sign: | Default width of the slide (only applied in the first render) |
-| `tag` | `string` | :no_entry_sign: | `li` | Tag to be rendered in the root element |
-| `fitImg` | `bool` | :no_entry_sign: | `true` | If the slide component should try to fit the `img` (only works if children is an `img` element) |
-| `resizeDebounce` | `number` | :no_entry_sign: | `250` | Time of debounce of resize event listener |
-| `sliderTransitionDuration` | `number` | :no_entry_sign: | `250` | Duration of transition passed to Slider (must be the same), if nothing is passed to any of the components it will apply the same default value |
+| Prop name                  | Type     | isRequired         | defaultValue    | Description                                                                                                                                    |
+| -------------------------- | -------- | ------------------ | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `children`                 | `node`   | :heavy_check_mark: | :no_entry_sign: | Node to render                                                                                                                                 |
+| `className`                | `string` | :no_entry_sign:    | :no_entry_sign: | Classes to pass to the root element of the Slide                                                                                               |
+| `defaultWidth`             | `number` | :no_entry_sign:    | :no_entry_sign: | Default width of the slide (only applied in the first render)                                                                                  |
+| `tag`                      | `string` | :no_entry_sign:    | `li`            | Tag to be rendered in the root element                                                                                                         |
+| `fitImg`                   | `bool`   | :no_entry_sign:    | `true`          | If the slide component should try to fit the `img` (only works if children is an `img` element)                                                |
+| `resizeDebounce`           | `number` | :no_entry_sign:    | `250`           | Time of debounce of resize event listener                                                                                                      |
+| `sliderTransitionDuration` | `number` | :no_entry_sign:    | `250`           | Duration of transition passed to Slider (must be the same), if nothing is passed to any of the components it will apply the same default value |
 
 #### SliderContainer
 
-| Prop name | Type | isRequired | defaultValue | Description |
-| --- | --- | --- | --- | --- |
-| `autoplay` | `bool` | :no_entry_sign: | `false` | If the slider should be passing automatically |
-| `autoplayInterval` | `number` | :no_entry_sign: | `5000` | Time in milliseconds of the interval to change the currentSlider |
-| `children` | `node` | :heavy_check_mark: | :no_entry_sign: | Children of the component to render |
-| `className` | `string` | :no_entry_sign: | :no_entry_sign: | Classes to be applied to the root element |
-| `onNextSlide` | `func` | :no_entry_sign: | :no_entry_sign: | Function to be called if `autoplay={true}` |
-| `pauseOnHover` | `bool` | :no_entry_sign: | `true` | If the interval should not be executed when the mouse is hovering the component |
-| `tag` | `string` | :no_entry_sign: | `'div'` | Tag to render the component | 
+| Prop name          | Type     | isRequired         | defaultValue    | Description                                                                     |
+| ------------------ | -------- | ------------------ | --------------- | ------------------------------------------------------------------------------- |
+| `autoplay`         | `bool`   | :no_entry_sign:    | `false`         | If the slider should be passing automatically                                   |
+| `autoplayInterval` | `number` | :no_entry_sign:    | `5000`          | Time in milliseconds of the interval to change the currentSlider                |
+| `children`         | `node`   | :heavy_check_mark: | :no_entry_sign: | Children of the component to render                                             |
+| `className`        | `string` | :no_entry_sign:    | :no_entry_sign: | Classes to be applied to the root element                                       |
+| `onNextSlide`      | `func`   | :no_entry_sign:    | :no_entry_sign: | Function to be called if `autoplay={true}`                                      |
+| `pauseOnHover`     | `bool`   | :no_entry_sign:    | `true`          | If the interval should not be executed when the mouse is hovering the component |
+| `tag`              | `string` | :no_entry_sign:    | `'div'`         | Tag to render the component                                                     |
 
 #### Dots
 
-| Prop name | Type | isRequired | defaultValue | Description |
-| --- | --- | --- | --- | --- |
-| `classes` | `object` | :no_entry_sign: | No extra classes applied to any element | Classes to style the elements of the component |
-| `dotProps` | `object` | :no_entry_sign: | :no_entry_sign: | Extra props to be applied to the dot element |
-| `dotSize` | `number/string` | :no_entry_sign: | :no_entry_sign: | The size of the dots, can be a number (in this case it will use px unit), or a string (you have to pass the number with the unit e.g `'3rem'`) |
-| `dotTag` | `string` | :no_entry_sign: | `'li'` | Tag to be rendered in the dot element |
-| `loop` | `bool` | :no_entry_sign: | `false` | If the slides should be looping |
-| `onChangeSlide` | `func` | :heavy_check_mark: | :no_entry_sign: | Function to change the currentSlide |
-| `perPage` | `number/object` | :no_entry_sign: | `1` | This prop works the same way the `perPage` of `Slider` and this component should receive the same value of `Slider` |
-| `resizeDebounce` | `number` | :no_entry_sign: | `250` | Debounce time in milliseconds |
-| `rootTag` | `string` | :no_entry_sign: | `'ul'` | Tag to be rendered as the root element of the component |
-| `totalSlides` | `number` | :heavy_check_mark: | :no_entry_sign: | Total value of sliders that will be rendered |
-| `showDotsPerPage` | `bool` | :no_entry_sign: | `false` | If this frag is true, then every dot represent a page of slides (e.g. if `perPage = 2` and you have 4 elements, then you have 2 dots), if false, then it will render one dot to each slide |
+| Prop name         | Type            | isRequired         | defaultValue                            | Description                                                                                                                                                                                |
+| ----------------- | --------------- | ------------------ | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `classes`         | `object`        | :no_entry_sign:    | No extra classes applied to any element | Classes to style the elements of the component                                                                                                                                             |
+| `dotProps`        | `object`        | :no_entry_sign:    | :no_entry_sign:                         | Extra props to be applied to the dot element                                                                                                                                               |
+| `dotSize`         | `number/string` | :no_entry_sign:    | :no_entry_sign:                         | The size of the dots, can be a number (in this case it will use px unit), or a string (you have to pass the number with the unit e.g `'3rem'`)                                             |
+| `dotTag`          | `string`        | :no_entry_sign:    | `'li'`                                  | Tag to be rendered in the dot element                                                                                                                                                      |
+| `loop`            | `bool`          | :no_entry_sign:    | `false`                                 | If the slides should be looping                                                                                                                                                            |
+| `onChangeSlide`   | `func`          | :heavy_check_mark: | :no_entry_sign:                         | Function to change the currentSlide                                                                                                                                                        |
+| `perPage`         | `number/object` | :no_entry_sign:    | `1`                                     | This prop works the same way the `perPage` of `Slider` and this component should receive the same value of `Slider`                                                                        |
+| `resizeDebounce`  | `number`        | :no_entry_sign:    | `250`                                   | Debounce time in milliseconds                                                                                                                                                              |
+| `rootTag`         | `string`        | :no_entry_sign:    | `'ul'`                                  | Tag to be rendered as the root element of the component                                                                                                                                    |
+| `totalSlides`     | `number`        | :heavy_check_mark: | :no_entry_sign:                         | Total value of sliders that will be rendered                                                                                                                                               |
+| `showDotsPerPage` | `bool`          | :no_entry_sign:    | `false`                                 | If this frag is true, then every dot represent a page of slides (e.g. if `perPage = 2` and you have 4 elements, then you have 2 dots), if false, then it will render one dot to each slide |
 
 ## Styles API
 
@@ -246,3 +248,7 @@ You can style this app by using the props `classeName` and `classes` of the comp
 ## Travis CI
 
 [![Build Status](https://travis-ci.org/vtex-apps/slider.svg?branch=master)](https://travis-ci.org/vtex-apps/slider)
+
+## Next
+
+The SliderNext is the upcoming version of VTEX Slider. The main difference is that dots, arrows and slide transitions are now handled by Slider instead of its parent component. To use it, check the [docs](/react/next/README.md)
