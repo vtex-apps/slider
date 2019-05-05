@@ -1,4 +1,4 @@
-# VTEX Slider
+# Slider Next
 
 ## Description
 
@@ -113,10 +113,10 @@ So, on your component you will use it like:
 | `customRightArrow`        | `React.ReactElement<any>!` | 🚫         | 🚫           | Custom arrow on right                           |
 | `customDot`               | `React.ReactElement<any>!` | 🚫         | 🚫           | Custom dots                                     |
 | `infinite`                | `Boolean`                  | 🚫         | false        | Whatever is infinite mode or not                |
-| `sliderClass`             | `String`                   | 🚫         | ''           | Custom class for slider                         |
-| `itemClass`               | `String`                   | 🚫         | ''           | Custom class for item                           |
-| `containerClass`          | `String`                   | 🚫         | ''           | Custom class for container                      |
-| `dotListClass`            | `String`                   | 🚫         | ''           | Custom class for dots                           |
+| `sliderClass`             | `String`                   | 🚫         | 🚫           | Custom class for slider                         |
+| `itemClass`               | `String`                   | 🚫         | 🚫           | Custom class for item                           |
+| `containerClass`          | `String`                   | 🚫         | 🚫           | Custom class for container                      |
+| `dotListClass`            | `String`                   | 🚫         | 🚫           | Custom class for dots                           |
 
 ## Upcoming
 
