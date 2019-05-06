@@ -35,17 +35,13 @@ import { SliderNext } from 'vtex.slider'
 The simplistic way of using `SlidexNext` is:
 
 ```javascript
-import Component from './**/Component'
+import Product from './Product'
 
-...
-
-const items = [...someting...]
+const products = [{ name: 'name', price: 50 }, ... ]
 
 <SliderNext>
-  { items.map(item => <Component {...item} />) }
+  { products.map(product => <Product {...product} />) }
 </SliderNext>
-
-...
 ```
 
 Check [configuration](#configuration) to see every prop that `SliderNext` can receive.
@@ -67,11 +63,9 @@ interface responsiveType {
 So, on your component you will use it like:
 
 ```javascript
-  import Component from './**/Component'
+  import Product from './Product'
 
-  ...
-
-  cosnt resonsive = {
+  cosnt responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
       items: 4,
@@ -83,40 +77,39 @@ So, on your component you will use it like:
       ...
     },
   }
-
-  const items = [...someting...]
+  
+  const products = [{ name: 'name', price: 50 }, ... ]
 
   <SliderNext
     ssr
     responsive={responsive}
   >
-    { items.map(item => <Component {...item} />) }
+    { products.map(product => <Product {...product} />) }
   </SliderNext>
-
-  ...
+  
 ```
 
 ### Configuration
 
-| Prop name                 | Type                       | isRequired | defaultValue | Description                                     |
-| ------------------------- | -------------------------- | ---------- | ------------ | ----------------------------------------------- |
-| `responsive`              | `responsiveType`           | 🚫         | 🚫           | Number of elements per breakpoint               |
-| `deviceType`              | `String`                   | 🚫         | 🚫           | The device type                                 |
-| `ssr`                     | `Boolean`                  | 🚫         | false        | If is SSR mode or not                           |
-| `slidesToSlide`           | `Number`                   | 🚫         | 1            | Number of slides that are passed each time      |
-| `slideVisibleSlides`      | `Boolean`                  | 🚫         | false        | Pass all the visible slides at once             |
-| `children`                | `Node!`                    | ✅         | 🚫           | Elements to render                              |
-| `showArrows`              | `Boolean`                  | 🚫         | true         | If should show arrows                           |
-| `showDots`                | `Boolean`                  | 🚫         | true         | If should show dots                             |
-| `removeArrowOnDeviceType` | `String or Array<String>`  | 🚫         | 🚫           | Which device types that arrows should be hidden |
-| `customLeftArrow`         | `React.ReactElement<any>!` | 🚫         | 🚫           | Custom arrow on left                            |
-| `customRightArrow`        | `React.ReactElement<any>!` | 🚫         | 🚫           | Custom arrow on right                           |
-| `customDot`               | `React.ReactElement<any>!` | 🚫         | 🚫           | Custom dots                                     |
-| `infinite`                | `Boolean`                  | 🚫         | false        | Whatever is infinite mode or not                |
-| `sliderClass`             | `String`                   | 🚫         | 🚫           | Custom class for slider                         |
-| `itemClass`               | `String`                   | 🚫         | 🚫           | Custom class for item                           |
-| `containerClass`          | `String`                   | 🚫         | 🚫           | Custom class for container                      |
-| `dotListClass`            | `String`                   | 🚫         | 🚫           | Custom class for dots                           |
+| Prop name | Type | isRequired | defaultValue | Description |
+| --- | --- | --- | --- | --- |
+| `responsive` | `responsiveType` | 🚫| 🚫 | Number of elements per breakpoint |
+| `deviceType` | `String`  | 🚫 | 🚫 | The device type |
+| `ssr`  | `Boolean` | 🚫 | false | If is SSR mode or not |
+| `slidesToSlide`  | `Number` | 🚫 | 1 | Number of slides that are passed each time |
+| `slideVisibleSlides` | `Boolean` | 🚫 | false | Pass all the visible slides at once |
+| `children` | `Array<Node!>` | ✅ | 🚫 | Elements to render |
+| `showArrows`  | `Boolean` | 🚫 | true | If should show arrows |
+| `showDots` | `Boolean` | 🚫 | true | If should show dots |
+| `removeArrowOnDeviceType` | `Array<String!>`  | 🚫 | 🚫 | Which device types that arrows should be hidden |
+| `customLeftArrow` | `ComponentType<any>!` | 🚫         | 🚫 | Custom arrow on left |
+| `customRightArrow` | `ComponentType<any>!` | 🚫         | 🚫 | Custom arrow on right |
+| `customDot` | `ComponentType<any>!` | 🚫 | 🚫           | Custom dots |
+| `infinite` | `Boolean` | 🚫 | false | Whatever is infinite mode or not |
+| `sliderClass` | `String` | 🚫 | 🚫 | Custom class for slider |
+| `itemClass` | `String` | 🚫 | 🚫 | Custom class for item |
+| `containerClass` | `String` | 🚫 | 🚫 | Custom class for container |
+| `dotListClass` | `String` | 🚫 | 🚫 | Custom class for dots |
 
 ## Upcoming
 
