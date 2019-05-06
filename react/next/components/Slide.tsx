@@ -8,6 +8,9 @@ interface Props
   width?: string | number
 }
 
+/**
+ * Slide wrapper around each slider's children
+ */
 const Slide: FC<Props> = props => {
   const {
     shouldRenderOnSSR,

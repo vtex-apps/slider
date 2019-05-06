@@ -9,7 +9,8 @@ interface Props {
   state: SliderState
 }
 
-const Slides = ({ props, state }: Props): any => {
+/** List of all slides */
+const SlideList = ({ props, state }: Props): any => {
   const { itemWidth } = state
   const { children, itemClass } = props
   const { flexBasis, shouldRenderOnSSR, domFullyLoaded } = getInitialState(
@@ -33,4 +34,4 @@ const Slides = ({ props, state }: Props): any => {
   ))
 }
 
-export default Slides
+export default SlideList
