@@ -1,6 +1,6 @@
 import React, { ReactElement, cloneElement, memo } from 'react'
 
-import { StyledLeftArrow, StyledRightArrow } from './Styled'
+import { StyledArrow } from './Styled'
 import { StateCallBack } from './typings'
 
 interface Props {
@@ -22,10 +22,10 @@ const Arrow = ({
       getState: getState,
       action: action,
     })
-  ) : direction === 'left' ? (
-    <StyledLeftArrow onClick={() => action()} />
   ) : (
-    <StyledRightArrow onClick={() => action()} />
+    <StyledArrow direction={direction} onClick={() => action()}>
+      ⏳
+    </StyledArrow>
   )
 
 export default memo(Arrow)
