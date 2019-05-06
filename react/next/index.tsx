@@ -82,22 +82,23 @@ const SliderNext: FC<SliderProps> = props => {
     }
   }
 
+  const slide = (transform: number, currentSlide: number) => {
+    dispatch({
+      type: 'slide',
+      payload: {
+        transform: transform,
+        currentSlide: currentSlide,
+      },
+    })
+  }
+
   const next = (slidesHavePassed = 0) => {
     const { nextSlides, nextPosition } = populateNextSlides(
       state,
       props,
       slidesHavePassed
     )
-    if (nextSlides === undefined || nextPosition === undefined) {
-      return
-    }
-    dispatch({
-      type: 'slide',
-      payload: {
-        transform: nextPosition,
-        currentSlide: nextSlides,
-      },
-    })
+    slide(nextPosition!, nextSlides!)
   }
 
   const previous = (slidesHavePassed = 0) => {
@@ -106,17 +107,7 @@ const SliderNext: FC<SliderProps> = props => {
       props,
       slidesHavePassed
     )
-    if (nextSlides === undefined || nextPosition === undefined) {
-      // they can be 0, which goes back to the first slide.
-      return
-    }
-    dispatch({
-      type: 'slide',
-      payload: {
-        transform: nextPosition,
-        currentSlide: nextSlides,
-      },
-    })
+    slide(nextPosition!, nextSlides!)
   }
 
   const goToSlide = (slide: number): void => {
