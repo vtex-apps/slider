@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { SliderState, SliderProps } from './typings/global'
-import { getInitialState, getIfSlideIsVisbile } from './utils/index'
-import { StyledSlide } from './Styled'
+import { SliderState, SliderProps } from '../typings/global'
+import { getInitialState, getIfSlideIsVisbile } from '../utils/index'
+import Slide from './Slide'
 
 interface Props {
   props: SliderProps
@@ -18,7 +18,7 @@ const Slides = ({ props, state }: Props): any => {
   )
 
   return React.Children.toArray(children).map((child, index) => (
-    <StyledSlide
+    <Slide
       key={index}
       data-index={index}
       aria-hidden={getIfSlideIsVisbile(index, state) ? 'false' : 'true'}
@@ -29,7 +29,7 @@ const Slides = ({ props, state }: Props): any => {
       className={itemClass}
     >
       {child}
-    </StyledSlide>
+    </Slide>
   ))
 }
 

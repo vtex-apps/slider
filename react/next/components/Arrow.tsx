@@ -1,7 +1,7 @@
 import React, { memo, FC, ComponentType } from 'react'
 import { IconCaret } from 'vtex.store-icons'
 
-import { StateCallBack } from './typings/global'
+import { StateCallBack } from '../typings/global'
 import Clickable from './Clickable'
 
 interface Props {
