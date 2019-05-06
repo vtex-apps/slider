@@ -1,6 +1,5 @@
 import React, { useMemo, memo } from 'react'
-
-import { SliderState, SliderProps, StateCallBack } from './typings'
+import { SliderProps, SliderState, StateCallBack } from './typings/global'
 
 interface Props {
   props: SliderProps

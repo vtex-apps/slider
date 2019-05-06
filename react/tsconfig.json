@@ -26,5 +26,5 @@
     "enable": false
   },
   "exclude": ["node_modules"],
-  "include": ["./typings/*.d.ts", "./**/*.tsx"]
+  "include": ["./**/typings/*.d.ts", "./**/*.tsx"]
 }

@@ -9,7 +9,8 @@
     "postreleasy": "vtex publish --verbose"
   },
   "dependencies": {
-    "vtex.device-detector": "0.x"
+    "vtex.device-detector": "0.x",
+    "vtex.store-icons": "0.x"
   },
   "builders": {
     "react": "3.x",
