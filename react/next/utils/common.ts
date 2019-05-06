@@ -17,7 +17,7 @@ const getInitialState = (
   props: SliderProps
 ): InitalState => {
   const { domLoaded, slidesToShow, containerWidth, itemWidth } = state
-  const { deviceType, responsive, ssr } = props
+  const { deviceType, ssr } = props
 
   const domFullyLoaded = Boolean(
     domLoaded && slidesToShow && containerWidth && itemWidth
@@ -25,7 +25,7 @@ const getInitialState = (
 
   const flexBasis =
     ssr && deviceType && !domFullyLoaded
-      ? getWidthFromDeviceType(deviceType, responsive)
+      ? getWidthFromDeviceType(deviceType, ssr)
       : undefined
 
   const shouldRenderOnSSR = Boolean(

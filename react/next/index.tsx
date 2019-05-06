@@ -3,7 +3,6 @@ import React, { FC, useReducer, useEffect, useRef } from 'react'
 import { SliderProps } from './typings/global'
 import {
   getInitialState,
-  throwError,
   getItemClientSideWidth,
   populateNextSlides,
   populatePreviousSlides,
@@ -33,38 +32,39 @@ const SliderNext: FC<SliderProps> = props => {
 
   useEffect(() => {
     const setNewState = (shouldCorrectItemPosition: boolean) => {
-      const { responsive } = props
-      Object.keys(responsive).forEach(item => {
-        const { breakpoint, items } = responsive[item]
-        const { max, min } = breakpoint
-        if (window.innerWidth >= min && window.innerWidth <= max) {
-          if (containerRef && containerRef.current) {
-            const containerWidth = containerRef.current.offsetWidth
-            const itemWidth: number = getItemClientSideWidth(
-              items,
-              containerWidth
-            )
-            dispatch({
-              type: 'loadAndCorrect',
-              payload: {
-                slidesToShow: items,
-                deviceType: item,
-                containerWidth,
-                itemWidth,
-                shouldCorrectItemPosition,
-              },
-            })
-          } else {
-            dispatch({
-              type: 'load',
-              payload: {
-                slidesToShow: items,
-                deviceType: item,
-              },
-            })
+      const { ssr } = props
+      ssr &&
+        Object.keys(ssr).forEach(item => {
+          const { breakpoint, items } = ssr[item]
+          const { max, min } = breakpoint
+          if (window.innerWidth >= min && window.innerWidth <= max) {
+            if (containerRef && containerRef.current) {
+              const containerWidth = containerRef.current.offsetWidth
+              const itemWidth: number = getItemClientSideWidth(
+                items,
+                containerWidth
+              )
+              dispatch({
+                type: 'loadAndCorrect',
+                payload: {
+                  slidesToShow: items,
+                  deviceType: item,
+                  containerWidth,
+                  itemWidth,
+                  shouldCorrectItemPosition,
+                },
+              })
+            } else {
+              dispatch({
+                type: 'load',
+                payload: {
+                  slidesToShow: items,
+                  deviceType: item,
+                },
+              })
+            }
           }
-        }
-      })
+        })
     }
 
     const onResize = (value?: any): void => {
@@ -184,11 +184,6 @@ const SliderNext: FC<SliderProps> = props => {
 
   const disableLeftArrow = !props.infinite && isLeftEndReach
   const disableRightArrow = !props.infinite && isRightEndReach
-
-  /**
-   * Points props inconsistencies
-   */
-  throwError(props)
 
   return (
     <div
