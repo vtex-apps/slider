@@ -11,9 +11,9 @@ import {
 
 import Dots from './components/Dots'
 import Arrow from './components/Arrow'
-import Slides from './components/Slides'
 import SliderTrack from './components/SliderTrack'
 import reducer from './stateReducer'
+import SlideList from './components/Slides'
 
 /**
  * Slider's main component
@@ -202,7 +202,7 @@ const SliderNext: FC<SliderProps> = props => {
         transform={state.transform}
         shouldRenderOnSSR={shouldRenderOnSSR}
       >
-        <Slides state={state} props={props} />
+        <SlideList state={state} props={props} />
       </SliderTrack>
       {shouldShowArrows && !disableLeftArrow && renderLeftArrow()}
       {shouldShowArrows && !disableRightArrow && renderRightArrow()}
