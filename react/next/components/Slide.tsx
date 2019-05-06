@@ -1,11 +1,6 @@
-import React, {
-  FC,
-  DetailedHTMLProps,
-  HTMLAttributes,
-  ButtonHTMLAttributes,
-} from 'react'
+import React, { FC, DetailedHTMLProps, HTMLAttributes } from 'react'
 
-interface SlideProps
+interface Props
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   shouldRenderOnSSR?: boolean
   domFullyLoaded?: boolean
@@ -13,7 +8,7 @@ interface SlideProps
   width?: string | number
 }
 
-export const StyledSlide: FC<SlideProps> = props => {
+const Slide: FC<Props> = props => {
   const {
     shouldRenderOnSSR,
     basis,
@@ -38,3 +33,5 @@ export const StyledSlide: FC<SlideProps> = props => {
     </div>
   )
 }
+
+export default Slide

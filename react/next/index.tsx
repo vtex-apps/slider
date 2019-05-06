@@ -8,10 +8,11 @@ import {
   populateNextSlides,
   populatePreviousSlides,
 } from './utils/index'
-import Dots from './Dots'
-import Arrow from './Arrow'
-import Slides from './Slides'
-import SliderTrack from './SliderTrack'
+
+import Dots from './components/Dots'
+import Arrow from './components/Arrow'
+import Slides from './components/Slides'
+import SliderTrack from './components/SliderTrack'
 import reducer from './stateReducer'
 
 /**
