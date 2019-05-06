@@ -1,4 +1,4 @@
-import { SliderState } from './typings'
+import { SliderState } from './typings/global'
 
 type LoadAction = {
   type: 'load'

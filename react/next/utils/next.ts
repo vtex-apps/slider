@@ -1,4 +1,4 @@
-import { SliderState, SliderProps } from '../typings'
+import { SliderState, SliderProps } from '../typings/global'
 
 interface NextSlides {
   nextSlides: number | undefined

@@ -1,6 +1,6 @@
 import React, { FC, useReducer, useEffect, useRef } from 'react'
 
-import { SliderProps } from './typings'
+import { SliderProps } from './typings/global'
 import {
   getInitialState,
   throwError,
@@ -134,7 +134,7 @@ const SliderNext: FC<SliderProps> = props => {
     return (
       <Arrow
         custom={customLeftArrow}
-        direction="left"
+        orientation="left"
         getState={() => getState()}
         action={previous}
       />
@@ -147,7 +147,7 @@ const SliderNext: FC<SliderProps> = props => {
       <Arrow
         custom={customRightArrow}
         getState={() => getState()}
-        direction="right"
+        orientation="right"
         action={next}
       />
     )

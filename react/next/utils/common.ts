@@ -1,5 +1,5 @@
 import { getWidthFromDeviceType } from './elementWidth'
-import { SliderState, SliderProps } from '../typings'
+import { SliderState, SliderProps } from '../typings/global'
 
 interface InitalState {
   shouldRenderOnSSR: boolean
