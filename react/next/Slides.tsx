@@ -26,7 +26,7 @@ const Slides = ({ props, state }: Props): any => {
       basis={flexBasis}
       domFullyLoaded={domFullyLoaded}
       shouldRenderOnSSR={shouldRenderOnSSR}
-      className={`${itemClass} relative`}
+      className={itemClass}
     >
       {child}
     </StyledSlide>
