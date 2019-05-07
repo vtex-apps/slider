@@ -7,6 +7,15 @@ interface responsiveType {
   }
 }
 
+interface transitionType {
+  /** Transition speed in ms */
+  speed: number
+  /** Transition delay in ms */
+  delay: number
+  /** Timing function */
+  timing: string
+}
+
 interface SliderProps {
   /** Device type */
   deviceType?: string
@@ -39,7 +48,9 @@ interface SliderProps {
   /** Custom class for dots */
   dotListClass?: string
   /** If should show dots or not */
-  showDots?: boolean
+  showDots?: boolean,
+  /** Custom transition */
+  transition?: transitionType
 }
 
 type StateCallBack = () => SliderState
