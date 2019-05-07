@@ -1,4 +1,4 @@
-import React, { FC, useReducer, useLayoutEffect, useRef } from 'react'
+import React, { FC, useReducer, useRef, useMemo, useEffect } from 'react'
 
 import { SliderProps } from './typings/global'
 import {
@@ -30,7 +30,11 @@ const SliderNext: FC<SliderProps> = props => {
     containerWidth: 0,
   })
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    /**
+     * Sets the state based on ssr's prop breakpoints
+     * @param shouldCorrectItemPosition : If should correct item and container width
+     */
     const setNewState = (shouldCorrectItemPosition: boolean) => {
       const { ssr } = props
       ssr &&
@@ -67,11 +71,16 @@ const SliderNext: FC<SliderProps> = props => {
         })
     }
 
+    /** 
+     * On resize screen the function setNewState will be called
+     * The container and item will be corrected if there is no value(e) or is infinite mode
+     */
     const onResize = (value?: any): void => {
-      setNewState(!(value && !props.infinite))
+      setNewState(!value || props.infinite!)
     }
 
     setNewState(false)
+
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
   }, [])
@@ -82,6 +91,7 @@ const SliderNext: FC<SliderProps> = props => {
     }
   }
 
+  /** Common function that allows to slide to previous or next slides */
   const slide = (transform: number, currentSlide: number) => {
     dispatch({
       type: 'slide',
@@ -92,6 +102,7 @@ const SliderNext: FC<SliderProps> = props => {
     })
   }
 
+  /** Go to next slides */
   const next = (slidesHavePassed = 0) => {
     const { nextSlides, nextPosition } = populateNextSlides(
       state,
@@ -101,6 +112,7 @@ const SliderNext: FC<SliderProps> = props => {
     slide(nextPosition!, nextSlides!)
   }
 
+  /** Go to previous slides */
   const previous = (slidesHavePassed = 0) => {
     const { nextSlides, nextPosition } = populatePreviousSlides(
       state,
@@ -110,6 +122,7 @@ const SliderNext: FC<SliderProps> = props => {
     slide(nextPosition!, nextSlides!)
   }
 
+  /** Go to any slide by index */
   const goToSlide = (slide: number): void => {
     const { itemWidth } = state
     dispatch({
@@ -121,6 +134,7 @@ const SliderNext: FC<SliderProps> = props => {
     })
   }
 
+  /** Renders left arrow */
   const renderLeftArrow = (): React.ReactNode => {
     const { customLeftArrow } = props
     return (
@@ -133,6 +147,7 @@ const SliderNext: FC<SliderProps> = props => {
     )
   }
 
+  /** Renders right arrow */
   const renderRightArrow = (): React.ReactNode => {
     const { customRightArrow } = props
     return (
@@ -145,6 +160,7 @@ const SliderNext: FC<SliderProps> = props => {
     )
   }
 
+  /** Renders the Dots */
   const renderDotsList = (): React.ReactElement<any> | null => {
     return (
       <Dots
@@ -156,24 +172,31 @@ const SliderNext: FC<SliderProps> = props => {
     )
   }
 
-  const { shouldRenderOnSSR } = getInitialState(state, props)
-  const isLeftEndReach = !(state.currentSlide - props.slidesToSlide! >= 0)
-  const isRightEndReach = !(
+  /** Reached left end */
+  const isLeftEndReach = useMemo(() => !(state.currentSlide - props.slidesToSlide! >= 0), [state.currentSlide, props.slidesToSlide])
+
+  /** Reached right end */
+  const isRightEndReach = useMemo(() => !(
     state.currentSlide + 1 + state.slidesToShow <=
     state.totalItems
-  )
+  ), [state.currentSlide, state.slidesToShow, state.totalItems])
 
-  const shouldShowArrows =
-    props.showArrows &&
+  const { shouldRenderOnSSR } = getInitialState(state, props)
+
+  /** If should arrows or not, filtering for specific device types */
+  const shouldShowArrows = useMemo(() => props.showArrows &&
     !(
       props.removeArrowOnDeviceType &&
       ((props.deviceType &&
         props.removeArrowOnDeviceType.indexOf(props.deviceType) > -1) ||
         (state.deviceType &&
           props.removeArrowOnDeviceType.indexOf(state.deviceType) > -1))
-    )
+    ), [props.showArrows, props.removeArrowOnDeviceType, props.deviceType, state.deviceType])
 
+  /** Disable left arrow if is not inifite and reached left end */
   const disableLeftArrow = !props.infinite && isLeftEndReach
+
+  /** Disable right arrow if is not infinite and reached rigth end */
   const disableRightArrow = !props.infinite && isRightEndReach
 
   return (
