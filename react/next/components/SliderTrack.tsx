@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import { useSpring, animated, config as springPresets } from 'react-spring'
 
 interface Props {
   className?: string
@@ -12,25 +11,19 @@ const SliderTrack: FC<Props> = ({
   className,
   transform,
   shouldRenderOnSSR,
-}) => {
-  const animation =
-    !!window.requestAnimationFrame &&
-    useSpring({
-      config: springPresets.default,
-      transform: `translate3d(${transform}px, 0, 0)`,
-    })
-
-  return (
-    <animated.div
+}) => (
+    <div
       className={`${className} flex relative pa0 ma0`}
       style={{
-        ...animation,
+        willChange: 'transform',
+        transition: 'transform 400ms ease-in-out',
+        transform: `translate3d(${transform}px, 0, 0)`,
         overflow: shouldRenderOnSSR ? 'hidden' : 'unset',
       }}
     >
       {children}
-    </animated.div>
+    </div>
   )
-}
+
 
 export default SliderTrack
