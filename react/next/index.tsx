@@ -180,12 +180,13 @@ const SliderNext: FC<SliderProps> = props => {
     <div
       className={`${
         props.containerClass
-      } flex items-center relative overflow-hidden`}
+        } flex items-center relative overflow-hidden`}
       ref={containerRef}
     >
       <SliderTrack
         className={props.sliderClass}
         transform={state.transform}
+        transition={props.transition!}
         shouldRenderOnSSR={shouldRenderOnSSR}
       >
         <SlideList state={state} props={props} />
@@ -207,6 +208,11 @@ SliderNext.defaultProps = {
   showDots: false,
   dotListClass: '',
   slideVisibleSlides: false,
+  transition: {
+    speed: 400,
+    delay: 0,
+    timing: 'ease-in-out'
+  }
 }
 
 export default SliderNext
