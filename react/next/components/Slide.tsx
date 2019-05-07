@@ -2,9 +2,6 @@ import React, { FC, DetailedHTMLProps, HTMLAttributes } from 'react'
 
 interface Props
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  shouldRenderOnSSR?: boolean
-  domFullyLoaded?: boolean
-  basis?: string | number
   width?: string | number
 }
 
@@ -13,9 +10,6 @@ interface Props
  */
 const Slide: FC<Props> = props => {
   const {
-    shouldRenderOnSSR,
-    basis,
-    domFullyLoaded,
     width,
     style,
     className,
@@ -24,10 +18,9 @@ const Slide: FC<Props> = props => {
   } = props
   return (
     <div
-      className={`${className} relative`}
+      className={`${className} flex relative`}
       style={{
-        flex: shouldRenderOnSSR ? `1 0 ${basis}%` : 'auto',
-        width: domFullyLoaded ? `${width}px` : 'auto',
+        width: `${width}px`,
         ...style,
       }}
       {...rest}

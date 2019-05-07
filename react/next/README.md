@@ -48,7 +48,7 @@ Check [configuration](#configuration) to see every prop that `SliderNext` can re
 
 ### SSR
 
-To use SSR mode you need to define the `responsive` prop that will specify how many items will be presented on each breakpoint. The `responsive` object has the type:
+To use SSR mode you need to define the `ssr` prop that will specify how many items will be presented on each breakpoint. The `ssr` object has the type:
 
 ```typescript
 interface responsiveType {
@@ -65,7 +65,7 @@ So, on your component you will use it like:
 ```javascript
   import Product from './Product'
 
-  cosnt responsive = {
+  cosnt ssr = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
       items: 4,
@@ -81,8 +81,7 @@ So, on your component you will use it like:
   const products = [{ name: 'name', price: 50 }, ... ]
 
   <SliderNext
-    ssr
-    responsive={responsive}
+    ssr={ssr}
   >
     { products.map(product => <Product {...product} />) }
   </SliderNext>
