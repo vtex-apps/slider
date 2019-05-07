@@ -1,4 +1,4 @@
-import React, { FC, useReducer, useEffect, useRef } from 'react'
+import React, { FC, useReducer, useLayoutEffect, useRef } from 'react'
 
 import { SliderProps } from './typings/global'
 import {
@@ -30,7 +30,7 @@ const SliderNext: FC<SliderProps> = props => {
     containerWidth: 0,
   })
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const setNewState = (shouldCorrectItemPosition: boolean) => {
       const { ssr } = props
       ssr &&
