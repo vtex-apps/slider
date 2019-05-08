@@ -160,37 +160,23 @@ const SliderNext: FC<SliderProps> = props => {
   }
 
   /** Reached left end */
-  const isLeftEndReach = useMemo(
-    () => !(state.currentSlide - props.slidesToSlide! >= 0),
-    [state.currentSlide, props.slidesToSlide]
-  )
+  const isLeftEndReach = !(state.currentSlide - props.slidesToSlide! >= 0)
 
   /** Reached right end */
-  const isRightEndReach = useMemo(
-    () => !(state.currentSlide + 1 + state.slidesToShow <= state.totalItems),
-    [state.currentSlide, state.slidesToShow, state.totalItems]
-  )
+  const isRightEndReach = !(state.currentSlide + 1 + state.slidesToShow <= state.totalItems)
 
   const { shouldRenderOnSSR } = getInitialState(state, props)
 
   /** If should arrows or not, filtering for specific device types */
-  const shouldShowArrows = useMemo(
-    () =>
-      props.showArrows &&
-      !(
-        props.removeArrowOnDeviceType &&
-        ((props.deviceType &&
-          props.removeArrowOnDeviceType.indexOf(props.deviceType) > -1) ||
-          (state.deviceType &&
-            props.removeArrowOnDeviceType.indexOf(state.deviceType) > -1))
-      ),
-    [
-      props.showArrows,
-      props.removeArrowOnDeviceType,
-      props.deviceType,
-      state.deviceType,
-    ]
-  )
+  const shouldShowArrows =
+    props.showArrows &&
+    !(
+      props.removeArrowOnDeviceType &&
+      ((props.deviceType &&
+        props.removeArrowOnDeviceType.indexOf(props.deviceType) > -1) ||
+        (state.deviceType &&
+          props.removeArrowOnDeviceType.indexOf(state.deviceType) > -1))
+    )
 
   /** Disable left arrow if is not inifite and reached left end */
   const disableLeftArrow = !props.infinite && isLeftEndReach
