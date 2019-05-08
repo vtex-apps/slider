@@ -16,6 +16,7 @@ const Clickable: FC<
         background: 'transparent',
         ...style,
       }}
+      role="button"
       {...rest}
     >
       {children}
