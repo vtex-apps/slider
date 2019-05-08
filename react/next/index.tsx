@@ -85,12 +85,6 @@ const SliderNext: FC<SliderProps> = props => {
     return () => window.removeEventListener('resize', onResize)
   }, [])
 
-  const getState = (): any => {
-    return {
-      ...state,
-    }
-  }
-
   /** Common function that allows to slide to previous or next slides */
   const slide = (transform: number, currentSlide: number) => {
     dispatch({
@@ -138,38 +132,19 @@ const SliderNext: FC<SliderProps> = props => {
   const renderLeftArrow = (): React.ReactNode => {
     const { customLeftArrow } = props
     return (
-      <Arrow
-        custom={customLeftArrow}
-        orientation="left"
-        getState={() => getState()}
-        action={previous}
-      />
+      <Arrow custom={customLeftArrow} orientation="left" action={previous} />
     )
   }
 
   /** Renders right arrow */
   const renderRightArrow = (): React.ReactNode => {
     const { customRightArrow } = props
-    return (
-      <Arrow
-        custom={customRightArrow}
-        getState={() => getState()}
-        orientation="right"
-        action={next}
-      />
-    )
+    return <Arrow custom={customRightArrow} orientation="right" action={next} />
   }
 
   /** Renders the Dots */
   const renderDotsList = (): React.ReactElement<any> | null => {
-    return (
-      <Dots
-        state={state}
-        props={props}
-        goToSlide={goToSlide}
-        getState={() => getState()}
-      />
-    )
+    return <Dots state={state} props={props} goToSlide={goToSlide} />
   }
 
   /** Reached left end */

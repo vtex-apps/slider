@@ -48,12 +48,10 @@ interface SliderProps {
   /** Custom class for dots */
   dotListClass?: string
   /** If should show dots or not */
-  showDots?: boolean,
+  showDots?: boolean
   /** Custom transition */
   transition?: transitionType
 }
-
-type StateCallBack = () => SliderState
 
 interface SliderState {
   /** Width of each item */

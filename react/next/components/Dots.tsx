@@ -1,11 +1,10 @@
 import React, { useMemo, memo } from 'react'
-import { SliderProps, SliderState, StateCallBack } from '../typings/global'
+import { SliderProps, SliderState } from '../typings/global'
 
 interface Props {
   props: SliderProps
   state: SliderState
   goToSlide: (index: number) => void
-  getState: StateCallBack
 }
 
 /**
@@ -56,7 +55,6 @@ const Dots = ({
   props,
   state,
   goToSlide,
-  getState,
 }: Props): React.ReactElement<any> | null => {
   const { slidesToShow, totalItems, currentSlide, domLoaded } = state
   const { customDot, dotListClass, slideVisibleSlides } = props
