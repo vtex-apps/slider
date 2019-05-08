@@ -63,32 +63,31 @@ interface responsiveType {
 So, on your component you will use it like:
 
 ```javascript
-  import Product from './Product'
+import Product from './Product'
 
-  cosnt ssr = {
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 4,
-    },
-    tablet: {
-      ...
-    },
-    mobile: {
-      ...
-    },
-  }
-  
-  const products = [
-    { name: 'name', price: 50 },
+const ssr = {
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 4,
+  },
+  tablet: {
     // ...
-  ]
-
-  <SliderNext
-    ssr={ssr}
-  >
-    { products.map(product => <Product {...product} />) }
-  </SliderNext>
+  },
+  mobile: {
+    // ...
+  },
+}
   
+const products = [
+  { name: 'name', price: 50 },
+  // ...
+]
+
+<SliderNext
+  ssr={ssr}
+>
+  { products.map(product => <Product {...product} />) }
+</SliderNext>  
 ```
 
 ### Configuration
