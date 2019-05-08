@@ -155,8 +155,8 @@ const SliderNext: FC<SliderProps> = props => {
   }
 
   /** Renders the Dots */
-  const renderDotsList = (): React.ReactElement<any> | null => {
-    return <Dots state={state} props={props} goToSlide={goToSlide} />
+  const renderDotsList = (): React.ReactNode => {
+    return <Dots {...state} {...props} goToSlide={goToSlide} />
   }
 
   /** Reached left end */
@@ -202,7 +202,7 @@ const SliderNext: FC<SliderProps> = props => {
     <div
       className={`${
         props.containerClass
-      } flex items-center relative overflow-hidden`}
+        } flex items-center relative overflow-hidden`}
       ref={containerRef}
     >
       <SliderTrack
