@@ -23,27 +23,19 @@ const populateNextSlides = (
   let nextSlides
   let nextPosition
 
-  const nextMaximumSlides =
-    currentSlide +
-    1 +
-    slidesHavePassed +
-    slidesToShow +
-    (slidesHavePassed > 0
+  const realPassedSlides =
+    slidesHavePassed > 0
       ? 0
       : slideVisibleSlides
       ? slidesToShow
-      : slidesToSlide!)
+      : slidesToSlide!
+
+  const nextMaximumSlides =
+    currentSlide + 1 + slidesHavePassed + slidesToShow + realPassedSlides
 
   if (nextMaximumSlides <= totalItems) {
     /** Have more slides hidden on right */
-    nextSlides =
-      currentSlide +
-      slidesHavePassed +
-      (slidesHavePassed > 0
-        ? 0
-        : slideVisibleSlides
-        ? slidesToShow
-        : slidesToSlide!)
+    nextSlides = currentSlide + slidesHavePassed + realPassedSlides
     nextPosition = -(itemWidth * nextSlides)
   } else if (
     nextMaximumSlides > totalItems &&
