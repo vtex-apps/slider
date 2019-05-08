@@ -114,5 +114,7 @@ So, on your component you will use it like:
 
 Features that will be added soon:
 
-- Swipe and Drag
-- Autoplay
+- Autoplay to support `carousel`
+- Content Loader (Skeleton)
+- Drag and Swipe
+- Create an infinite loop impression (Circular Queue).
