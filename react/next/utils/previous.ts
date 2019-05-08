@@ -23,14 +23,14 @@ const populatePreviousSlides = (
   let nextSlides
   let nextPosition
 
-  const nextMaximumSlides =
-    currentSlide -
-    slidesHavePassed -
-    (slidesHavePassed > 0
+  const realPassedSlides =
+    slidesHavePassed > 0
       ? 0
       : slideVisibleSlides
       ? slidesToShow
-      : slidesToSlide!)
+      : slidesToSlide!
+
+  const nextMaximumSlides = currentSlide - slidesHavePassed - realPassedSlides
 
   if (nextMaximumSlides >= 0) {
     /** Have more slides hidden on left */
