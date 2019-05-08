@@ -17,7 +17,7 @@ interface transitionType {
 }
 
 interface SliderProps {
-  /** Aria label for slider */
+  /** Aria label of slider */
   label?: string
   /** Device type */
   deviceType?: string

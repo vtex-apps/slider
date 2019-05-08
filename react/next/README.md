@@ -94,6 +94,7 @@ const products = [
 
 | Prop name | Type | isRequired | defaultValue | Description |
 | --- | --- | --- | --- | --- |
+| `label` | `String` | 🚫 | 'VTEX Slider' | Aria label of slider
 | `responsive` | `responsiveType` | 🚫| 🚫 | Number of elements per breakpoint |
 | `deviceType` | `String`  | 🚫 | 🚫 | The device type |
 | `ssr`  | `Boolean` | 🚫 | false | If is SSR mode or not |
