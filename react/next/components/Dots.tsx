@@ -10,11 +10,15 @@ interface Props {
 
 /**
  * Returns the dot tha should be selected
- * @param slideVisibleSlides 
- * @param currentSlide 
- * @param slidesToShow 
+ * @param slideVisibleSlides
+ * @param currentSlide
+ * @param slidesToShow
  */
-const getSelectedDot = (slideVisibleSlides: boolean, currentSlide: number, slidesToShow: number): number => {
+const getSelectedDot = (
+  slideVisibleSlides: boolean,
+  currentSlide: number,
+  slidesToShow: number
+): number => {
   const realCurrentSlide = slideVisibleSlides
     ? currentSlide + (slidesToShow - 1)
     : currentSlide
@@ -28,22 +32,22 @@ const getSelectedDot = (slideVisibleSlides: boolean, currentSlide: number, slide
  * The array will be empty if there are not any0 slidesToShow
  * If all the visible slides should pass on a dot click, the array elements will be the sequence from 0 to ceil(totalItems/slidesToShow)
  * If not, the array elements will be the sequence from 0 to totalSlides
- * @param slidesToShow 
- * @param slideVisibleSlides 
- * @param totalItems 
+ * @param slidesToShow
+ * @param slideVisibleSlides
+ * @param totalItems
  */
-const getSlideIndices = (slidesToShow: number, slideVisibleSlides: boolean, totalItems: number): Array<number> =>
+const getSlideIndices = (
+  slidesToShow: number,
+  slideVisibleSlides: boolean,
+  totalItems: number
+): Array<number> =>
   slidesToShow
     ? [
-      ...Array(
-        slideVisibleSlides
-          ? Math.ceil(totalItems / slidesToShow)
-          : totalItems
-      ).keys(),
-    ]
+        ...Array(
+          slideVisibleSlides ? Math.ceil(totalItems / slidesToShow) : totalItems
+        ).keys(),
+      ]
     : []
-
-
 
 /**
  * Slider Dots
@@ -55,16 +59,17 @@ const Dots = ({
   getState,
 }: Props): React.ReactElement<any> | null => {
   const { slidesToShow, totalItems, currentSlide, domLoaded } = state
-  const { showDots, customDot, dotListClass, slideVisibleSlides } = props
+  const { customDot, dotListClass, slideVisibleSlides } = props
 
   const slideIndexes = useMemo(
     () => getSlideIndices(slidesToShow, slideVisibleSlides!, totalItems),
     [slidesToShow, slideVisibleSlides]
   )
 
-  const selectedDot = useMemo(() =>
-    getSelectedDot(slideVisibleSlides!, currentSlide, slidesToShow)
-    , [currentSlide, domLoaded])
+  const selectedDot = useMemo(
+    () => getSelectedDot(slideVisibleSlides!, currentSlide, slidesToShow),
+    [currentSlide, domLoaded]
+  )
 
   const handleDotClick = (index: number) => {
     const slideToGo = slideVisibleSlides ? index * slidesToShow : index
@@ -84,20 +89,20 @@ const Dots = ({
         <div
           className={`${
             isActive ? 'bg-emphasis' : 'bg-muted-3'
-            } grow dim dib w1 h1 br-100 pa2 mr2 bw0 pointer outline-0`}
+          } grow dim dib w1 h1 br-100 pa2 mr2 bw0 pointer outline-0`}
           key={index}
           onClick={() => handleDotClick(index)}
         />
       )
     })
 
-  return showDots ? (
+  return (
     <div
       className={`${dotListClass} flex absolute justify-center pa0 ma0 bottom-0 left-0 right-0`}
     >
       {renderDots()}
     </div>
-  ) : null
+  )
 }
 
 export default memo(Dots)
