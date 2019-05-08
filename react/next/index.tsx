@@ -2,7 +2,6 @@ import React, { FC, useReducer, useRef, useEffect } from 'react'
 
 import { SliderProps } from './typings/global'
 import {
-  getInitialState,
   getItemClientSideWidth,
   populateNextSlides,
   populatePreviousSlides,
@@ -168,8 +167,6 @@ const SliderNext: FC<SliderProps> = props => {
     state.totalItems
   )
 
-  const { shouldRenderOnSSR } = getInitialState(state, props)
-
   /** If should arrows or not, filtering for specific device types */
   const shouldShowArrows =
     props.showArrows &&
@@ -198,7 +195,6 @@ const SliderNext: FC<SliderProps> = props => {
         className={props.sliderClass}
         transform={state.transform}
         transition={props.transition!}
-        shouldRenderOnSSR={shouldRenderOnSSR}
       >
         <SlideList {...state} {...props} />
       </SliderTrack>
