@@ -71,7 +71,7 @@ const SliderNext: FC<SliderProps> = props => {
         })
     }
 
-    /** 
+    /**
      * On resize screen the function setNewState will be called
      * The container and item will be corrected if there is no value(e) or is infinite mode
      */
@@ -173,25 +173,37 @@ const SliderNext: FC<SliderProps> = props => {
   }
 
   /** Reached left end */
-  const isLeftEndReach = useMemo(() => !(state.currentSlide - props.slidesToSlide! >= 0), [state.currentSlide, props.slidesToSlide])
+  const isLeftEndReach = useMemo(
+    () => !(state.currentSlide - props.slidesToSlide! >= 0),
+    [state.currentSlide, props.slidesToSlide]
+  )
 
   /** Reached right end */
-  const isRightEndReach = useMemo(() => !(
-    state.currentSlide + 1 + state.slidesToShow <=
-    state.totalItems
-  ), [state.currentSlide, state.slidesToShow, state.totalItems])
+  const isRightEndReach = useMemo(
+    () => !(state.currentSlide + 1 + state.slidesToShow <= state.totalItems),
+    [state.currentSlide, state.slidesToShow, state.totalItems]
+  )
 
   const { shouldRenderOnSSR } = getInitialState(state, props)
 
   /** If should arrows or not, filtering for specific device types */
-  const shouldShowArrows = useMemo(() => props.showArrows &&
-    !(
-      props.removeArrowOnDeviceType &&
-      ((props.deviceType &&
-        props.removeArrowOnDeviceType.indexOf(props.deviceType) > -1) ||
-        (state.deviceType &&
-          props.removeArrowOnDeviceType.indexOf(state.deviceType) > -1))
-    ), [props.showArrows, props.removeArrowOnDeviceType, props.deviceType, state.deviceType])
+  const shouldShowArrows = useMemo(
+    () =>
+      props.showArrows &&
+      !(
+        props.removeArrowOnDeviceType &&
+        ((props.deviceType &&
+          props.removeArrowOnDeviceType.indexOf(props.deviceType) > -1) ||
+          (state.deviceType &&
+            props.removeArrowOnDeviceType.indexOf(state.deviceType) > -1))
+      ),
+    [
+      props.showArrows,
+      props.removeArrowOnDeviceType,
+      props.deviceType,
+      state.deviceType,
+    ]
+  )
 
   /** Disable left arrow if is not inifite and reached left end */
   const disableLeftArrow = !props.infinite && isLeftEndReach
@@ -203,7 +215,7 @@ const SliderNext: FC<SliderProps> = props => {
     <div
       className={`${
         props.containerClass
-        } flex items-center relative overflow-hidden`}
+      } flex items-center relative overflow-hidden`}
       ref={containerRef}
     >
       <SliderTrack
@@ -216,7 +228,7 @@ const SliderNext: FC<SliderProps> = props => {
       </SliderTrack>
       {shouldShowArrows && !disableLeftArrow && renderLeftArrow()}
       {shouldShowArrows && !disableRightArrow && renderRightArrow()}
-      {renderDotsList()}
+      {props.showDots && renderDotsList()}
     </div>
   )
 }
@@ -225,17 +237,17 @@ SliderNext.defaultProps = {
   slidesToSlide: 1,
   infinite: false,
   showArrows: true,
+  showDots: true,
   containerClass: '',
   sliderClass: '',
   itemClass: '',
-  showDots: false,
   dotListClass: '',
   slideVisibleSlides: false,
   transition: {
     speed: 400,
     delay: 0,
-    timing: 'ease-in-out'
-  }
+    timing: 'ease-in-out',
+  },
 }
 
 export default SliderNext
