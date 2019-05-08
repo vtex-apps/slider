@@ -1,4 +1,4 @@
-import React, { useMemo, memo, FC } from 'react'
+import React, { memo, FC } from 'react'
 
 interface Props {
   slidesToShow: number
@@ -46,19 +46,31 @@ const getSlideIndices = (
 ): Array<number> =>
   slidesToShow
     ? [
-      ...Array(
-        slideVisibleSlides ? Math.ceil(totalItems / slidesToShow) : totalItems
-      ).keys(),
-    ]
+        ...Array(
+          slideVisibleSlides ? Math.ceil(totalItems / slidesToShow) : totalItems
+        ).keys(),
+      ]
     : []
 
 /**
  * Slider Dots
  */
 const Dots: FC<Props> = props => {
-  const { slidesToShow, totalItems, currentSlide, domLoaded, dotClass, dotListClass, slideVisibleSlides, goToSlide } = props
+  const {
+    slidesToShow,
+    totalItems,
+    currentSlide,
+    dotClass,
+    dotListClass,
+    slideVisibleSlides,
+    goToSlide,
+  } = props
 
-  const slideIndexes = getSlideIndices(slidesToShow, slideVisibleSlides!, totalItems)
+  const slideIndexes = getSlideIndices(
+    slidesToShow,
+    slideVisibleSlides!,
+    totalItems
+  )
 
   const handleDotClick = (index: number) => {
     const slideToGo = slideVisibleSlides ? index * slidesToShow : index
@@ -73,12 +85,14 @@ const Dots: FC<Props> = props => {
 
   const renderDots = () =>
     slideIndexes.map(index => {
-      const isActive = index === getSelectedDot(slideVisibleSlides!, currentSlide, slidesToShow)
+      const isActive =
+        index ===
+        getSelectedDot(slideVisibleSlides!, currentSlide, slidesToShow)
       return (
         <div
           className={`${dotClass} ${
             isActive ? 'bg-emphasis' : 'bg-muted-3'
-            } grow dim dib w1 h1 br-100 pa2 mr2 bw0 pointer outline-0`}
+          } grow dim dib w1 h1 br-100 pa2 mr2 bw0 pointer outline-0`}
           key={index}
           onClick={() => handleDotClick(index)}
         />

@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { transitionType } from '../typings/global';
+import { transitionType } from '../typings/global'
 
 interface Props {
   className?: string
@@ -15,19 +15,18 @@ const SliderTrack: FC<Props> = ({
   transition,
   shouldRenderOnSSR,
 }) => (
-    <div
-      className={`${className} flex relative pa0 ma0`}
-      style={{
-        willChange: 'transform',
-        transition: `transform ${transition.speed}ms ${transition.timing}`,
-        transitionDelay: `${transition.delay}ms`,
-        transform: `translate3d(${transform}px, 0, 0)`,
-        overflow: shouldRenderOnSSR ? 'hidden' : 'unset',
-      }}
-    >
-      {children}
-    </div>
-  )
-
+  <div
+    className={`${className} flex relative pa0 ma0`}
+    style={{
+      willChange: 'transform',
+      transition: `transform ${transition.speed}ms ${transition.timing}`,
+      transitionDelay: `${transition.delay}ms`,
+      transform: `translate3d(${transform}px, 0, 0)`,
+      overflow: shouldRenderOnSSR ? 'hidden' : 'unset',
+    }}
+  >
+    {children}
+  </div>
+)
 
 export default SliderTrack

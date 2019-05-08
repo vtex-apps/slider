@@ -30,7 +30,7 @@ interface SliderProps {
   /** If should show arrows */
   showArrows?: boolean
   /** Which device types that arrows should be hidden */
-  removeArrowOnDeviceType?: string | Array<string>
+  removeArrowOnDeviceType?: string | string[]
   /** Custom arrow on left */
   customLeftArrow?: ComponentType<any> | null
   /** Custom arrow on right */

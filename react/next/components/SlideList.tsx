@@ -19,7 +19,11 @@ const SlideList = (props: Props): any => {
     <Slide
       key={index}
       data-index={index}
-      aria-hidden={getIfSlideIsVisbile(index, currentSlide, slidesToShow) ? 'false' : 'true'}
+      aria-hidden={
+        getIfSlideIsVisbile(index, currentSlide, slidesToShow)
+          ? 'false'
+          : 'true'
+      }
       width={itemWidth}
       className={itemClass}
     >
