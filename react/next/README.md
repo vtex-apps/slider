@@ -78,7 +78,10 @@ So, on your component you will use it like:
     },
   }
   
-  const products = [{ name: 'name', price: 50 }, ... ]
+  const products = [
+    { name: 'name', price: 50 },
+    // ...
+  ]
 
   <SliderNext
     ssr={ssr}
