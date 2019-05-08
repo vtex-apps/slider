@@ -1,9 +1,13 @@
-import React, { useMemo, memo } from 'react'
-import { SliderProps, SliderState } from '../typings/global'
+import React, { useMemo, memo, FC } from 'react'
 
 interface Props {
-  props: SliderProps
-  state: SliderState
+  slidesToShow: number
+  totalItems: number
+  currentSlide: number
+  domLoaded: boolean
+  dotClass?: string
+  dotListClass?: string
+  slideVisibleSlides?: boolean
   goToSlide: (index: number) => void
 }
 
@@ -42,32 +46,19 @@ const getSlideIndices = (
 ): Array<number> =>
   slidesToShow
     ? [
-        ...Array(
-          slideVisibleSlides ? Math.ceil(totalItems / slidesToShow) : totalItems
-        ).keys(),
-      ]
+      ...Array(
+        slideVisibleSlides ? Math.ceil(totalItems / slidesToShow) : totalItems
+      ).keys(),
+    ]
     : []
 
 /**
  * Slider Dots
  */
-const Dots = ({
-  props,
-  state,
-  goToSlide,
-}: Props): React.ReactElement<any> | null => {
-  const { slidesToShow, totalItems, currentSlide, domLoaded } = state
-  const { dotClass, dotListClass, slideVisibleSlides } = props
+const Dots: FC<Props> = props => {
+  const { slidesToShow, totalItems, currentSlide, domLoaded, dotClass, dotListClass, slideVisibleSlides, goToSlide } = props
 
-  const slideIndexes = useMemo(
-    () => getSlideIndices(slidesToShow, slideVisibleSlides!, totalItems),
-    [slidesToShow, slideVisibleSlides]
-  )
-
-  const selectedDot = useMemo(
-    () => getSelectedDot(slideVisibleSlides!, currentSlide, slidesToShow),
-    [currentSlide, domLoaded]
-  )
+  const slideIndexes = getSlideIndices(slidesToShow, slideVisibleSlides!, totalItems)
 
   const handleDotClick = (index: number) => {
     const slideToGo = slideVisibleSlides ? index * slidesToShow : index
@@ -82,12 +73,12 @@ const Dots = ({
 
   const renderDots = () =>
     slideIndexes.map(index => {
-      const isActive = index === selectedDot
+      const isActive = index === getSelectedDot(slideVisibleSlides!, currentSlide, slidesToShow)
       return (
         <div
           className={`${dotClass} ${
             isActive ? 'bg-emphasis' : 'bg-muted-3'
-          } grow dim dib w1 h1 br-100 pa2 mr2 bw0 pointer outline-0`}
+            } grow dim dib w1 h1 br-100 pa2 mr2 bw0 pointer outline-0`}
           key={index}
           onClick={() => handleDotClick(index)}
         />
