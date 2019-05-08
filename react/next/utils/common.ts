@@ -42,7 +42,11 @@ const getInitialState = (
 /**
  * Returns if the slide is visible or not
  */
-const getIfSlideIsVisbile = (index: number, currentSlide: number, slidesToShow: number): boolean => {
+const getIfSlideIsVisbile = (
+  index: number,
+  currentSlide: number,
+  slidesToShow: number
+): boolean => {
   return index >= currentSlide && index < currentSlide + slidesToShow
 }
 

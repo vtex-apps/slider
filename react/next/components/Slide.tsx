@@ -9,13 +9,7 @@ interface Props
  * Slide wrapper around each slider's children
  */
 const Slide: FC<Props> = props => {
-  const {
-    width,
-    style,
-    className,
-    children,
-    ...rest
-  } = props
+  const { width, style, className, children, ...rest } = props
   return (
     <div
       className={`${className} flex relative`}

@@ -1,4 +1,4 @@
-import React, { FC, useReducer, useRef, useMemo, useEffect } from 'react'
+import React, { FC, useReducer, useRef, useEffect } from 'react'
 
 import { SliderProps } from './typings/global'
 import {
@@ -83,7 +83,7 @@ const SliderNext: FC<SliderProps> = props => {
 
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
-  }, [])
+  }, [props])
 
   /** Common function that allows to slide to previous or next slides */
   const slide = (transform: number, currentSlide: number) => {
@@ -163,7 +163,10 @@ const SliderNext: FC<SliderProps> = props => {
   const isLeftEndReach = !(state.currentSlide - props.slidesToSlide! >= 0)
 
   /** Reached right end */
-  const isRightEndReach = !(state.currentSlide + 1 + state.slidesToShow <= state.totalItems)
+  const isRightEndReach = !(
+    state.currentSlide + 1 + state.slidesToShow <=
+    state.totalItems
+  )
 
   const { shouldRenderOnSSR } = getInitialState(state, props)
 
@@ -188,7 +191,7 @@ const SliderNext: FC<SliderProps> = props => {
     <div
       className={`${
         props.containerClass
-        } flex items-center relative overflow-hidden`}
+      } flex items-center relative overflow-hidden`}
       ref={containerRef}
     >
       <SliderTrack
