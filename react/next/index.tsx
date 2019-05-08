@@ -130,16 +130,28 @@ const SliderNext: FC<SliderProps> = props => {
 
   /** Renders left arrow */
   const renderLeftArrow = (): React.ReactNode => {
-    const { customLeftArrow } = props
+    const { customLeftArrow, leftArrowClass } = props
     return (
-      <Arrow custom={customLeftArrow} orientation="left" action={previous} />
+      <Arrow
+        className={leftArrowClass}
+        custom={customLeftArrow}
+        orientation="left"
+        action={previous}
+      />
     )
   }
 
   /** Renders right arrow */
   const renderRightArrow = (): React.ReactNode => {
-    const { customRightArrow } = props
-    return <Arrow custom={customRightArrow} orientation="right" action={next} />
+    const { customRightArrow, rightArrowClass } = props
+    return (
+      <Arrow
+        className={rightArrowClass}
+        custom={customRightArrow}
+        orientation="right"
+        action={next}
+      />
+    )
   }
 
   /** Renders the Dots */
