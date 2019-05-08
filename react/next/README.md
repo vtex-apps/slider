@@ -105,7 +105,7 @@ So, on your component you will use it like:
 | `showDots` | `Boolean` | 🚫 | true | If should show dots |
 | `removeArrowOnDeviceType` | `Array<String!>`  | 🚫 | 🚫 | Which device types that arrows should be hidden |
 | `customLeftArrow` | `ComponentType<any>!` | 🚫 | 🚫 | Custom arrow on left |
-| `customRightArrow` | `ComponentType<any>!` | 🚫         | 🚫 | Custom arrow on right |
+| `customRightArrow` | `ComponentType<any>!` | 🚫 | 🚫 | Custom arrow on right |
 | `customDot` | `ComponentType<any>!` | 🚫 | 🚫           | Custom dots |
 | `infinite` | `Boolean` | 🚫 | false | Whatever is infinite mode or not |
 | `sliderClass` | `String` | 🚫 | 🚫 | Custom class for slider |
