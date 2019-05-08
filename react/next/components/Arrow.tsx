@@ -18,6 +18,8 @@ const Arrow: FC<Props> = props => {
         orientation === 'left' ? 'left-1' : 'right-1'
       }`}
       onClick={() => action()}
+      aria-controls="slider-items"
+      aria-label={`${orientation === 'left' ? 'Previous' : 'Next'} Slide`}
     >
       {custom || <IconCaret size={25} orientation={orientation} thin />}
     </Clickable>

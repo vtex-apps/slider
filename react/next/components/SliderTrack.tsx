@@ -21,6 +21,9 @@ const SliderTrack: FC<Props> = ({
       transitionDelay: `${transition.delay}ms`,
       transform: `translate3d(${transform}px, 0, 0)`,
     }}
+    id="slider-items"
+    aria-atomic="false"
+    aria-live="polite"
   >
     {children}
   </div>

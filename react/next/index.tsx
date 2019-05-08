@@ -185,11 +185,14 @@ const SliderNext: FC<SliderProps> = props => {
   const disableRightArrow = !props.infinite && isRightEndReach
 
   return (
-    <div
+    <section
       className={`${
         props.containerClass
       } flex items-center relative overflow-hidden`}
       ref={containerRef}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label={props.label}
     >
       <SliderTrack
         className={props.sliderClass}
@@ -201,11 +204,12 @@ const SliderNext: FC<SliderProps> = props => {
       {shouldShowArrows && !disableLeftArrow && renderLeftArrow()}
       {shouldShowArrows && !disableRightArrow && renderRightArrow()}
       {props.showDots && renderDotsList()}
-    </div>
+    </section>
   )
 }
 
 SliderNext.defaultProps = {
+  label: 'VTEX Slider',
   slidesToSlide: 1,
   infinite: false,
   showArrows: true,

@@ -17,6 +17,8 @@ interface transitionType {
 }
 
 interface SliderProps {
+  /** Aria label for slider */
+  label?: string
   /** Device type */
   deviceType?: string
   /** Number of elements per breakpoint when on SSR */

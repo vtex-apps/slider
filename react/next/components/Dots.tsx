@@ -95,6 +95,9 @@ const Dots: FC<Props> = props => {
           } grow dim dib w1 h1 br-100 pa2 mr2 bw0 pointer outline-0`}
           key={index}
           onClick={() => handleDotClick(index)}
+          role="button"
+          aria-controls="slider-items"
+          aria-label={`Dot ${index + 1} of ${slideIndexes.length}`}
         />
       )
     })
@@ -102,6 +105,8 @@ const Dots: FC<Props> = props => {
   return (
     <div
       className={`${dotListClass} flex absolute justify-center pa0 ma0 bottom-0 left-0 right-0`}
+      role="group"
+      aria-label={`Slider Dots`}
     >
       {renderDots()}
     </div>

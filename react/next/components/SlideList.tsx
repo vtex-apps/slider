@@ -8,6 +8,7 @@ interface Props {
   slidesToShow: number
   children: any
   itemClass?: string
+  totalItems: number
 }
 
 /**
@@ -23,19 +24,29 @@ const getIfSlideIsVisbile = (
 
 /** List of all slides */
 const SlideList = (props: Props): any => {
-  const { children, itemClass, itemWidth, currentSlide, slidesToShow } = props
+  const {
+    children,
+    itemClass,
+    itemWidth,
+    currentSlide,
+    slidesToShow,
+    totalItems,
+  } = props
 
   return React.Children.toArray(children).map((child, index) => (
     <Slide
       key={index}
       data-index={index}
+      width={itemWidth}
+      className={itemClass}
       aria-hidden={
         getIfSlideIsVisbile(index, currentSlide, slidesToShow)
           ? 'false'
           : 'true'
       }
-      width={itemWidth}
-      className={itemClass}
+      role="group"
+      aria-roledescription="slide"
+      aria-label={`${index + 1} of ${totalItems}`}
     >
       {child}
     </Slide>
