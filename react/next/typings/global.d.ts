@@ -35,18 +35,22 @@ interface SliderProps {
   customLeftArrow?: ComponentType<any> | null
   /** Custom arrow on right */
   customRightArrow?: ComponentType<any> | null
-  /** Custom dots */
-  customDot?: React.ReactElement<any> | null
   /** Whatever is infinite mode or not */
   infinite?: boolean // TODO
   /** Custom class for slider */
   sliderClass?: string
   /** Custom class for items */
   itemClass?: string
+  /** Custom class for left arrow */
+  leftArrowClass?: string
+  /** Custom class for right arrow */
+  rightArrowClass?: string
   /** Custom class for container */
   containerClass?: string
-  /** Custom class for dots */
+  /** Custom class for dot list */
   dotListClass?: string
+  /** Custom classes for a single dot */
+  dotClass?: string
   /** If should show dots or not */
   showDots?: boolean
   /** Custom transition */

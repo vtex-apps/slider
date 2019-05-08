@@ -57,7 +57,7 @@ const Dots = ({
   goToSlide,
 }: Props): React.ReactElement<any> | null => {
   const { slidesToShow, totalItems, currentSlide, domLoaded } = state
-  const { customDot, dotListClass, slideVisibleSlides } = props
+  const { dotClass, dotListClass, slideVisibleSlides } = props
 
   const slideIndexes = useMemo(
     () => getSlideIndices(slidesToShow, slideVisibleSlides!, totalItems),
@@ -85,7 +85,7 @@ const Dots = ({
       const isActive = index === selectedDot
       return (
         <div
-          className={`${
+          className={`${dotClass} ${
             isActive ? 'bg-emphasis' : 'bg-muted-3'
           } grow dim dib w1 h1 br-100 pa2 mr2 bw0 pointer outline-0`}
           key={index}
