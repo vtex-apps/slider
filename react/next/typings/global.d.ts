@@ -1,4 +1,8 @@
-import React from 'react'
+import React, {
+  DetailedHTMLProps,
+  HTMLAttributes,
+  ButtonHTMLAttributes,
+} from 'react'
 
 interface responsiveType {
   [key: string]: {
@@ -77,3 +81,13 @@ interface SliderState {
   /** Current transform value */
   transform: number
 }
+
+/** Shorten for Div */
+interface Div
+  extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {}
+
+interface Button
+  extends DetailedHTMLProps<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > {}
