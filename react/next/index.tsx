@@ -103,8 +103,13 @@ const SliderNext: FC<SliderProps> = props => {
   /** Go to next slides */
   const next = (slidesHavePassed = 0) => {
     const { nextSlides, nextPosition } = populateNextSlides(
-      state,
-      props,
+      state.currentSlide,
+      state.slidesToShow,
+      state.itemWidth,
+      state.totalItems,
+      props.slidesToSlide!,
+      props.slideVisibleSlides!,
+      props.infinite!,
       slidesHavePassed
     )
     slide(nextPosition!, nextSlides!)
@@ -113,8 +118,13 @@ const SliderNext: FC<SliderProps> = props => {
   /** Go to previous slides */
   const previous = (slidesHavePassed = 0) => {
     const { nextSlides, nextPosition } = populatePreviousSlides(
-      state,
-      props,
+      state.currentSlide,
+      state.slidesToShow,
+      state.itemWidth,
+      state.totalItems,
+      props.slidesToSlide!,
+      props.slideVisibleSlides!,
+      props.infinite!,
       slidesHavePassed
     )
     slide(nextPosition!, nextSlides!)

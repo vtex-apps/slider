@@ -1,5 +1,3 @@
-import { SliderState, SliderProps } from '../typings/global'
-
 interface NextSlides {
   nextSlides: number | undefined
   nextPosition: number | undefined
@@ -13,13 +11,15 @@ interface NextSlides {
  * @param slidesHavePassed : slides that passed
  */
 const populateNextSlides = (
-  state: SliderState,
-  props: SliderProps,
+  currentSlide: number,
+  slidesToShow: number,
+  itemWidth: number,
+  totalItems: number,
+  slidesToSlide: number,
+  slideVisibleSlides: boolean,
+  infinite: boolean,
   slidesHavePassed: number = 0
 ): NextSlides => {
-  const { slidesToShow, currentSlide, itemWidth, totalItems } = state
-  const { slidesToSlide, slideVisibleSlides, infinite } = props
-
   let nextSlides
   let nextPosition
 
