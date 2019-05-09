@@ -1,11 +1,7 @@
 import React, { FC, useReducer, useRef, useEffect } from 'react'
 
 import { SliderProps } from './typings/global'
-import {
-  getItemClientSideWidth,
-  populateNextSlides,
-  populatePreviousSlides,
-} from './utils/index'
+import { getItemClientSideWidth, populateSlides } from './utils/index'
 
 import Dots from './components/Dots'
 import Arrow from './components/Arrow'
@@ -100,34 +96,29 @@ const SliderNext: FC<SliderProps> = props => {
     })
   }
 
-  /** Go to next slides */
-  const next = (slidesHavePassed = 0) => {
-    const { nextSlides, nextPosition } = populateNextSlides(
+  /** Populate slides for next or prev */
+  const populate = (order: 'next' | 'prev') => {
+    const { nextSlides, nextPosition } = populateSlides(
+      order,
       state.currentSlide,
       state.slidesToShow,
       state.itemWidth,
       state.totalItems,
       props.slidesToSlide!,
       props.slideVisibleSlides!,
-      props.infinite!,
-      slidesHavePassed
+      props.infinite!
     )
     slide(nextPosition!, nextSlides!)
   }
 
-  /** Go to previous slides */
-  const previous = (slidesHavePassed = 0) => {
-    const { nextSlides, nextPosition } = populatePreviousSlides(
-      state.currentSlide,
-      state.slidesToShow,
-      state.itemWidth,
-      state.totalItems,
-      props.slidesToSlide!,
-      props.slideVisibleSlides!,
-      props.infinite!,
-      slidesHavePassed
-    )
-    slide(nextPosition!, nextSlides!)
+  /** Populate next slides */
+  const next = () => {
+    populate('next')
+  }
+
+  /** Populate previous slides */
+  const prev = () => {
+    populate('prev')
   }
 
   /** Go to any slide by index */
@@ -151,7 +142,7 @@ const SliderNext: FC<SliderProps> = props => {
         className={leftArrowClass}
         custom={customLeftArrow}
         orientation="left"
-        action={previous}
+        action={prev}
       />
     )
   }
