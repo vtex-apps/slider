@@ -1,10 +1,4 @@
 import { getWidthFromDeviceType, getItemClientSideWidth } from './elementWidth'
-import { populateNextSlides } from './next'
-import { populatePreviousSlides } from './previous'
+import { populateSlides } from './populateSlides'
 
-export {
-  getWidthFromDeviceType,
-  getItemClientSideWidth,
-  populateNextSlides,
-  populatePreviousSlides,
-}
+export { getWidthFromDeviceType, getItemClientSideWidth, populateSlides }
