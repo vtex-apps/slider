@@ -96,6 +96,8 @@ const Dots: FC<Props> = props => {
             isActive ? 'bg-emphasis' : 'bg-muted-3'
           } grow dim dib w1 h1 br-100 pa2 mr2 bw0 pointer outline-0`}
           key={index}
+          tabIndex={index}
+          onKeyDown={() => handleDotClick(index)}
           onClick={() => handleDotClick(index)}
           role="button"
           aria-controls={controls}
