@@ -1,17 +1,18 @@
 import React, { FC } from 'react'
-import { transitionType } from '../typings/global'
+import { transitionType, Div } from '../typings/global'
 
-interface Props {
-  className?: string
+interface Props extends Div {
   transform: number
   transition: transitionType
 }
 
 const SliderTrack: FC<Props> = ({
   children,
+  style,
   className,
   transform,
   transition,
+  ...rest
 }) => (
   <div
     className={`${className} flex relative pa0 ma0`}
@@ -20,10 +21,11 @@ const SliderTrack: FC<Props> = ({
       transition: `transform ${transition.speed}ms ${transition.timing}`,
       transitionDelay: `${transition.delay}ms`,
       transform: `translate3d(${transform}px, 0, 0)`,
+      ...style,
     }}
-    id="slider-items"
     aria-atomic="false"
     aria-live="polite"
+    {...rest}
   >
     {children}
   </div>

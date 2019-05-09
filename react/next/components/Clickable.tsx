@@ -1,12 +1,11 @@
-import React, { FC, DetailedHTMLProps, ButtonHTMLAttributes } from 'react'
+import React, { FC } from 'react'
+import { Button } from '../typings/global'
 
 /**
  * Defines a clickable area
  * @param props : Same props of button
  */
-const Clickable: FC<
-  DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
-> = props => {
+const Clickable: FC<Button> = props => {
   const { children, style, className, ...rest } = props
 
   return (
@@ -16,7 +15,6 @@ const Clickable: FC<
         background: 'transparent',
         ...style,
       }}
-      role="button"
       {...rest}
     >
       {children}

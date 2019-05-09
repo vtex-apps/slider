@@ -28,6 +28,11 @@ const SliderNext: FC<SliderProps> = props => {
     transform: 0,
     containerWidth: 0,
   })
+  /** Transform Label Text => label-text-items */
+  const itemsId: string = `${props
+    .label!.toLowerCase()
+    .trim()
+    .replace(/ /g, '-')}-items`
 
   useEffect(() => {
     /**
@@ -132,6 +137,7 @@ const SliderNext: FC<SliderProps> = props => {
     const { customLeftArrow, leftArrowClass } = props
     return (
       <Arrow
+        controls={itemsId}
         className={leftArrowClass}
         custom={customLeftArrow}
         orientation="left"
@@ -145,6 +151,7 @@ const SliderNext: FC<SliderProps> = props => {
     const { customRightArrow, rightArrowClass } = props
     return (
       <Arrow
+        controls={itemsId}
         className={rightArrowClass}
         custom={customRightArrow}
         orientation="right"
@@ -155,7 +162,9 @@ const SliderNext: FC<SliderProps> = props => {
 
   /** Renders the Dots */
   const renderDotsList = (): React.ReactNode => {
-    return <Dots {...state} {...props} goToSlide={goToSlide} />
+    return (
+      <Dots {...state} {...props} goToSlide={goToSlide} controls={itemsId} />
+    )
   }
 
   /** Reached left end */
@@ -195,6 +204,7 @@ const SliderNext: FC<SliderProps> = props => {
       aria-label={props.label}
     >
       <SliderTrack
+        id={itemsId}
         className={props.sliderClass}
         transform={state.transform}
         transition={props.transition!}
@@ -209,7 +219,7 @@ const SliderNext: FC<SliderProps> = props => {
 }
 
 SliderNext.defaultProps = {
-  label: 'VTEX Slider',
+  label: 'Carousel',
   slidesToSlide: 1,
   infinite: false,
   showArrows: true,

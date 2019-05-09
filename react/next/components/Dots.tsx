@@ -5,6 +5,7 @@ interface Props {
   totalItems: number
   currentSlide: number
   domLoaded: boolean
+  controls: string
   dotClass?: string
   dotListClass?: string
   slideVisibleSlides?: boolean
@@ -64,6 +65,7 @@ const Dots: FC<Props> = props => {
     dotListClass,
     slideVisibleSlides,
     goToSlide,
+    controls,
   } = props
 
   const slideIndexes = getSlideIndices(
@@ -96,7 +98,7 @@ const Dots: FC<Props> = props => {
           key={index}
           onClick={() => handleDotClick(index)}
           role="button"
-          aria-controls="slider-items"
+          aria-controls={controls}
           aria-label={`Dot ${index + 1} of ${slideIndexes.length}`}
         />
       )
@@ -106,7 +108,7 @@ const Dots: FC<Props> = props => {
     <div
       className={`${dotListClass} flex absolute justify-center pa0 ma0 bottom-0 left-0 right-0`}
       role="group"
-      aria-label={`Slider Dots`}
+      aria-label="Carousel Dots"
     >
       {renderDots()}
     </div>

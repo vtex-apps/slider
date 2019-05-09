@@ -1,7 +1,7 @@
-import React, { FC, DetailedHTMLProps, HTMLAttributes } from 'react'
+import React, { FC } from 'react'
+import { Div } from '../typings/global'
 
-interface Props
-  extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+interface Props extends Div {
   width?: string | number
 }
 
