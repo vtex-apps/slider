@@ -1,5 +1,3 @@
-import { SliderState, SliderProps } from '../typings/global'
-
 interface NextSlides {
   nextSlides: number | undefined
   nextPosition: number | undefined
@@ -8,18 +6,25 @@ interface NextSlides {
 /**
  * Populate the previous slides
  * TODO: Implement the 'fake' translate when in infinite mode when left end is reached
- * @param state : slider current state
- * @param props : slider props
- * @param slidesHavePassed : slides that passed
+ * @param currentSlide
+ * @param slidesToShow
+ * @param itemWidth
+ * @param totalItems
+ * @param slidesToSlide
+ * @param slideVisibleSlides
+ * @param infinite
+ * @param slidesHavePassed
  */
 const populatePreviousSlides = (
-  state: SliderState,
-  props: SliderProps,
+  currentSlide: number,
+  slidesToShow: number,
+  itemWidth: number,
+  totalItems: number,
+  slidesToSlide: number,
+  slideVisibleSlides: boolean,
+  infinite: boolean,
   slidesHavePassed: number = 0
 ): NextSlides => {
-  const { currentSlide, slidesToShow, itemWidth, totalItems } = state
-  const { slidesToSlide, slideVisibleSlides, infinite } = props
-
   let nextSlides
   let nextPosition
 
