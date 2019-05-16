@@ -117,7 +117,7 @@ const products = [
 | `customLeftArrow` | `ComponentType<any>!` | 🚫 | 🚫 | Custom arrow on left |
 | `customRightArrow` | `ComponentType<any>!` | 🚫 | 🚫 | Custom arrow on right |
 | `customDot` | `ComponentType<any>!` | 🚫 | 🚫 | Custom dots |
-| `infinite` | `Boolean` | 🚫 | false | Whatever is infinite mode or not |
+| `infinite` | `Boolean` | 🚫 | true | Whatever is infinite mode or not |
 | `classNames` | `ClassNames` | 🚫 | - | Custom classes |
 
 **SliderElements Type**
