@@ -96,11 +96,10 @@ const populateSlides = (
   slidesToShow: number,
   itemWidth: number,
   totalItems: number,
-  slidesToSlide: number,
-  slideVisibleSlides: boolean,
+  toPass: number | 'visible',
   infinite: boolean
 ): NextSlides => {
-  const realPassedSlides = slideVisibleSlides ? slidesToShow : slidesToSlide!
+  const realPassedSlides = toPass === 'visible' ? slidesToShow : toPass!
 
   return order === 'next'
     ? populateNext(

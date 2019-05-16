@@ -46,9 +46,9 @@ const products = [{ name: 'name', price: 50 }, ... ]
 
 Check [configuration](#configuration) to see every prop that `SliderNext` can receive.
 
-### SSR
+### Resposive
 
-To use SSR mode you need to define the `ssr` prop that will specify how many items will be presented on each breakpoint. The `ssr` object has the type:
+The `elements` prop will specify how many items will be presented on each breakpoint (`visible`) and how many elements will be passed each type (`toPass`). The `elements` object has the type:
 
 ```typescript
 interface responsiveType {
@@ -58,6 +58,16 @@ interface responsiveType {
     items: number
   }
 }
+
+interface SliderProps {
+  /** Element props */
+  elements: {
+    /** Number of visible elements per breakpoint */
+    visible: responsiveType
+    /** Number of elements that are passed each time 1 to visible */
+    toPass?: number | 'visible'
+  }
+}
 ```
 
 So, on your component you will use it like:
@@ -65,7 +75,7 @@ So, on your component you will use it like:
 ```javascript
 import Product from './Product'
 
-const ssr = {
+const visibleElements = {
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
     items: 4,
@@ -84,7 +94,10 @@ const products = [
 ]
 
 <SliderNext
-  ssr={ssr}
+  elements={{
+    visible: visibleElements,
+    toPass: 'visible' // will pass every visible element each arrow click
+  }}
 >
   { products.map(product => <Product {...product} />) }
 </SliderNext>  
@@ -95,11 +108,8 @@ const products = [
 | Prop name | Type | isRequired | defaultValue | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `String` | 🚫 | 'VTEX Slider' | Aria label of slider
-| `responsive` | `responsiveType` | 🚫| 🚫 | Number of elements per breakpoint |
 | `deviceType` | `String`  | 🚫 | 🚫 | The device type |
-| `ssr`  | `Boolean` | 🚫 | false | If is SSR mode or not |
-| `slidesToSlide`  | `Number` | 🚫 | 1 | Number of slides that are passed each time |
-| `slideVisibleSlides` | `Boolean` | 🚫 | false | Pass all the visible slides at once |
+| `elements` | `SliderElements`  | ✅ | - | Elements props |
 | `children` | `Array<Node!>` | ✅ | 🚫 | Elements to render |
 | `showArrows`  | `Boolean` | 🚫 | true | If should show arrows |
 | `showDots` | `Boolean` | 🚫 | true | If should show dots |
@@ -108,7 +118,14 @@ const products = [
 | `customRightArrow` | `ComponentType<any>!` | 🚫 | 🚫 | Custom arrow on right |
 | `customDot` | `ComponentType<any>!` | 🚫 | 🚫 | Custom dots |
 | `infinite` | `Boolean` | 🚫 | false | Whatever is infinite mode or not |
-| `classNames` | `ClassNames` | 🚫 | 🚫 | Custom classes |
+| `classNames` | `ClassNames` | 🚫 | - | Custom classes |
+
+**SliderElements Type**
+
+| Prop name | Type | isRequired | defaultValue | Description |
+| --- | --- | --- | --- | --- |
+| `visible` | `responsiveType` | ✅ | `every: { breakpoint: { max: 3840, min: 0 }, items: 1}` | Number of visible elements per breakpoint |
+| `toPass` | `Number | 'visible'` | 🚫 | 1 | Number of elements that are passed each time 1 to visible |
 
 **ClassNames Type**
 
