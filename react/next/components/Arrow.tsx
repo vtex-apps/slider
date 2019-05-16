@@ -9,10 +9,11 @@ interface Props {
   orientation: 'left' | 'right'
   action: () => void
   controls: string
+  disabled: boolean
 }
 
 const Arrow: FC<Props> = props => {
-  const { custom, orientation, action, className, controls } = props
+  const { custom, orientation, action, className, controls, disabled } = props
   return (
     <Clickable
       className={`${className} ${
@@ -21,6 +22,7 @@ const Arrow: FC<Props> = props => {
       onClick={() => action()}
       aria-controls={controls}
       aria-label={`${orientation === 'left' ? 'Previous' : 'Next'} Slide`}
+      disabled={disabled}
     >
       {custom || <IconCaret size={25} orientation={orientation} thin />}
     </Clickable>

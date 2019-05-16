@@ -36,7 +36,9 @@ const SliderNext: FC<SliderProps> = props => {
      * @param shouldCorrectItemPosition : If should correct item and container width
      */
     const setNewState = (shouldCorrectItemPosition: boolean) => {
-      const { elements: {visible} } = props
+      const {
+        elements: { visible },
+      } = props
       visible &&
         Object.keys(visible).forEach(item => {
           const { breakpoint, items } = visible[item]
@@ -135,6 +137,15 @@ const SliderNext: FC<SliderProps> = props => {
   /** Renders left arrow */
   const renderLeftArrow = (): React.ReactNode => {
     const { customLeftArrow, classNames } = props
+    const { toPass } = props.elements
+    const isLeftEndReach = !(
+      state.currentSlide - (toPass! === 'visible' ? 1 : toPass!) >=
+      0
+    )
+
+    /** Disable left arrow if is not inifite and reached left end */
+    const disabled = !props.infinite && isLeftEndReach
+
     return (
       <Arrow
         controls={itemsId}
@@ -142,6 +153,7 @@ const SliderNext: FC<SliderProps> = props => {
         custom={customLeftArrow}
         orientation="left"
         action={prev}
+        disabled={disabled}
       />
     )
   }
@@ -149,6 +161,14 @@ const SliderNext: FC<SliderProps> = props => {
   /** Renders right arrow */
   const renderRightArrow = (): React.ReactNode => {
     const { customRightArrow, classNames } = props
+    const isRightEndReach = !(
+      state.currentSlide + 1 + state.slidesToShow <=
+      state.totalItems
+    )
+
+    /** Disable right arrow if is not infinite and reached rigth end */
+    const disabled = !props.infinite && isRightEndReach
+
     return (
       <Arrow
         controls={itemsId}
@@ -156,6 +176,7 @@ const SliderNext: FC<SliderProps> = props => {
         custom={customRightArrow}
         orientation="right"
         action={next}
+        disabled={disabled}
       />
     )
   }
@@ -167,17 +188,6 @@ const SliderNext: FC<SliderProps> = props => {
     )
   }
 
-  
-  /** Reached left end */
-  const { toPass } = props.elements
-  const isLeftEndReach = !(state.currentSlide - (toPass! === 'visible' ? 1 : toPass!) >= 0)
-
-  /** Reached right end */
-  const isRightEndReach = !(
-    state.currentSlide + 1 + state.slidesToShow <=
-    state.totalItems
-  )
-
   /** If should arrows or not, filtering for specific device types */
   const shouldShowArrows =
     props.showArrows &&
@@ -188,12 +198,6 @@ const SliderNext: FC<SliderProps> = props => {
         (state.deviceType &&
           props.removeArrowOnDeviceType.indexOf(state.deviceType) > -1))
     )
-
-  /** Disable left arrow if is not inifite and reached left end */
-  const disableLeftArrow = !props.infinite && isLeftEndReach
-
-  /** Disable right arrow if is not infinite and reached rigth end */
-  const disableRightArrow = !props.infinite && isRightEndReach
 
   return (
     <section
@@ -213,8 +217,8 @@ const SliderNext: FC<SliderProps> = props => {
       >
         <SlideList {...state} {...props} />
       </SliderTrack>
-      {shouldShowArrows && !disableLeftArrow && renderLeftArrow()}
-      {shouldShowArrows && !disableRightArrow && renderRightArrow()}
+      {shouldShowArrows && renderLeftArrow()}
+      {shouldShowArrows && renderRightArrow()}
       {props.showDots && renderDotsList()}
     </section>
   )
@@ -224,12 +228,12 @@ SliderNext.defaultProps = {
   label: 'Carousel',
   elements: {
     visible: {
-      every: { 
+      every: {
         breakpoint: { max: 3840, min: 0 },
-        items: 1
-      }
-    }, 
-    toPass: 1
+        items: 1,
+      },
+    },
+    toPass: 1,
   },
   infinite: true,
   showArrows: true,
