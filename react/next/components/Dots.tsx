@@ -6,8 +6,10 @@ interface Props {
   currentSlide: number
   domLoaded: boolean
   controls: string
-  dotClass?: string
-  dotListClass?: string
+  classNames?: {
+    dotList?: string
+    dot?: string
+  }
   slideVisibleSlides?: boolean
   goToSlide: (index: number) => void
 }
@@ -61,8 +63,7 @@ const Dots: FC<Props> = props => {
     slidesToShow,
     totalItems,
     currentSlide,
-    dotClass,
-    dotListClass,
+    classNames,
     slideVisibleSlides,
     goToSlide,
     controls,
@@ -92,7 +93,7 @@ const Dots: FC<Props> = props => {
         getSelectedDot(slideVisibleSlides!, currentSlide, slidesToShow)
       return (
         <div
-          className={`${dotClass} ${
+          className={`${classNames!.dot} ${
             isActive ? 'bg-emphasis' : 'bg-muted-3'
           } grow dim dib w1 h1 br-100 pa2 mr2 bw0 pointer outline-0`}
           key={index}
@@ -108,7 +109,7 @@ const Dots: FC<Props> = props => {
 
   return (
     <div
-      className={`${dotListClass} flex absolute justify-center pa0 ma0 bottom-0 left-0 right-0`}
+      className={`${classNames!.dotList} flex absolute justify-center pa0 ma0 bottom-0 left-0 right-0`}
       role="group"
       aria-label="Carousel Dots"
     >
