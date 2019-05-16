@@ -25,12 +25,13 @@ interface SliderProps {
   label?: string
   /** Device type */
   deviceType?: string
-  /** Number of elements per breakpoint when on SSR */
-  ssr?: responsiveType
-  /** Number of slides that are passed each time */
-  slidesToSlide?: number
-  /** Pass all the visible slides */
-  slideVisibleSlides?: boolean
+  /** Element props */
+  elements: {
+    /** Number of visible elements per breakpoint */
+    visible: responsiveType
+    /** Number of elements that are passed each time 1 to visible */
+    toPass?: number | 'visible'
+  }
   /** Elements to render  */
   children: any
   /** If should show arrows */

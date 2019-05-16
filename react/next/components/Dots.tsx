@@ -10,25 +10,27 @@ interface Props {
     dotList?: string
     dot?: string
   }
-  slideVisibleSlides?: boolean
+  elements: {
+    toPass?: number | 'visible'
+  }
   goToSlide: (index: number) => void
 }
 
 /**
  * Returns the dot tha should be selected
- * @param slideVisibleSlides
+ * @param passVisibleSlides
  * @param currentSlide
  * @param slidesToShow
  */
 const getSelectedDot = (
-  slideVisibleSlides: boolean,
+  passVisibleSlides: boolean,
   currentSlide: number,
   slidesToShow: number
 ): number => {
-  const realCurrentSlide = slideVisibleSlides
+  const realCurrentSlide = passVisibleSlides
     ? currentSlide + (slidesToShow - 1)
     : currentSlide
-  return slideVisibleSlides
+  return passVisibleSlides
     ? Math.floor(realCurrentSlide / slidesToShow)
     : realCurrentSlide
 }
@@ -39,18 +41,18 @@ const getSelectedDot = (
  * If all the visible slides should pass on a dot click, the array elements will be the sequence from 0 to ceil(totalItems/slidesToShow)
  * If not, the array elements will be the sequence from 0 to totalSlides
  * @param slidesToShow
- * @param slideVisibleSlides
+ * @param passVisibleSlides
  * @param totalItems
  */
 const getSlideIndices = (
   slidesToShow: number,
-  slideVisibleSlides: boolean,
+  passVisibleSlides: boolean,
   totalItems: number
 ): Array<number> =>
   slidesToShow
     ? [
         ...Array(
-          slideVisibleSlides ? Math.ceil(totalItems / slidesToShow) : totalItems
+          passVisibleSlides ? Math.ceil(totalItems / slidesToShow) : totalItems
         ).keys(),
       ]
     : []
@@ -64,19 +66,21 @@ const Dots: FC<Props> = props => {
     totalItems,
     currentSlide,
     classNames,
-    slideVisibleSlides,
+    elements,
     goToSlide,
     controls,
   } = props
 
+  const passVisibleSlides = elements.toPass === 'visible'
+
   const slideIndexes = getSlideIndices(
     slidesToShow,
-    slideVisibleSlides!,
+    passVisibleSlides,
     totalItems
   )
 
   const handleDotClick = (index: number) => {
-    const slideToGo = slideVisibleSlides ? index * slidesToShow : index
+    const slideToGo = passVisibleSlides ? index * slidesToShow : index
 
     const isLastDot = index === slideIndexes.length - 1
     const isExactDivision = totalItems % slidesToShow === 0
@@ -89,8 +93,7 @@ const Dots: FC<Props> = props => {
   const renderDots = () =>
     slideIndexes.map(index => {
       const isActive =
-        index ===
-        getSelectedDot(slideVisibleSlides!, currentSlide, slidesToShow)
+        index === getSelectedDot(passVisibleSlides, currentSlide, slidesToShow)
       return (
         <div
           className={`${classNames!.dot} ${
@@ -109,7 +112,9 @@ const Dots: FC<Props> = props => {
 
   return (
     <div
-      className={`${classNames!.dotList} flex absolute justify-center pa0 ma0 bottom-0 left-0 right-0`}
+      className={`${
+        classNames!.dotList
+      } flex absolute justify-center pa0 ma0 bottom-0 left-0 right-0`}
       role="group"
       aria-label="Carousel Dots"
     >

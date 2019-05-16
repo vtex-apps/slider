@@ -36,10 +36,10 @@ const SliderNext: FC<SliderProps> = props => {
      * @param shouldCorrectItemPosition : If should correct item and container width
      */
     const setNewState = (shouldCorrectItemPosition: boolean) => {
-      const { ssr } = props
-      ssr &&
-        Object.keys(ssr).forEach(item => {
-          const { breakpoint, items } = ssr[item]
+      const { elements: {visible} } = props
+      visible &&
+        Object.keys(visible).forEach(item => {
+          const { breakpoint, items } = visible[item]
           const { max, min } = breakpoint
           if (window.innerWidth >= min && window.innerWidth <= max) {
             if (containerRef && containerRef.current) {
@@ -104,8 +104,7 @@ const SliderNext: FC<SliderProps> = props => {
       state.slidesToShow,
       state.itemWidth,
       state.totalItems,
-      props.slidesToSlide!,
-      props.slideVisibleSlides!,
+      props.elements!.toPass!,
       props.infinite!
     )
     slide(nextPosition!, nextSlides!)
@@ -168,8 +167,10 @@ const SliderNext: FC<SliderProps> = props => {
     )
   }
 
+  
   /** Reached left end */
-  const isLeftEndReach = !(state.currentSlide - props.slidesToSlide! >= 0)
+  const { toPass } = props.elements
+  const isLeftEndReach = !(state.currentSlide - (toPass! === 'visible' ? 1 : toPass!) >= 0)
 
   /** Reached right end */
   const isRightEndReach = !(
@@ -221,8 +222,16 @@ const SliderNext: FC<SliderProps> = props => {
 
 SliderNext.defaultProps = {
   label: 'Carousel',
-  slidesToSlide: 1,
-  infinite: false,
+  elements: {
+    visible: {
+      every: { 
+        breakpoint: { max: 3840, min: 0 },
+        items: 1
+      }
+    }, 
+    toPass: 1
+  },
+  infinite: true,
   showArrows: true,
   showDots: true,
   classNames: {
@@ -234,7 +243,6 @@ SliderNext.defaultProps = {
     dotList: '',
     dot: '',
   },
-  slideVisibleSlides: false,
   transition: {
     speed: 400,
     delay: 0,
