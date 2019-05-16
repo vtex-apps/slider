@@ -108,10 +108,19 @@ const products = [
 | `customRightArrow` | `ComponentType<any>!` | 🚫 | 🚫 | Custom arrow on right |
 | `customDot` | `ComponentType<any>!` | 🚫 | 🚫 | Custom dots |
 | `infinite` | `Boolean` | 🚫 | false | Whatever is infinite mode or not |
-| `sliderClass` | `String` | 🚫 | 🚫 | Custom class for slider |
-| `itemClass` | `String` | 🚫 | 🚫 | Custom class for item |
-| `containerClass` | `String` | 🚫 | 🚫 | Custom class for container |
-| `dotListClass` | `String` | 🚫 | 🚫 | Custom class for dots |
+| `classNames` | `ClassNames` | 🚫 | 🚫 | Custom classes |
+
+**ClassNames Type**
+
+| Prop name | Type | isRequired | defaultValue | Description |
+| --- | --- | --- | --- | --- |
+| `slider` | `String` | 🚫 | `''` | Custom classes for slider |
+| `container` | `String` | 🚫 | `''` | Custom classes for container | 
+| `item` | `String` | 🚫 | `''` | Custom classes for item | 
+| `leftArrow` | `String` | 🚫 | `''` | Custom classes for left arrow | 
+| `rightArrow` | `String` | 🚫 | `''` | Custom classes for right arrow | 
+| `dotList` | `String` | 🚫 | `''` | Custom classes for the dot list |
+| `dot` | `String` | 🚫 | `''` | Custom classes for a single dot | 
 
 ## Upcoming
 

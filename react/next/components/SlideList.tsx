@@ -7,7 +7,9 @@ interface Props {
   currentSlide: number
   slidesToShow: number
   children: any
-  itemClass?: string
+  classNames?: {
+    item?: string
+  }
   totalItems: number
 }
 
@@ -26,7 +28,7 @@ const getIfSlideIsVisbile = (
 const SlideList = (props: Props): any => {
   const {
     children,
-    itemClass,
+    classNames,
     itemWidth,
     currentSlide,
     slidesToShow,
@@ -38,7 +40,7 @@ const SlideList = (props: Props): any => {
       key={index}
       data-index={index}
       width={itemWidth}
-      className={itemClass}
+      className={classNames!.item}
       aria-hidden={
         getIfSlideIsVisbile(index, currentSlide, slidesToShow)
           ? 'false'

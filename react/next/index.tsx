@@ -135,11 +135,11 @@ const SliderNext: FC<SliderProps> = props => {
 
   /** Renders left arrow */
   const renderLeftArrow = (): React.ReactNode => {
-    const { customLeftArrow, leftArrowClass } = props
+    const { customLeftArrow, classNames } = props
     return (
       <Arrow
         controls={itemsId}
-        className={leftArrowClass}
+        className={classNames!.leftArrow}
         custom={customLeftArrow}
         orientation="left"
         action={prev}
@@ -149,11 +149,11 @@ const SliderNext: FC<SliderProps> = props => {
 
   /** Renders right arrow */
   const renderRightArrow = (): React.ReactNode => {
-    const { customRightArrow, rightArrowClass } = props
+    const { customRightArrow, classNames } = props
     return (
       <Arrow
         controls={itemsId}
-        className={rightArrowClass}
+        className={classNames!.leftArrow}
         custom={customRightArrow}
         orientation="right"
         action={next}
@@ -197,7 +197,7 @@ const SliderNext: FC<SliderProps> = props => {
   return (
     <section
       className={`${
-        props.containerClass
+        props.classNames!.container
       } flex items-center relative overflow-hidden`}
       ref={containerRef}
       role="region"
@@ -206,7 +206,7 @@ const SliderNext: FC<SliderProps> = props => {
     >
       <SliderTrack
         id={itemsId}
-        className={props.sliderClass}
+        className={props.classNames!.slider}
         transform={state.transform}
         transition={props.transition!}
       >
@@ -225,10 +225,15 @@ SliderNext.defaultProps = {
   infinite: false,
   showArrows: true,
   showDots: true,
-  containerClass: '',
-  sliderClass: '',
-  itemClass: '',
-  dotListClass: '',
+  classNames: {
+    slider: '',
+    container: '',
+    item: '',
+    leftArrow: '',
+    rightArrow: '',
+    dotList: '',
+    dot: '',
+  },
   slideVisibleSlides: false,
   transition: {
     speed: 400,
