@@ -1,5 +1,7 @@
 import React, { memo, FC } from 'react'
 
+const DOTS_DEFAULT_SIZE = 0.625
+
 interface Props {
   slidesToShow: number
   totalItems: number
@@ -98,7 +100,11 @@ const Dots: FC<Props> = props => {
         <div
           className={`${classNames!.dot} ${
             isActive ? 'bg-emphasis' : 'bg-muted-3'
-          } grow dim dib w1 h1 br-100 pa2 mr2 bw0 pointer outline-0`}
+          } grow dib br-100 pa2 mr2 ml2 bw0 pointer outline-0`}
+          style={{
+            height: `${DOTS_DEFAULT_SIZE}rem`,
+            width: `${DOTS_DEFAULT_SIZE}rem`
+          }}
           key={index}
           tabIndex={index}
           onKeyDown={() => handleDotClick(index)}
