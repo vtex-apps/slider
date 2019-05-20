@@ -8,6 +8,7 @@ import Arrow from './components/Arrow'
 import SliderTrack from './components/SliderTrack'
 import reducer from './stateReducer'
 import SlideList from './components/SlideList'
+import Tumbnails from './components/Tumbnails'
 
 /**
  * Slider's main component
@@ -188,6 +189,12 @@ const SliderNext: FC<SliderProps> = props => {
     )
   }
 
+  const renderTumbnails = (): React.ReactNode => {
+    return (
+      <Tumbnails {...state} {...props} goToSlide={goToSlide} controls={itemsId} />
+    )
+  }
+
   /** If should arrows or not, filtering for specific device types */
   const shouldShowArrows =
     props.showArrows &&
@@ -220,6 +227,7 @@ const SliderNext: FC<SliderProps> = props => {
       {shouldShowArrows && renderLeftArrow()}
       {shouldShowArrows && renderRightArrow()}
       {props.showDots && renderDotsList()}
+      {props.showTumbnails && renderTumbnails()}
     </section>
   )
 }
@@ -252,6 +260,7 @@ SliderNext.defaultProps = {
     delay: 0,
     timing: 'ease-in-out',
   },
+  showTumbnails: false,
 }
 
 export default SliderNext

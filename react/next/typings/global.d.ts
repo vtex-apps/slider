@@ -58,6 +58,8 @@ interface SliderProps {
   showDots?: boolean
   /** Custom transition */
   transition?: transitionType
+  /** If should show tumbnails or not */
+  showTumbnails?: boolean
 }
 
 interface SliderState {
