@@ -77,8 +77,8 @@ interface SliderProps {
     items: Array<Thumbnail>
     /** Thumbs position relative to slider container */
     position: 'right' | 'left'
-    /** Thumbs width in rem */
-    width: number
+    /** Thumbs width with measure (px, em, rem %, ...) */
+    width: string
   }
 }
 
