@@ -268,6 +268,9 @@ SliderNext.defaultProps = {
     rightArrow: '',
     dotList: '',
     dot: '',
+    thumbnails: '',
+    thumbnail: '',
+    selectedThumbnail: '',
   },
   transition: {
     speed: 400,
