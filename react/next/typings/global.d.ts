@@ -20,6 +20,13 @@ interface transitionType {
   timing: string
 }
 
+interface Thumbnail {
+  /** Url of the thumbnail */
+  url: string
+  /** Slide that it refers to */
+  forSlide: number
+}
+
 interface SliderProps {
   /** Aria label of slider */
   label?: string
@@ -46,8 +53,9 @@ interface SliderProps {
   infinite?: boolean
   /** Custom classes */
   classNames?: {
-    slider?: string
     container?: string
+    sliderContainer?: string
+    slider?: string
     item?: string
     leftArrow?: string
     rightArrow?: string
@@ -60,6 +68,26 @@ interface SliderProps {
   transition?: transitionType
   /** If should show tumbnails or not */
   showTumbnails?: boolean
+  /** Thumbnails props */
+  thumbnails?: {
+    /** Array of thumbnails */
+    items: Array<Thumbnail>
+    /** Thumbs position relative to slider container */
+    position: 'right' | 'left'
+    /** Thumbs width in rem */
+    width: number
+    /** Thumbs height in rem (default: auto)*/
+    height?: number
+    /** Custom classnames for each inner element */
+    classNames?: {
+      /** Class for the thumb container */
+      thumbnails?: string
+      /** Class for all single thumbs */
+      thumbnail?: string
+      /** Class for the selected single thumb */
+      selectedThumbnail?: string
+    }
+  }
 }
 
 interface SliderState {
