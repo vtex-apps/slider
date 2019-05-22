@@ -150,7 +150,7 @@ const products = [
 | --- | --- | --- | --- | --- |
 | `items` | `Array<Thumbnail>` | ✅ | 🚫 | Array of thumbnails |
 | `position` | `'left' | 'right'` | ✅ | 🚫 | Thumbs position relative to slider container |
-| `width` | `Number` | ✅ | 🚫 | Thumbs width in rem |
+| `width` | `String` | ✅ | 🚫 | Thumbs width measure can be `rem`, `px`, `%`, etc. |
 
 **Thumbnail Type**
 

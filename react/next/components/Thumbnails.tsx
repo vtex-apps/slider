@@ -13,6 +13,7 @@ interface Props {
       url: string
       forSlide: number
     }>
+    width: string
   }
   goToSlide: (index: number) => void
 }
@@ -28,7 +29,7 @@ const Thumbnails: FC<Props> = props => {
       currentSlide === index
         ? `${classNames!.selectedThumbnail} ba bw1 b--emphasis `
         : ''
-    } pointer ma2`
+    } pointer ma2 h-auto w-90`
 
   const renderTumbnails = () => {
     const { items } = thumbnails!
@@ -47,9 +48,10 @@ const Thumbnails: FC<Props> = props => {
 
   return (
     <div
-      className={`${
-        classNames!.thumbnails
-      } flex flex-column w-20 justify-start pa0 ma0`}
+      className={`${classNames!.thumbnails} flex flex-column justify-start`}
+      style={{
+        width: thumbnails!.width,
+      }}
       role="group"
       aria-label="Carousel Tumbnails"
     >

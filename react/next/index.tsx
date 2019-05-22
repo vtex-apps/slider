@@ -217,8 +217,7 @@ const SliderNext: FC<SliderProps> = props => {
 
   const sliderContainerClasses = `${
     props.classNames!.sliderContainer
-  } ${hasThumbsleft &&
-    'order-1'} flex w-80 items-center relative overflow-hidden`
+  } ${hasThumbsleft && 'order-1'} flex items-center relative overflow-hidden`
 
   return (
     <section
@@ -227,7 +226,15 @@ const SliderNext: FC<SliderProps> = props => {
       aria-label={props.label}
       className={containerClasses}
     >
-      <div className={sliderContainerClasses} ref={containerRef}>
+      <div
+        className={sliderContainerClasses}
+        style={{
+          width: props.thumbnails
+            ? `calc(100% - ${props.thumbnails.width})`
+            : `100%`,
+        }}
+        ref={containerRef}
+      >
         <SliderTrack
           id={itemsId}
           className={props.classNames!.slider}
