@@ -2,9 +2,7 @@ import React, { memo, FC } from 'react'
 import result from 'lodash.result'
 
 interface Props {
-  slidesToShow: number
   currentSlide: number
-  domLoaded: boolean
   controls: string
   thumbnails?: {
     items: Array<{
@@ -24,7 +22,7 @@ interface Props {
  * Slider Tumbnails
  */
 const Thumbnails: FC<Props> = props => {
-  const { goToSlide, thumbnails, currentSlide } = props
+  const { goToSlide, thumbnails, currentSlide, controls } = props
 
   const customClasses = {
     thumbnails: result(thumbnails!, 'classNames.thumbnails', ''),
@@ -41,13 +39,15 @@ const Thumbnails: FC<Props> = props => {
 
   const renderTumbnails = () => {
     const { items } = thumbnails!
-    return items.map(item => (
+    return items.map((item, i) => (
       <img
         src={item.url}
         key={item.forSlide}
         className={getThumbClass(item.forSlide)}
         onClick={() => goToSlide(item.forSlide)}
         role="button"
+        ria-controls={controls}
+        aria-label={`Thumbnail ${i + 1} of ${items!.length}`}
       />
     ))
   }
