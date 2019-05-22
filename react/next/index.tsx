@@ -8,7 +8,7 @@ import Arrow from './components/Arrow'
 import SliderTrack from './components/SliderTrack'
 import reducer from './stateReducer'
 import SlideList from './components/SlideList'
-import Tumbnails from './components/Tumbnails'
+import Thumbnails from './components/Thumbnails'
 
 /**
  * Slider's main component
@@ -191,7 +191,12 @@ const SliderNext: FC<SliderProps> = props => {
 
   const renderTumbnails = (): React.ReactNode => {
     return (
-      <Tumbnails {...state} {...props} goToSlide={goToSlide} controls={itemsId} />
+      <Thumbnails
+        {...state}
+        {...props}
+        goToSlide={goToSlide}
+        controls={itemsId}
+      />
     )
   }
 
@@ -206,28 +211,36 @@ const SliderNext: FC<SliderProps> = props => {
           props.removeArrowOnDeviceType.indexOf(state.deviceType) > -1))
     )
 
+  const hasThumbsleft = props.thumbnails && props.thumbnails.position === 'left'
+
+  const containerClasses = `${props.classNames!.sliderContainer} flex w-100`
+
+  const sliderContainerClasses = `${
+    props.classNames!.sliderContainer
+  } ${hasThumbsleft &&
+    'order-1'} flex w-80 items-center relative overflow-hidden`
+
   return (
     <section
-      className={`${
-        props.classNames!.container
-      } flex items-center relative overflow-hidden`}
-      ref={containerRef}
       role="region"
       aria-roledescription="carousel"
       aria-label={props.label}
+      className={containerClasses}
     >
-      <SliderTrack
-        id={itemsId}
-        className={props.classNames!.slider}
-        transform={state.transform}
-        transition={props.transition!}
-      >
-        <SlideList {...state} {...props} />
-      </SliderTrack>
-      {shouldShowArrows && renderLeftArrow()}
-      {shouldShowArrows && renderRightArrow()}
-      {props.showDots && renderDotsList()}
-      {props.showTumbnails && renderTumbnails()}
+      <div className={sliderContainerClasses} ref={containerRef}>
+        <SliderTrack
+          id={itemsId}
+          className={props.classNames!.slider}
+          transform={state.transform}
+          transition={props.transition!}
+        >
+          <SlideList {...state} {...props} />
+        </SliderTrack>
+        {shouldShowArrows && renderLeftArrow()}
+        {shouldShowArrows && renderRightArrow()}
+        {props.showDots && renderDotsList()}
+      </div>
+      {props.thumbnails && renderTumbnails()}
     </section>
   )
 }
@@ -247,8 +260,9 @@ SliderNext.defaultProps = {
   showArrows: true,
   showDots: true,
   classNames: {
-    slider: '',
     container: '',
+    sliderContainer: '',
+    slider: '',
     item: '',
     leftArrow: '',
     rightArrow: '',
@@ -260,7 +274,6 @@ SliderNext.defaultProps = {
     delay: 0,
     timing: 'ease-in-out',
   },
-  showTumbnails: false,
 }
 
 export default SliderNext
