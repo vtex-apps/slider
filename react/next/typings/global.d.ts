@@ -61,6 +61,9 @@ interface SliderProps {
     rightArrow?: string
     dotList?: string
     dot?: string
+    thumbnails?: string
+    thumbnail?: string
+    selectedThumbnail?: string
   }
   /** If should show dots or not */
   showDots?: boolean
@@ -76,17 +79,6 @@ interface SliderProps {
     position: 'right' | 'left'
     /** Thumbs width in rem */
     width: number
-    /** Thumbs height in rem (default: auto)*/
-    height?: number
-    /** Custom classnames for each inner element */
-    classNames?: {
-      /** Class for the thumb container */
-      thumbnails?: string
-      /** Class for all single thumbs */
-      thumbnail?: string
-      /** Class for the selected single thumb */
-      selectedThumbnail?: string
-    }
   }
 }
 
