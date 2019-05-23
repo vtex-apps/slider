@@ -82,7 +82,7 @@ interface SliderProps {
   autoplay?: {
     /** Time duration in ms */
     timeout: number
-    /** If should stop the timeout on hover the slide */
+    /** If should stop the timeout by hovering the slide */
     stopOnHover?: boolean
   }
 }
