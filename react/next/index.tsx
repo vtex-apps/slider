@@ -10,6 +10,8 @@ import SliderTrack from './components/SliderTrack'
 import reducer from './stateReducer'
 import SlideList from './components/SlideList'
 import Thumbnails from './components/Thumbnails'
+import useControlledTimeout from './hooks/useControlledTimeout'
+import useHovering from './hooks/useHovering'
 
 /**
  * Slider's main component
@@ -26,6 +28,7 @@ const SliderNext: FC<SliderProps> = props => {
     transform: 0,
     containerWidth: 0,
   })
+
   /** Transform Label Text => label-text-items */
   const itemsId: string = `${props
     .label!.toLowerCase()
@@ -113,6 +116,15 @@ const SliderNext: FC<SliderProps> = props => {
     )
     slide(nextPosition!, nextSlides!)
   }
+
+  const { isHovering } = useHovering(containerRef)
+  props.autoplay &&
+    useControlledTimeout(
+      props.autoplay!.timeout,
+      () => populate('next'),
+      props.autoplay!.stopOnHover! && isHovering,
+      [state.currentSlide]
+    )
 
   /** Populate next slides */
   const next = () => {
