@@ -85,6 +85,8 @@ interface SliderProps {
     /** If should stop the timeout by hovering the slide */
     stopOnHover?: boolean
   }
+  /** If is controlled via keyboard arrows or not */
+  keyboardControlled?: boolean
 }
 
 interface SliderState {

@@ -12,6 +12,7 @@ import SlideList from './components/SlideList'
 import Thumbnails from './components/Thumbnails'
 import useControlledTimeout from './hooks/useControlledTimeout'
 import useHovering from './hooks/useHovering'
+import useKeyboardArrows from './hooks/useKeyboardArrows'
 
 /**
  * Slider's main component
@@ -135,6 +136,9 @@ const SliderNext: FC<SliderProps> = props => {
   const prev = () => {
     populate('prev')
   }
+
+  props.keyboardControlled &&
+    useKeyboardArrows(prev, next, [state.domLoaded, state.currentSlide])
 
   /** Go to any slide by index */
   const goToSlide = (slide: number): void => {
@@ -299,6 +303,7 @@ SliderNext.defaultProps = {
     delay: 0,
     timing: 'ease-in-out',
   },
+  keyboardControlled: true,
 }
 
 export default SliderNext
