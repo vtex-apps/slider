@@ -121,6 +121,7 @@ const products = [
 | `classNames` | `ClassNames` | 🚫 | - | Custom classes |
 | `thumbnails` | `Thumbnails` | 🚫 | - | Props for thumbnails |
 | `autoplay` | `AutoplayProps` | 🚫 | - | Props for autoplay |
+| `keyboardControlled`  | `Boolean` | 🚫 | false | If is controlled via keyboard arrows or not |
 
 
 

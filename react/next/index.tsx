@@ -303,7 +303,7 @@ SliderNext.defaultProps = {
     delay: 0,
     timing: 'ease-in-out',
   },
-  keyboardControlled: true,
+  keyboardControlled: false,
 }
 
 export default SliderNext
