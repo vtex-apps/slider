@@ -120,6 +120,8 @@ const products = [
 | `infinite` | `Boolean` | 🚫 | true | Whatever is infinite mode or not |
 | `classNames` | `ClassNames` | 🚫 | - | Custom classes |
 | `thumbnails` | `Thumbnails` | 🚫 | - | Props for thumbnails |
+| `autoplay` | `AutoplayProps` | 🚫 | - | Props for autoplay |
+
 
 
 **SliderElements Type**
@@ -159,11 +161,17 @@ const products = [
 | `url` | `String` | ✅ | 🚫 | Url of the thumbnail |
 | `forSlide` | `Number` | ✅ | 🚫 | Slide index that it refers to |
 
+**Autoplay Props**
+
+| Prop name | Type | isRequired | defaultValue | Description |
+| --- | --- | --- | --- | --- |
+| `timeout` | `Number` | ✅ | 🚫 | Time duration in ms |
+| `stopOnHover` | `Boolean` | 🚫 | 🚫 | If should stop the timeout by hovering the slide | 
+
 ## Upcoming
 
 Features that will be added soon:
 
-- Autoplay to support `carousel`
 - Content Loader (Skeleton)
 - Drag and Swipe
 - Create an infinite loop impression (Circular Queue).

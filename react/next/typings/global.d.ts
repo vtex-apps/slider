@@ -78,6 +78,13 @@ interface SliderProps {
     /** Thumbs width with measure (px, em, rem %, ...) */
     width: string
   }
+  /** Props for autoplay */
+  autoplay?: {
+    /** Time duration in ms */
+    timeout: number
+    /** If should stop the timeout by hovering the slide */
+    stopOnHover?: boolean
+  }
 }
 
 interface SliderState {
