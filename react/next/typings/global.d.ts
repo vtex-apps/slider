@@ -20,6 +20,13 @@ interface transitionType {
   timing: string
 }
 
+interface Thumbnail {
+  /** Url of the thumbnail */
+  url: string
+  /** Slide that it refers to */
+  forSlide: number
+}
+
 interface SliderProps {
   /** Aria label of slider */
   label?: string
@@ -46,18 +53,31 @@ interface SliderProps {
   infinite?: boolean
   /** Custom classes */
   classNames?: {
-    slider?: string
     container?: string
+    sliderContainer?: string
+    slider?: string
     item?: string
     leftArrow?: string
     rightArrow?: string
     dotList?: string
     dot?: string
+    thumbnails?: string
+    thumbnail?: string
+    selectedThumbnail?: string
   }
   /** If should show dots or not */
   showDots?: boolean
   /** Custom transition */
   transition?: transitionType
+  /** Thumbnails props */
+  thumbnails?: {
+    /** Array of thumbnails */
+    items: Array<Thumbnail>
+    /** Thumbs position relative to slider container */
+    position: 'right' | 'left'
+    /** Thumbs width with measure (px, em, rem %, ...) */
+    width: string
+  }
 }
 
 interface SliderState {

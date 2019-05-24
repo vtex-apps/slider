@@ -119,6 +119,8 @@ const products = [
 | `customDot` | `ComponentType<any>!` | 🚫 | 🚫 | Custom dots |
 | `infinite` | `Boolean` | 🚫 | true | Whatever is infinite mode or not |
 | `classNames` | `ClassNames` | 🚫 | - | Custom classes |
+| `thumbnails` | `Thumbnails` | 🚫 | - | Props for thumbnails |
+
 
 **SliderElements Type**
 
@@ -137,7 +139,25 @@ const products = [
 | `leftArrow` | `String` | 🚫 | `''` | Custom classes for left arrow | 
 | `rightArrow` | `String` | 🚫 | `''` | Custom classes for right arrow | 
 | `dotList` | `String` | 🚫 | `''` | Custom classes for the dot list |
-| `dot` | `String` | 🚫 | `''` | Custom classes for a single dot | 
+| `dot` | `String` | 🚫 | `''` | Custom classes for a single dot |
+| `thumbnails` | `String` | 🚫 | `''` | Custom classes for the thumb container |
+| `thumbnail` | `String` | 🚫 | `''` | Custom classes for all single thumbs |
+| `selectedThumbnail` | `String` | 🚫 | `''` | Custom classes for the selected single thumb |
+
+**Thumbnails Props**
+
+| Prop name | Type | isRequired | defaultValue | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `Array<Thumbnail>` | ✅ | 🚫 | Array of thumbnails |
+| `position` | `'left' | 'right'` | ✅ | 🚫 | Thumbs position relative to slider container |
+| `width` | `String` | ✅ | 🚫 | Thumbs width measure can be `rem`, `px`, `%`, etc. |
+
+**Thumbnail Type**
+
+| Prop name | Type | isRequired | defaultValue | Description |
+| --- | --- | --- | --- | --- |
+| `url` | `String` | ✅ | 🚫 | Url of the thumbnail |
+| `forSlide` | `Number` | ✅ | 🚫 | Slide index that it refers to |
 
 ## Upcoming
 
