@@ -1,4 +1,5 @@
 import React, { FC, useReducer, useRef, useEffect } from 'react'
+import csx from 'classnames'
 
 import { SliderProps } from './typings/global'
 import { getItemClientSideWidth, populateSlides } from './utils/index'
@@ -189,7 +190,7 @@ const SliderNext: FC<SliderProps> = props => {
     )
   }
 
-  const renderTumbnails = (): React.ReactNode => {
+  const renderThumbnails = (): React.ReactNode => {
     return (
       <Thumbnails
         {...state}
@@ -213,11 +214,13 @@ const SliderNext: FC<SliderProps> = props => {
 
   const hasThumbsleft = props.thumbnails && props.thumbnails.position === 'left'
 
-  const containerClasses = `${props.classNames!.sliderContainer} flex w-100`
+  const containerClasses = csx(props.classNames!.sliderContainer, 'flex w-100')
 
-  const sliderContainerClasses = `${
-    props.classNames!.sliderContainer
-  } ${hasThumbsleft && 'order-1'} flex items-center relative overflow-hidden`
+  const sliderContainerClasses = csx(
+    props.classNames!.sliderContainer,
+    hasThumbsleft && 'order-1',
+    'flex items-center relative overflow-hidden'
+  )
 
   return (
     <section
@@ -247,7 +250,7 @@ const SliderNext: FC<SliderProps> = props => {
         {shouldShowArrows && renderRightArrow()}
         {props.showDots && renderDotsList()}
       </div>
-      {props.thumbnails && renderTumbnails()}
+      {props.thumbnails && renderThumbnails()}
     </section>
   )
 }

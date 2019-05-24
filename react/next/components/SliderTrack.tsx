@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import csx from 'classnames'
 import { transitionType, Div } from '../typings/global'
 
 interface Props extends Div {
@@ -15,7 +16,7 @@ const SliderTrack: FC<Props> = ({
   ...rest
 }) => (
   <div
-    className={`${className} flex relative pa0 ma0`}
+    className={csx(className, 'flex relative pa0 ma0')}
     style={{
       willChange: 'transform',
       transition: `transform ${transition.speed}ms ${transition.timing}`,

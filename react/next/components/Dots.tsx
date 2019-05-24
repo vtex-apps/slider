@@ -1,4 +1,5 @@
 import React, { memo, FC } from 'react'
+import csx from 'classnames'
 
 const DOTS_DEFAULT_SIZE = 0.625
 
@@ -98,12 +99,14 @@ const Dots: FC<Props> = props => {
         index === getSelectedDot(passVisibleSlides, currentSlide, slidesToShow)
       return (
         <div
-          className={`${classNames!.dot} ${
-            isActive ? 'bg-emphasis' : 'bg-muted-3'
-          } grow dib br-100 pa2 mr2 ml2 bw0 pointer outline-0`}
+          className={csx(
+            classNames!.dot,
+            isActive ? 'bg-emphasis' : 'bg-muted-3',
+            'grow dib br-100 pa2 mr2 ml2 bw0 pointer outline-0'
+          )}
           style={{
             height: `${DOTS_DEFAULT_SIZE}rem`,
-            width: `${DOTS_DEFAULT_SIZE}rem`
+            width: `${DOTS_DEFAULT_SIZE}rem`,
           }}
           key={index}
           tabIndex={index}

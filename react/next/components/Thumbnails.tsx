@@ -1,4 +1,5 @@
 import React, { memo, FC } from 'react'
+import csx from 'classnames'
 
 interface Props {
   currentSlide: number
@@ -24,38 +25,39 @@ interface Props {
 const Thumbnails: FC<Props> = props => {
   const { goToSlide, thumbnails, currentSlide, controls, classNames } = props
 
-  const getThumbClass = (index: number) =>
-    `${classNames!.thumbnail} ${
-      currentSlide === index
-        ? `${classNames!.selectedThumbnail} ba bw1 b--emphasis `
-        : ''
-    } pointer ma2 h-auto w-90`
+  const selectedThumbClass = csx(
+    classNames!.selectedThumbnail,
+    'ba bw1 b--emphasis'
+  )
 
-  const renderTumbnails = () => {
-    const { items } = thumbnails!
-    return items.map((item, i) => (
-      <img
-        src={item.url}
-        key={item.forSlide}
-        className={getThumbClass(item.forSlide)}
-        onClick={() => goToSlide(item.forSlide)}
-        role="button"
-        ria-controls={controls}
-        aria-label={`Thumbnail ${i + 1} of ${items!.length}`}
-      />
-    ))
-  }
+  const getThumbClass = (index: number) =>
+    csx(
+      classNames!.thumbnail,
+      'pointer ma2 h-auto w-90',
+      currentSlide === index && selectedThumbClass
+    )
 
   return (
     <div
-      className={`${classNames!.thumbnails} flex flex-column justify-start`}
+      className={csx(classNames!.thumbnails, 'flex flex-column justify-start')}
       style={{
         width: thumbnails!.width,
       }}
       role="group"
       aria-label="Carousel Tumbnails"
     >
-      {renderTumbnails()}
+      {thumbnails &&
+        thumbnails.items.map((item, i) => (
+          <img
+            src={item.url}
+            key={item.forSlide}
+            className={getThumbClass(item.forSlide)}
+            onClick={() => goToSlide(item.forSlide)}
+            role="button"
+            ria-controls={controls}
+            aria-label={`Thumbnail ${i + 1} of ${thumbnails.items!.length}`}
+          />
+        ))}
     </div>
   )
 }
