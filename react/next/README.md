@@ -172,7 +172,6 @@ const products = [
 
 Features that will be added soon:
 
-- Autoplay to support `carousel`
 - Content Loader (Skeleton)
 - Drag and Swipe
 - Create an infinite loop impression (Circular Queue).
