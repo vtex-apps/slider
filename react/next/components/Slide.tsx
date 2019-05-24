@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import csx from 'classnames'
 import { Div } from '../typings/global'
 
 interface Props extends Div {
@@ -12,7 +13,7 @@ const Slide: FC<Props> = props => {
   const { width, style, className, children, ...rest } = props
   return (
     <div
-      className={`${className} flex relative`}
+      className={csx(className, 'flex relative')}
       style={{
         width: `${width}px`,
         ...style,
