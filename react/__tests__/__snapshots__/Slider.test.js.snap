@@ -2,11 +2,15 @@
 
 exports[`<Slider /> component should match snapshot 1`] = `
 <DocumentFragment>
-  <div>
-    arrow left
-  </div>
-  <div>
-    arrow right
+  <div
+    class="db"
+  >
+    <div>
+      arrow left
+    </div>
+    <div>
+      arrow right
+    </div>
   </div>
   <div
     class="overflow-hidden h-100"
