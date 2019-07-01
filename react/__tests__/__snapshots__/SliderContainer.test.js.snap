@@ -6,6 +6,9 @@ exports[`<SliderContainer /> component should match snapshot 1`] = `
     class="relative"
   >
     <div
+      class="db"
+    />
+    <div
       class="overflow-hidden h-100"
     >
       <ul
@@ -43,6 +46,9 @@ exports[`<SliderContainer /> component should match snapshot with another tag 1`
   <span
     class="relative"
   >
+    <div
+      class="db"
+    />
     <div
       class="overflow-hidden h-100"
     >
