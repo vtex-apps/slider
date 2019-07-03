@@ -20,6 +20,9 @@ function resolveSlidesNumber(perPage, runtime) {
   } else if (typeof perPage === 'object') {
     const isMobile = runtime && runtime.hints && runtime.hints.mobile
     const innerWidth = window && window.innerWidth
+
+    /** If it's on SSR, use placeholder screen sizes to get an approximate
+     * guess of how many items are displayed per page */
     const windowSize = innerWidth || (isMobile ? 320 : 1024)
 
     for (const viewport in perPage) {
