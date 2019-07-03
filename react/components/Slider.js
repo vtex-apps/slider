@@ -148,7 +148,7 @@ class Slider extends PureComponent {
         stateCurrentSlide += this.perPage
       } else if (this.isPositiveClone(currentSlide)) {
         const mirrorIndex =
-          this.childrenLength + this.perpage - currentSlide - 1
+          this.childrenLength + this.perPage - currentSlide - 1
         onChangeSlide(mirrorIndex)
       }
     }
