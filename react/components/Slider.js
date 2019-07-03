@@ -241,7 +241,7 @@ class Slider extends PureComponent {
     const { children } = this.props
 
     if (children) {
-      const totalChildren = React.Children.count(this.props.children)
+      const totalChildren = React.Children.count(children)
       return totalChildren + (this.shouldAddClones ? 2 * this.perPage : 0)
     }
 
