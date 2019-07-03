@@ -13,17 +13,18 @@
  * will return the default value; that is, 1.
  * @param {number|object} perPage 
  */
-function resolveSlidesNumber(perPage) {
-  let result
+function resolveSlidesNumber(perPage, runtime) {
+  let result = 1
   if (typeof perPage === 'number') {
     result = perPage
   } else if (typeof perPage === 'object') {
-    result = 1
-    if (window) {
-      for (const viewport in perPage) {
-        if (window.innerWidth >= viewport) {
-          result = perPage[viewport]
-        }
+    const isMobile = runtime && runtime.hints && runtime.hints.mobile
+    const innerWidth = window && window.innerWidth
+    const windowSize = innerWidth || (isMobile ? 320 : 1024)
+
+    for (const viewport in perPage) {
+      if (windowSize >= viewport) {
+        result = perPage[viewport]
       }
     }
   }
