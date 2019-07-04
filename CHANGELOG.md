@@ -6,8 +6,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Infer slide size on SSR, to prevent flickering on hydration.
 
 ## [0.5.5] - 2019-07-01
+
+### Fixed
+- Fixes issue with SSR hydration when the quantity of items is smaller than the number of items per page.
 
 ## [0.5.4] - 2019-06-27
 

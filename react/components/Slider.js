@@ -5,6 +5,8 @@ import PropTypes from 'prop-types'
 import EventListener from 'react-event-listener'
 import styles from './styles.css'
 import resolveSlidesNumber from '../utils/resolveSlidesNumber'
+import { withRuntimeContext } from 'vtex.render-runtime'
+
 import {
   getStylingTransition,
   getTranslateProperty,
@@ -64,6 +66,8 @@ class Slider extends PureComponent {
     threshold: PropTypes.number,
     /** If should scroll by page or one item at a time */
     scrollByPage: PropTypes.bool,
+    /** Render runtime context */
+    runtime: PropTypes.object,
   }
 
   static defaultProps = {
@@ -100,7 +104,7 @@ class Slider extends PureComponent {
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.currentSlide !== prevState.currentSlide) {
       const { currentSlide, children } = nextProps
-      const perPage = resolveSlidesNumber(nextProps.perPage)
+      const perPage = resolveSlidesNumber(nextProps.perPage, nextProps.runtime)
       const currentSlideIsClone =
         currentSlide < perPage ||
         currentSlide >= React.Children.count(children) + perPage
@@ -129,7 +133,7 @@ class Slider extends PureComponent {
     this._sliderFrame = React.createRef()
     this._sliderFrameWidth = 0
     this.handleResize = debounce(this.fit, props.resizeDebounce)
-    this.perPage = resolveSlidesNumber(props.perPage)
+    this.perPage = resolveSlidesNumber(props.perPage, props.runtime)
 
     this.state = {
       firstRender: true,
@@ -148,7 +152,7 @@ class Slider extends PureComponent {
         stateCurrentSlide += this.perPage
       } else if (this.isPositiveClone(currentSlide)) {
         const mirrorIndex =
-          this.childrenLength + this.perpage - currentSlide - 1
+          this.childrenLength + this.perPage - currentSlide - 1
         onChangeSlide(mirrorIndex)
       }
     }
@@ -188,7 +192,7 @@ class Slider extends PureComponent {
 
     this.setSelectorWidth()
     this.setInnerElements()
-    this.perPage = resolveSlidesNumber(this.props.perPage)
+    this.perPage = resolveSlidesNumber(this.props.perPage, this.props.runtime)
     this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
   }
 
@@ -210,7 +214,7 @@ class Slider extends PureComponent {
 
   fit = () => {
     const { perPage, currentSlide, onChangeSlide } = this.props
-    this.perPage = resolveSlidesNumber(perPage)
+    this.perPage = resolveSlidesNumber(perPage, this.props.runtime)
     const newCurrentSlide =
       Math.floor(currentSlide / this.perPage) * this.perPage
 
@@ -241,7 +245,7 @@ class Slider extends PureComponent {
     const { children } = this.props
 
     if (children) {
-      const totalChildren = React.Children.count(this.props.children)
+      const totalChildren = React.Children.count(children)
       return totalChildren + (this.shouldAddClones ? 2 * this.perPage : 0)
     }
 
@@ -593,4 +597,4 @@ class Slider extends PureComponent {
   }
 }
 
-export default Slider
+export default withRuntimeContext(Slider)

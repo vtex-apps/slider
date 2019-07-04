@@ -81,13 +81,11 @@ class SlideComponent extends PureComponent {
       ...rootProps
     } = this.props
 
-    const { firstRender } = this.state
-
     return (
       <RootComponent
         ref={innerRef}
         className={classnames(className, 'inline-flex h-100 relative overflow-hidden')}
-        style={defaultWidth && firstRender ? { ...style, width: defaultWidth } : style}
+        style={{ ...style }}
         {...rootProps}
       >
         <EventListener target="window" onResize={this.handleResize} />
