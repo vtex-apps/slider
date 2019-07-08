@@ -11,7 +11,7 @@ class SliderContainerComponent extends PureComponent {
     if (
       !autoplay ||
       typeof autoplayInterval !== 'number' ||
-      autoplayInterval == 0
+      autoplayInterval === 0
     ) {
       return
     }
