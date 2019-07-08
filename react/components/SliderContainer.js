@@ -6,7 +6,15 @@ class SliderContainerComponent extends PureComponent {
   intervalRef = null
 
   setNewInterval = () => {
-    const { autoplayInterval, onNextSlide } = this.props
+    const { autoplay, autoplayInterval, onNextSlide } = this.props
+
+    if (
+      !autoplay ||
+      typeof autoplayInterval !== 'number' ||
+      autoplayInterval === 0
+    ) {
+      return
+    }
 
     if (this.intervalRef) {
       clearInterval(this.intervalRef)
@@ -18,7 +26,7 @@ class SliderContainerComponent extends PureComponent {
   }
 
   componentDidMount() {
-    if (this.props.autoplay) {
+    if (this.props.autoplay && this.props.autoplayInterval > 0) {
       this.setNewInterval()
     }
   }
@@ -52,7 +60,7 @@ class SliderContainerComponent extends PureComponent {
   onMouseLeave = e => {
     this.eventProcedure(e, this.props.onMouseLeave, false)
   }
-  
+
   render() {
     const {
       className,
@@ -86,7 +94,9 @@ class SliderContainerComponent extends PureComponent {
   }
 }
 
-const renderForwardRef = (props, ref) => <SliderContainerComponent innerRef={ref} {...props} />
+const renderForwardRef = (props, ref) => (
+  <SliderContainerComponent innerRef={ref} {...props} />
+)
 renderForwardRef.displayName = 'SliderContainer'
 const SliderContainer = React.forwardRef(renderForwardRef)
 
@@ -104,14 +114,14 @@ SliderContainer.propsTypes = {
   /** If the interval should not be executed if the mouse is on the component */
   pauseOnHover: PropTypes.boolean,
   /** Tag to render the component */
-  tag: PropTypes.string
+  tag: PropTypes.string,
 }
 
 SliderContainer.defaultProps = {
   autoplay: false,
   autoplayInterval: 5000,
   pauseOnHover: true,
-  tag: 'div'
+  tag: 'div',
 }
 
 export default SliderContainer
