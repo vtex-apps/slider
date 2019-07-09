@@ -504,7 +504,9 @@ class Slider extends PureComponent {
     return React.cloneElement(child, {
       style: {
         ...(child.props.style ? child.props.style : {}),
-        width: `${100 / this.totalSlides}%`,
+        width: this.isMultiPage
+          ? `${100 / this.totalSlides}%`
+          : `${100 / this.perPage}%`,
       },
     })
   }
@@ -571,6 +573,7 @@ class Slider extends PureComponent {
             className={classnames(
               classes.sliderFrame,
               styles.sliderFrame,
+              { 'justify-center': !this.isMultiPage },
               'list pa0 h-100 ma0 flex'
             )}
             style={sliderFrameStyle}
