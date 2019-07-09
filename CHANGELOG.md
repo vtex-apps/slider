@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Prevent slides from stretching (and center them) if the total number of items is smaller than the number of items visible per page.
 
 ## [0.5.7] - 2019-07-08
 ### Fixed
