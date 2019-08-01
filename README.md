@@ -230,7 +230,7 @@ render() {
 | `resizeDebounce` | `number` | :no_entry_sign: | `250` | Debounce time in milliseconds |
 | `rootTag` | `string` | :no_entry_sign: | `'ul'` | Tag to be rendered as the root element of the component |
 | `totalSlides` | `number` | :heavy_check_mark: | :no_entry_sign: | Total value of sliders that will be rendered |
-| `minPerPage` | `number` | :no_entry_sign: | `1` | Minimum amount of slides to be on the screen, can be used to control how many itens will be displayed in the smallest screen size |
+| `minPerPage` | `number` | :no_entry_sign: | `1` | This prop works the same way the `minPerPage` of `Slider` and this component should receive the same value of `Slider` |
 | `showDotsPerPage` | `bool` | :no_entry_sign: | `false` | If this frag is true, then every dot represent a page of slides (e.g. if `perPage = 2` and you have 4 elements, then you have 2 dots), if false, then it will render one dot to each slide |
 
 ## Styles API
