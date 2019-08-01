@@ -16,6 +16,8 @@ class Dots extends PureComponent {
       activeDot: PropTypes.string,
       notActiveDot: PropTypes.string,
     }),
+    /** Number of the current slide */
+    currentSlide: PropTypes.number,
     /** Extra props to be applied to the dot element */
     dotProps: PropTypes.object,
     /** The size of the dots, can be a number (in this case it will use px unit), or a string (you have to pass the number with the unit e.g '3rem') */
@@ -26,6 +28,8 @@ class Dots extends PureComponent {
     loop: PropTypes.bool,
     /** Function to change the currentSlide */
     onChangeSlide: PropTypes.func.isRequired,
+    /** This prop works the same way the minPerPage of Slider and this component should receive the same value of Slider */
+    minPerPage: PropTypes.number,
     /** This prop works the same way the perPage of Slider and this component should receive the same value of Slider */
     perPage: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
     /** Debounce time in milliseconds. */
@@ -92,8 +96,8 @@ class Dots extends PureComponent {
   }
 
   _setPerPageOnResize = () => {
-    const { perPage } = this.props
-    this.perPage = resolveSlidesNumber(perPage)
+    const { minPerPage, perPage } = this.props
+    this.perPage = resolveSlidesNumber(minPerPage, perPage)
     this.forceUpdate()
   }
 
@@ -103,13 +107,10 @@ class Dots extends PureComponent {
       dotTag: DotTag,
       classes: classesProp,
       dotProps,
-      showDotsPerPage,
+      minPerPage,
       perPage,
-      currentSlide,
-      onChangeSlide,
       totalSlides,
       dotSize,
-      resizeDebounce,
       ...otherProps
     } = this.props
 
@@ -123,7 +124,7 @@ class Dots extends PureComponent {
     }
 
     if (!this.perPage) {
-      this.perPage = resolveSlidesNumber(perPage)
+      this.perPage = resolveSlidesNumber(minPerPage, perPage)
     }
 
     return (
@@ -141,6 +142,7 @@ class Dots extends PureComponent {
             [classes.activeDot]: i === this.selectedDot,
             [classes.notActiveDot]: i !== this.selectedDot,
           })
+
           return (
             <DotTag
               className={dotClasses}
