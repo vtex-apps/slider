@@ -51,6 +51,8 @@ class Slider extends PureComponent {
     loop: PropTypes.bool,
     /** Function to change the value of currentSlide */
     onChangeSlide: PropTypes.func.isRequired,
+    /** Minimum amount of slides to be on the screen */
+    minPerPage: PropTypes.number,
     /** Amount of slides to be on the screen, if a number is passed, then thats the slides that will be shown,
      * if an object with breakpoints is passed, then the component will check the size of the screen to see how
      * many elements will be on the screen
@@ -68,6 +70,7 @@ class Slider extends PureComponent {
     scrollByPage: PropTypes.bool,
     /** Render runtime context */
     runtime: PropTypes.object,
+    draggable: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -104,7 +107,11 @@ class Slider extends PureComponent {
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.currentSlide !== prevState.currentSlide) {
       const { currentSlide, children } = nextProps
-      const perPage = resolveSlidesNumber(nextProps.perPage, nextProps.runtime)
+      const perPage = resolveSlidesNumber(
+        nextProps.minPerPage,
+        nextProps.perPage,
+        nextProps.runtime
+      )
       const currentSlideIsClone =
         currentSlide < perPage ||
         currentSlide >= React.Children.count(children) + perPage
@@ -133,7 +140,11 @@ class Slider extends PureComponent {
     this._sliderFrame = React.createRef()
     this._sliderFrameWidth = 0
     this.handleResize = debounce(this.fit, props.resizeDebounce)
-    this.perPage = resolveSlidesNumber(props.perPage, props.runtime)
+    this.perPage = resolveSlidesNumber(
+      props.minPerPage,
+      props.perPage,
+      props.runtime
+    )
 
     this.state = {
       firstRender: true,
@@ -192,7 +203,11 @@ class Slider extends PureComponent {
 
     this.setSelectorWidth()
     this.setInnerElements()
-    this.perPage = resolveSlidesNumber(this.props.perPage, this.props.runtime)
+    this.perPage = resolveSlidesNumber(
+      this.props.minPerPage,
+      this.props.perPage,
+      this.props.runtime
+    )
     this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
   }
 
@@ -213,8 +228,8 @@ class Slider extends PureComponent {
   }
 
   fit = () => {
-    const { perPage, currentSlide, onChangeSlide } = this.props
-    this.perPage = resolveSlidesNumber(perPage, this.props.runtime)
+    const { minPerPage, perPage, currentSlide, onChangeSlide } = this.props
+    this.perPage = resolveSlidesNumber(minPerPage, perPage, this.props.runtime)
     const newCurrentSlide =
       Math.floor(currentSlide / this.perPage) * this.perPage
 
