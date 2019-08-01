@@ -186,6 +186,7 @@ render() {
 | `loop` | `bool` | :no_entry_sign: | `false` | If the slides should be looping |
 | `onChangeSlide` | `func` | :heavy_check_mark: | :no_entry_sign: | Function to change the value of currentSlide. The function should expect a `number` as it's only parameter |
 | `perPage` | `number/object` | :no_entry_sign: | `1` | Amount of slides to be on the screen, if a number is passed, then that's the number of slides that will be shown, if an object with breakpoints is passed, then the component will check the size of the screen to see how many slides will be on the screen at the same time |
+| `minPerPage` | `number` | :no_entry_sign: | `1` | Minimum amount of slides to be on the screen, can be used to control how many itens will be displayed in the smallest screen size |
 | `resizeDebounce` | `number` | :no_entry_sign: | `250` | Resize debounce timer in milliseconds |
 | `rootTag` | `string` | :no_entry_sign: | `'div'` | Tag to be rendered in the root of the slider |
 | `sliderFrameTag` | `string` | :no_entry_sign: | `'ul'` | Tag to be rendered in the slider frame element |
@@ -229,6 +230,7 @@ render() {
 | `resizeDebounce` | `number` | :no_entry_sign: | `250` | Debounce time in milliseconds |
 | `rootTag` | `string` | :no_entry_sign: | `'ul'` | Tag to be rendered as the root element of the component |
 | `totalSlides` | `number` | :heavy_check_mark: | :no_entry_sign: | Total value of sliders that will be rendered |
+| `minPerPage` | `number` | :no_entry_sign: | `1` | Minimum amount of slides to be on the screen, can be used to control how many itens will be displayed in the smallest screen size |
 | `showDotsPerPage` | `bool` | :no_entry_sign: | `false` | If this frag is true, then every dot represent a page of slides (e.g. if `perPage = 2` and you have 4 elements, then you have 2 dots), if false, then it will render one dot to each slide |
 
 ## Styles API
