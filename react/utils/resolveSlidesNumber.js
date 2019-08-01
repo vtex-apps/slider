@@ -5,16 +5,17 @@
  * If you pass for example
  * perPage = {
  *   400: 2,
- *   1000: 3  
+ *   1000: 3
  * }
- * 
+ *
  * If the size of the window is something between 400px and 999px if will return 2,
- * if it is 1000px or bigger, it will return 3, and if it is smaller than 400px it 
+ * if it is 1000px or bigger, it will return 3, and if it is smaller than 400px it
  * will return the default value; that is, 1.
- * @param {number|object} perPage 
+ * @param {number|object} perPage
+ * @param {number|undefined} minPerPage
  */
-function resolveSlidesNumber(perPage, runtime) {
-  let result = 1
+function resolveSlidesNumber(minPerPage, perPage, runtime) {
+  let result = minPerPage || 1
   if (typeof perPage === 'number') {
     result = perPage
   } else if (typeof perPage === 'object') {
@@ -31,7 +32,7 @@ function resolveSlidesNumber(perPage, runtime) {
       }
     }
   }
-  return result
+  return result < minPerPage ? minPerPage : result
 }
 
 export default resolveSlidesNumber
