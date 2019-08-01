@@ -7,26 +7,38 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Support for `minPerPage` prop to be passed to the Slider and Dots components.
+
 ## [0.5.8] - 2019-07-09
+
 ### Fixed
+
 - Prevent slides from stretching (and center them) if the total number of items is smaller than the number of items visible per page.
 
 ## [0.5.7] - 2019-07-08
+
 ### Fixed
+
 - Issue where the slider would flicker if autoplay delay was 0.
 
 ## [0.5.6] - 2019-07-04
+
 ### Fixed
+
 - Infer slide size on SSR, to prevent flickering on hydration.
 
 ## [0.5.5] - 2019-07-01
 
 ### Fixed
+
 - Fixes issue with SSR hydration when the quantity of items is smaller than the number of items per page.
 
 ## [0.5.4] - 2019-06-27
 
 ### Fixed
+
 - Build assets with new builder hub.
 
 ## [0.5.3] - 2019-04-12
