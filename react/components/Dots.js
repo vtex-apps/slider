@@ -16,7 +16,7 @@ class Dots extends PureComponent {
       activeDot: PropTypes.string,
       notActiveDot: PropTypes.string,
     }),
-    /** Number of the current slide */
+    /** Current slide on the screen, if you have perPage > 1, then the current slide is the most left slide on the screen */
     currentSlide: PropTypes.number,
     /** Extra props to be applied to the dot element */
     dotProps: PropTypes.object,
