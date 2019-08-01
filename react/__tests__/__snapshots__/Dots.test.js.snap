@@ -4,6 +4,7 @@ exports[`<Dots /> component should match snapshot 1`] = `
 <DocumentFragment>
   <ul
     class="dotsContainer absolute ma0 pa0 dib list"
+    resizedebounce="250"
   >
     <li
       class="dib "

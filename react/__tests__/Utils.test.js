@@ -26,10 +26,10 @@ describe('Util functions', () => {
     expect(resolveSlidesNumber(5)).toEqual(5)
 
     window.resizeTo(400, 1000)
-    expect(resolveSlidesNumber({ 400: 2, 1000: 3 })).toEqual(2)
+    expect(resolveSlidesNumber(1, { 400: 2, 1000: 3 })).toEqual(2)
 
     window.resizeTo(1000, 1000)
-    expect(resolveSlidesNumber({ 400: 2, 1000: 3 })).toEqual(3)
+    expect(resolveSlidesNumber(1, { 400: 2, 1000: 3 })).toEqual(3)
   })
 
   it('should set style correctly', () => {
