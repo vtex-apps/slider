@@ -30,6 +30,10 @@ describe('Util functions', () => {
 
     window.resizeTo(1000, 1000)
     expect(resolveSlidesNumber(1, { 400: 2, 1000: 3 })).toEqual(3)
+
+    // Testing for minimum values
+    window.resizeTo(320, 1000)
+    expect(resolveSlidesNumber(2, { 320: 1, 500: 2, 750: 3 })).toEqual(2)
   })
 
   it('should set style correctly', () => {
