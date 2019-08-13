@@ -272,8 +272,9 @@ class Slider extends PureComponent {
   }
 
   prev = (howManySlides = 1, dragDistance = 0) => {
+    const howManyInt = Number.parseInt(howManySlides)
     const { onChangeSlide, currentSlide, loop } = this.props
-    let newCurrentSlide = currentSlide
+    let newCurrentSlide = Number.parseInt(currentSlide)
     let stateCurrentSlide
     let enableTransition = true
 
@@ -282,16 +283,16 @@ class Slider extends PureComponent {
     }
 
     if (loop) {
-      if (this.isNegativeClone(currentSlide - howManySlides)) {
+      if (this.isNegativeClone(currentSlide - howManyInt)) {
         newCurrentSlide = this.getPositiveClone(currentSlide)
         enableTransition = false
-        stateCurrentSlide = newCurrentSlide - howManySlides
+        stateCurrentSlide = newCurrentSlide - howManyInt
       } else {
-        newCurrentSlide = currentSlide - howManySlides
+        newCurrentSlide = currentSlide - howManyInt
         stateCurrentSlide = newCurrentSlide
       }
     } else {
-      newCurrentSlide = Math.max(currentSlide - howManySlides, 0)
+      newCurrentSlide = Math.max(currentSlide - howManyInt, 0)
       stateCurrentSlide = newCurrentSlide
     }
 
@@ -306,8 +307,9 @@ class Slider extends PureComponent {
   }
 
   next = (howManySlides = 1, dragDistance = 0) => {
+    const howManyInt = Number.parseInt(howManySlides)
     const { onChangeSlide, currentSlide, loop } = this.props
-    let newCurrentSlide = currentSlide
+    let newCurrentSlide = Number.parseInt(currentSlide)
     let stateCurrentSlide
     let enableTransition = true
 
@@ -316,17 +318,17 @@ class Slider extends PureComponent {
     }
 
     if (loop) {
-      if (this.isPositiveClone(currentSlide + howManySlides)) {
+      if (this.isPositiveClone(currentSlide + howManyInt)) {
         newCurrentSlide = this.getNegativeClone(currentSlide)
         enableTransition = false
-        stateCurrentSlide = newCurrentSlide + howManySlides
+        stateCurrentSlide = newCurrentSlide + howManyInt
       } else {
-        newCurrentSlide = currentSlide + howManySlides
+        newCurrentSlide = currentSlide + howManyInt
         stateCurrentSlide = newCurrentSlide
       }
     } else {
       newCurrentSlide = Math.min(
-        currentSlide + howManySlides,
+        currentSlide + howManyInt,
         this.totalSlides - this.perPage
       )
       stateCurrentSlide = newCurrentSlide
