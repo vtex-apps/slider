@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, fireEvent } from '@vtex/test-tools/react'
+import { render } from '@vtex/test-tools/react'
 
 import Slider from '../components/Slider.js'
 import Slide from '../components/Slide.js'
