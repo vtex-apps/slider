@@ -14,12 +14,11 @@
  * @param {number|object} perPage
  * @param {number|undefined} minPerPage
  */
-function resolveSlidesNumber(minPerPage, perPage, runtime) {
+function resolveSlidesNumber(minPerPage, perPage, isMobile) {
   let result = minPerPage || 1
   if (typeof perPage === 'number') {
     result = perPage
   } else if (typeof perPage === 'object') {
-    const isMobile = runtime && runtime.hints && runtime.hints.mobile
     const innerWidth = window && window.innerWidth
 
     /** If it's on SSR, use placeholder screen sizes to get an approximate
