@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import EventListener from 'react-event-listener'
 import styles from './styles.css'
 import resolveSlidesNumber from '../utils/resolveSlidesNumber'
-import { withRuntimeContext } from 'vtex.render-runtime'
+import { withDevice } from 'vtex.device-detector'
 
 import {
   getStylingTransition,
@@ -68,8 +68,8 @@ class Slider extends PureComponent {
     threshold: PropTypes.number,
     /** If should scroll by page or one item at a time */
     scrollByPage: PropTypes.bool,
-    /** Render runtime context */
-    runtime: PropTypes.object,
+    /** Check if on mobile using vtex.device-detector */
+    isMobile: PropTypes.bool,
     draggable: PropTypes.bool,
   }
 
@@ -110,7 +110,7 @@ class Slider extends PureComponent {
       const perPage = resolveSlidesNumber(
         nextProps.minPerPage,
         nextProps.perPage,
-        nextProps.runtime
+        nextProps.isMobile
       )
       const currentSlideIsClone =
         currentSlide < perPage ||
@@ -143,7 +143,7 @@ class Slider extends PureComponent {
     this.perPage = resolveSlidesNumber(
       props.minPerPage,
       props.perPage,
-      props.runtime
+      props.isMobile
     )
 
     this.state = {
@@ -206,7 +206,7 @@ class Slider extends PureComponent {
     this.perPage = resolveSlidesNumber(
       this.props.minPerPage,
       this.props.perPage,
-      this.props.runtime
+      this.props.isMobile
     )
     this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
   }
@@ -229,7 +229,7 @@ class Slider extends PureComponent {
 
   fit = () => {
     const { minPerPage, perPage, currentSlide, onChangeSlide } = this.props
-    this.perPage = resolveSlidesNumber(minPerPage, perPage, this.props.runtime)
+    this.perPage = resolveSlidesNumber(minPerPage, perPage, this.props.isMobile)
     const newCurrentSlide =
       Math.floor(currentSlide / this.perPage) * this.perPage
 
@@ -548,8 +548,13 @@ class Slider extends PureComponent {
       easing,
       duration,
       cursor,
+      isMobile,
+      minPerPage,
     } = this.props
     const { enableTransition, dragDistance, firstRender } = this.state
+    const shouldCenterSlideOnMobile = !Number.isInteger(minPerPage)
+    const CURRENT_SLIDE_CENTER_SHIFT =
+      isMobile && shouldCenterSlideOnMobile ? 0.75 : 0
 
     const classes = {
       ...Slider.defaultProps.classes,
@@ -565,7 +570,9 @@ class Slider extends PureComponent {
       width: `${sliderFrameWidth}%`,
       ...(this.isMultiPage &&
         getTranslateProperty(
-          (currentSlide / this.totalSlides) * -100 + dragDistance
+          ((currentSlide + CURRENT_SLIDE_CENTER_SHIFT) / this.totalSlides) *
+            -100 +
+            dragDistance
         )),
       ...getStylingTransition(easing, enableTransition ? duration : 0),
       ...(this.isMultiPage && { cursor }),
@@ -617,4 +624,4 @@ class Slider extends PureComponent {
   }
 }
 
-export default withRuntimeContext(Slider)
+export default withDevice(Slider)
