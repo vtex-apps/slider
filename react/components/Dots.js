@@ -111,7 +111,6 @@ class Dots extends PureComponent {
       perPage,
       totalSlides,
       dotSize,
-      ...otherProps
     } = this.props
 
     const classes = {
@@ -134,7 +133,6 @@ class Dots extends PureComponent {
           classes.root,
           'absolute ma0 pa0 dib list'
         )}
-        {...otherProps}
       >
         <EventListener target="window" onResize={this.handleResize} />
         {this.slideIndeces.map(i => {
