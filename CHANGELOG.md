@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.7.0] - 2019-08-16
+
 ### Added
 
 - Better handling of `Float` values in `next` and `prev` function calls in the Slider component.
