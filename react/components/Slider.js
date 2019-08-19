@@ -552,7 +552,8 @@ class Slider extends PureComponent {
       minPerPage,
     } = this.props
     const { enableTransition, dragDistance, firstRender } = this.state
-    const shouldCenterSlideOnMobile = !Number.isInteger(minPerPage)
+    const shouldCenterSlideOnMobile =
+      minPerPage && !Number.isInteger(minPerPage)
     const CURRENT_SLIDE_CENTER_SHIFT =
       isMobile && shouldCenterSlideOnMobile ? 0.75 : 0
 
