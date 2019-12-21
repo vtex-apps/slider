@@ -581,9 +581,7 @@ class Slider extends PureComponent {
 
     return (
       <Fragment>
-        <div className={this.isMultiPage && !firstRender ? 'db' : 'dn'}>
-          {this.renderArrows()}
-        </div>
+        {this.renderArrows()}
         <RootTag
           className={classnames(classes.root, 'overflow-hidden h-100')}
           ref={this._selector}
