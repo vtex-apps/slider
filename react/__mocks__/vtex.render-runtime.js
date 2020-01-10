@@ -10,4 +10,8 @@ const withRuntimeContext = Component => {
   return ExtendedComponent
 }
 
-export { withRuntimeContext }
+const NoSSR = ({ children }) => {
+  return children
+}
+
+export { withRuntimeContext, NoSSR }
