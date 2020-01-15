@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- `navigationStep` prop to Slider.
+
 ## [0.7.3] - 2019-10-28
 ### Chore
 - Rebuild to enable lazy evaluation of slider entrypoints.
