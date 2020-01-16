@@ -71,6 +71,10 @@ class Slider extends PureComponent {
     /** Check if on mobile using vtex.device-detector */
     isMobile: PropTypes.bool,
     draggable: PropTypes.bool,
+    navigationStep: PropTypes.oneOfType([
+      PropTypes.oneOf([constants.NAVIGATION_PAGE]),
+      PropTypes.number,
+    ]),
   }
 
   static defaultProps = {
@@ -92,6 +96,7 @@ class Slider extends PureComponent {
     sliderFrameTag: 'ul',
     threshold: 50,
     scrollByPage: false,
+    navigationStep: 'page',
   }
 
   static events = [
@@ -487,26 +492,41 @@ class Slider extends PureComponent {
     }
   }
 
+  getSlidesToSlide = () => {
+    const { navigationStep, scrollByPage } = this.props
+
+    if (typeof navigationStep === 'number') {
+      return navigationStep
+    }
+
+    if (navigationStep === constants.NAVIGATION_PAGE || scrollByPage) {
+      return this.perPage
+    }
+
+    return 1
+  }
+
   renderArrows = () => {
     const {
       arrowsContainerComponent: ArrowsContainerComponent,
       arrowRender,
-      scrollByPage,
     } = this.props
 
     if (!arrowRender) {
       return null
     }
 
+    const slidesToSlide = this.getSlidesToSlide()
+
     const arrows = (
       <Fragment>
         {arrowRender({
           orientation: 'left',
-          onClick: scrollByPage ? this.prevPage : () => this.prev(),
+          onClick: () => this.prev(slidesToSlide),
         })}
         {arrowRender({
           orientation: 'right',
-          onClick: scrollByPage ? this.nextPage : () => this.next(),
+          onClick: () => this.next(slidesToSlide),
         })}
       </Fragment>
     )
@@ -587,11 +607,11 @@ class Slider extends PureComponent {
         <RootTag
           className={classnames(classes.root, 'overflow-hidden h-100')}
           ref={this._selector}
-          {...this.isMultiPage &&
+          {...(this.isMultiPage &&
             Slider.events.reduce(
               (props, event) => ({ ...props, [event]: this[event] }),
               {}
-            )}
+            ))}
         >
           <EventListener target="window" onResize={this.handleResize} />
           <SliderFrameTag

@@ -191,6 +191,7 @@ render() {
 | `rootTag` | `string` | :no_entry_sign: | `'div'` | Tag to be rendered in the root of the slider |
 | `sliderFrameTag` | `string` | :no_entry_sign: | `'ul'` | Tag to be rendered in the slider frame element |
 | `threshold` | `number` | :no_entry_sign: | `50` | Minimum of pixels to drag until the slider change the `currentSlide` |
+| `navigationStep`| `number` &#124; `'page'` | :no_entry_sign: | `'page'` | How many elements should pass when you click in the arrows to navigate |
 
 #### Slide
 
