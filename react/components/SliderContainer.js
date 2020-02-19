@@ -3,9 +3,9 @@ import classnames from 'classnames'
 import PropTypes from 'prop-types'
 
 class SliderContainerComponent extends PureComponent {
-  intervalRef = null
+  timeoutRef = null
 
-  setNewInterval = () => {
+  setNewTimeout = () => {
     const { autoplay, autoplayInterval, onNextSlide } = this.props
 
     if (
@@ -16,48 +16,52 @@ class SliderContainerComponent extends PureComponent {
       return
     }
 
-    if (this.intervalRef) {
-      clearInterval(this.intervalRef)
+    if (this.timeoutRef) {
+      clearTimeout(this.timeoutRef)
     }
 
-    this.intervalRef = setInterval(() => {
-      onNextSlide && onNextSlide()
+    this.timeoutRef = setTimeout(() => {
+      if (onNextSlide) {
+        onNextSlide()
+      }
+
+      this.setNewTimeout()
     }, autoplayInterval)
   }
 
   componentDidMount() {
     if (this.props.autoplay && this.props.autoplayInterval > 0) {
-      this.setNewInterval()
+      this.setNewTimeout()
     }
   }
 
   componentWillUnmount() {
-    clearInterval(this.intervalRef)
+    clearTimeout(this.timeoutRef)
   }
 
   eventProcedure = (e, eventCallback, clearOnPause = true) => {
     const { pauseOnHover } = this.props
     if (pauseOnHover) {
-      clearOnPause ? clearInterval(this.intervalRef) : this.setNewInterval()
+      clearOnPause ? clearTimeout(this.timeoutRef) : this.setNewTimeout()
     }
     if (eventCallback) {
       eventCallback(e)
     }
   }
 
-  onTouchStart = e => {
+  handleTouchStart = e => {
     this.eventProcedure(e, this.props.onTouchStart)
   }
 
-  onTouchEnd = e => {
+  handleTouchEnd = e => {
     this.eventProcedure(e, this.props.onTouchEnd, false)
   }
 
-  onMouseEnter = e => {
+  handleMouseEnter = e => {
     this.eventProcedure(e, this.props.onMouseEnter)
   }
 
-  onMouseLeave = e => {
+  handleMouseLeave = e => {
     this.eventProcedure(e, this.props.onMouseLeave, false)
   }
 
@@ -67,14 +71,6 @@ class SliderContainerComponent extends PureComponent {
       children,
       tag: RootTag,
       innerRef,
-      onMouseEnter,
-      onMouseLeave,
-      onTouchStart,
-      onTouchEnd,
-      onNextSlide,
-      pauseOnHover,
-      autoplay,
-      autoplayInterval,
       ...otherProps
     } = this.props
 
@@ -82,10 +78,10 @@ class SliderContainerComponent extends PureComponent {
       <RootTag
         ref={innerRef}
         className={classnames(className, 'relative')}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
-        onTouchStart={this.onTouchStart}
-        onTouchEnd={this.onTouchEnd}
+        onMouseEnter={this.handleMouseEnter}
+        onMouseLeave={this.handleMouseLeave}
+        onTouchStart={this.handleTouchStart}
+        onTouchEnd={this.handleTouchEnd}
         {...otherProps}
       >
         {children}

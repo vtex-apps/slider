@@ -3,6 +3,7 @@
 exports[`<SliderContainer /> component should match snapshot 1`] = `
 <DocumentFragment>
   <div
+    autoplayinterval="5000"
     class="relative"
   >
     <div
@@ -44,6 +45,7 @@ exports[`<SliderContainer /> component should match snapshot 1`] = `
 exports[`<SliderContainer /> component should match snapshot with another tag 1`] = `
 <DocumentFragment>
   <span
+    autoplayinterval="5000"
     class="relative"
   >
     <div
