@@ -6,6 +6,7 @@ import EventListener from 'react-event-listener'
 import styles from './styles.css'
 import resolveSlidesNumber from '../utils/resolveSlidesNumber'
 import { withDevice } from 'vtex.device-detector'
+import { NoSSR } from 'vtex.render-runtime'
 
 import {
   getStylingTransition,
@@ -601,9 +602,14 @@ class Slider extends PureComponent {
 
     return (
       <Fragment>
-        <div className={this.isMultiPage && !firstRender ? 'db' : 'dn'}>
-          {this.renderArrows()}
-        </div>
+        {/* Render arrows by default on SSR.
+         * It needs to know the users screen size to be sure if arrows need to be rendered
+         * or not, but most of the time, if a slider is being used, there will be multiple
+         * pages, and thus the arrows will be rendered.
+         * TODO: see if this check can be done on SSR */}
+        <NoSSR onSSR={this.renderArrows()}>
+          {this.isMultiPage && this.renderArrows()}
+        </NoSSR>
         <RootTag
           className={classnames(classes.root, 'overflow-hidden h-100')}
           ref={this._selector}
