@@ -143,7 +143,8 @@ class Slider extends PureComponent {
 
     this._selector = React.createRef()
     this._sliderFrame = React.createRef()
-    this._sliderFrameWidth = 0
+    this._sliderFrameWidth = null
+    this._selectorWidth = null
     this.handleResize = debounce(this.fit, props.resizeDebounce)
     this.perPage = resolveSlidesNumber(
       props.minPerPage,
@@ -206,14 +207,37 @@ class Slider extends PureComponent {
       this.setState(newState)
     }
 
-    this.setSelectorWidth()
     this.setInnerElements()
     this.perPage = resolveSlidesNumber(
       this.props.minPerPage,
       this.props.perPage,
       this.props.isMobile
     )
-    this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
+    this.resetWidthCalculation()
+  }
+
+  /** Marks _selectorWidth and _sliderFrameWidth as "dirty", in order
+   * to let the getters know that they need to be recalculated.
+   * This is done for performance, to avoid triggering a layout
+   * recalculation before needed.
+   */
+  resetWidthCalculation = () => {
+    this._selectorWidth = null
+    this._sliderFrameWidth = null
+  }
+
+  getSliderFrameWidth = () => {
+    if (!this._sliderFrameWidth) {
+      this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
+    }
+    return this._sliderFrameWidth
+  }
+
+  getSelectorWidth = () => {
+    if (!this._selectorWidth) {
+      this._selectorWidth = this._selector.current.getBoundingClientRect().width
+    }
+    return this._selectorWidth
   }
 
   isNegativeClone = index => {
@@ -238,8 +262,7 @@ class Slider extends PureComponent {
     const newCurrentSlide =
       Math.floor(currentSlide / this.perPage) * this.perPage
 
-    this.setSelectorWidth()
-    this._sliderFrameWidth = this._sliderFrame.current.getBoundingClientRect().width
+    this.resetWidthCalculation()
 
     if (currentSlide !== newCurrentSlide) {
       this.setState({
@@ -249,10 +272,6 @@ class Slider extends PureComponent {
       onChangeSlide(newCurrentSlide)
     }
     this.forceUpdate()
-  }
-
-  setSelectorWidth = () => {
-    this.selectorWidth = this._selector.current.getBoundingClientRect().width
   }
 
   setInnerElements = () => {
@@ -362,9 +381,9 @@ class Slider extends PureComponent {
     const movement = this.drag.endX - this.drag.startX
     const movementDistance = Math.abs(movement)
     const howManySlidesToSlide = Math.ceil(
-      movementDistance / (this.selectorWidth / this.perPage)
+      movementDistance / (this.getSelectorWidth() / this.perPage)
     )
-    const dragDistance = (movement / this._sliderFrameWidth) * 100
+    const dragDistance = (movement / this.getSliderFrameWidth()) * 100
     if (
       movement > 0 &&
       movementDistance > threshold &&
@@ -424,10 +443,11 @@ class Slider extends PureComponent {
 
       this.drag.endX = e.touches[0].pageX
 
-      const currentOffset = currentSlide * (this.selectorWidth / this.perPage)
+      const currentOffset =
+        currentSlide * (this.getSelectorWidth() / this.perPage)
       const dragOffset = this.drag.endX - this.drag.startX
       const offset =
-        ((currentOffset - dragOffset) / this._sliderFrameWidth) * -100
+        ((currentOffset - dragOffset) / this.getSliderFrameWidth()) * -100
 
       setStyle(this._sliderFrame.current, {
         ...getTranslateProperty(offset),
@@ -467,10 +487,11 @@ class Slider extends PureComponent {
       // TODO prevent link clicks
       this.drag.endX = e.pageX
 
-      const currentOffset = currentSlide * (this.selectorWidth / this.perPage)
+      const currentOffset =
+        currentSlide * (this.getSelectorWidth() / this.perPage)
       const dragOffset = this.drag.endX - this.drag.startX
       const offset =
-        ((currentOffset - dragOffset) / this._sliderFrameWidth) * -100
+        ((currentOffset - dragOffset) / this.getSliderFrameWidth()) * -100
       setStyle(this._sliderFrame.current, {
         cursor: cursorOnMouseDown,
         ...getTranslateProperty(offset),
