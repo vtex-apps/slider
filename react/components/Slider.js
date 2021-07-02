@@ -457,7 +457,14 @@ class Slider extends PureComponent {
 
   onMouseDown = e => {
     const { cursorOnMouseDown } = this.props
-    e.preventDefault()
+
+    /** this check avoid call the preventDefault when the event was triggered by SKU-selector with mode selector inside the product-summary.
+     * <Link the sku selector here>
+     */
+    if (e.target.name !== 'product-summary-sku-selector') {
+      e.preventDefault()
+    }
+
     this.pointerDown = true
     this.drag.startX = e.pageX
 
@@ -483,6 +490,7 @@ class Slider extends PureComponent {
   onMouseMove = e => {
     const { currentSlide, draggable, cursorOnMouseDown } = this.props
     e.preventDefault()
+
     if (this.pointerDown && draggable) {
       // TODO prevent link clicks
       this.drag.endX = e.pageX
