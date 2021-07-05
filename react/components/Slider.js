@@ -458,8 +458,9 @@ class Slider extends PureComponent {
   onMouseDown = e => {
     const { cursorOnMouseDown } = this.props
 
-    /** this check avoid call the preventDefault when the event was triggered by SKU-selector with mode selector inside the product-summary.
-     * https://github.com/vtex-apps/store-components/pull/958
+    /** 
+     * This check avoids calling the preventDefault when the event was triggered by SKU-selector with mode selector inside a product-summary.
+     * Further details at https://github.com/vtex-apps/store-components/pull/958.
      */
     if (e.target.name !== 'product-summary-sku-selector') {
       e.preventDefault()
