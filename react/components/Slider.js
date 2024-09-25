@@ -351,10 +351,7 @@ class Slider extends PureComponent {
         stateCurrentSlide = newCurrentSlide
       }
     } else {
-      newCurrentSlide = Math.min(
-        currentSlide + howManyInt,
-        this.totalSlides - this.perPage
-      )
+      newCurrentSlide = currentSlide + howManyInt
       stateCurrentSlide = newCurrentSlide
     }
 
@@ -384,21 +381,24 @@ class Slider extends PureComponent {
       movementDistance / (this.getSelectorWidth() / this.perPage)
     )
     const dragDistance = (movement / this.getSliderFrameWidth()) * 100
+
+    const { easing, duration, currentSlide } = this.props
+
     if (
       movement > 0 &&
       movementDistance > threshold &&
-      this.totalSlides > this.perPage
+      this.totalSlides > this.perPage &&
+      currentSlide !== 0
     ) {
       this.prev(howManySlidesToSlide, dragDistance)
     } else if (
       movement < 0 &&
       movementDistance > threshold &&
-      this.totalSlides > this.perPage
+      this.totalSlides > this.perPage &&
+      currentSlide + this.perPage <= this.totalSlides
     ) {
       this.next(howManySlidesToSlide, dragDistance)
     } else {
-      const { easing, duration, currentSlide } = this.props
-
       this.setState({ enableTransition: true, dragDistance: 0 })
       setStyle(this._sliderFrame.current, {
         ...getStylingTransition(easing, duration),
@@ -458,7 +458,7 @@ class Slider extends PureComponent {
   onMouseDown = e => {
     const { cursorOnMouseDown } = this.props
 
-    /** 
+    /**
      * This check avoids calling the preventDefault when the event was triggered by SKU-selector with mode selector inside a product-summary.
      * Further details at https://github.com/vtex-apps/store-components/pull/958.
      */
